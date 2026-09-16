@@ -12,6 +12,347 @@ content="वसुधैव कुटुम्बकम् — एक परि�
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+ /* =========================================
+   PREMIUM INDIA SOCIAL DESIGN
+========================================= */
+
+:root{
+  --saffron:#ff7a18;
+  --saffron2:#ff9f43;
+  --green:#138a4b;
+  --deep:#17324d;
+  --text:#18212b;
+  --muted:#718096;
+  --white:#ffffff;
+  --bg:#f5f7fa;
+  --border:#e8edf2;
+  --shadow:0 8px 28px rgba(23,50,77,.08);
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial, sans-serif;
+}
+
+/* APP HEADER */
+
+.app-header{
+  background:rgba(255,255,255,.96);
+  border-bottom:1px solid var(--border);
+  box-shadow:0 4px 18px rgba(0,0,0,.05);
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+
+.app-header-inner{
+  max-width:1100px;
+  margin:auto;
+  padding:12px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.brand-icon{
+  width:44px;
+  height:44px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  background:linear-gradient(
+    135deg,
+    #ff7a18,
+    #ffffff,
+    #138a4b
+  );
+  box-shadow:0 5px 15px rgba(255,122,24,.18);
+}
+
+.brand-text h1{
+  margin:0;
+  font-size:18px;
+  font-weight:800;
+}
+
+.brand-text p{
+  margin:2px 0 0;
+  font-size:11px;
+  color:var(--muted);
+}
+
+/* HOME CONTAINER */
+
+.page{
+  max-width:1100px;
+  margin:auto;
+  padding:18px 14px 90px;
+}
+
+.page.active{
+  display:block;
+}
+
+/* HERO */
+
+.hero{
+  background:
+    linear-gradient(
+      135deg,
+      #fff7ef,
+      #ffffff 50%,
+      #eefaf3
+    );
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:25px 20px;
+  margin-bottom:18px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+
+.hero:after{
+  content:"🇮🇳";
+  position:absolute;
+  right:18px;
+  top:18px;
+  font-size:48px;
+  opacity:.12;
+}
+
+.hero h2{
+  margin:0 0 8px;
+  font-size:26px;
+  font-weight:800;
+  color:var(--deep);
+}
+
+.hero p{
+  margin:0;
+  color:var(--muted);
+  line-height:1.6;
+  max-width:650px;
+}
+
+/* TRENDING */
+
+.trending{
+  display:flex;
+  gap:12px;
+  overflow-x:auto;
+  padding:3px 2px 14px;
+}
+
+.trending::-webkit-scrollbar{
+  display:none;
+}
+
+.trend-card{
+  min-width:145px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:14px;
+  box-shadow:var(--shadow);
+}
+
+.trend-card span{
+  font-size:22px;
+}
+
+.trend-card strong{
+  display:block;
+  margin-top:7px;
+  font-size:14px;
+}
+
+.trend-card small{
+  display:block;
+  margin-top:4px;
+  color:var(--muted);
+}
+
+/* COMPOSER */
+
+.composer{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:16px;
+  margin:8px 0 18px;
+  box-shadow:var(--shadow);
+}
+
+.composer-top{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.composer-avatar{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  background:linear-gradient(
+    135deg,
+    var(--saffron),
+    var(--green)
+  );
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-size:20px;
+}
+
+.composer input,
+.composer textarea{
+  flex:1;
+  width:100%;
+  border:1px solid var(--border);
+  background:#f7f9fb;
+  border-radius:16px;
+  padding:13px 15px;
+  outline:none;
+  font-size:14px;
+}
+
+.composer input:focus,
+.composer textarea:focus{
+  border-color:var(--saffron);
+  background:#fff;
+}
+
+.composer-actions{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:13px;
+  gap:8px;
+}
+
+.composer-actions button{
+  border:0;
+  background:#f3f6f8;
+  border-radius:12px;
+  padding:9px 13px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.composer-actions button:hover{
+  background:#fff0e5;
+}
+
+/* POSTS */
+
+.post-card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:22px;
+  margin-bottom:16px;
+  padding:17px;
+  box-shadow:var(--shadow);
+}
+
+.post-header{
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+
+.post-avatar{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#fff0e5;
+  font-size:20px;
+}
+
+.post-author{
+  font-weight:800;
+}
+
+.post-time{
+  display:block;
+  font-size:11px;
+  color:var(--muted);
+  margin-top:3px;
+}
+
+.post-content{
+  margin:15px 0;
+  font-size:15px;
+  line-height:1.65;
+}
+
+.post-actions{
+  display:flex;
+  border-top:1px solid var(--border);
+  padding-top:11px;
+  gap:8px;
+}
+
+.post-actions button{
+  flex:1;
+  border:0;
+  background:transparent;
+  padding:10px 5px;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:600;
+  color:#536273;
+}
+
+.post-actions button:hover{
+  background:#f5f7fa;
+  color:var(--deep);
+}
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+  .page{
+    padding:12px 10px 90px;
+  }
+
+  .hero{
+    border-radius:20px;
+    padding:20px 16px;
+  }
+
+  .hero h2{
+    font-size:22px;
+  }
+
+  .brand-text h1{
+    font-size:16px;
+  }
+
+  .post-card,
+  .composer{
+    border-radius:18px;
+  }
+
+  .post-actions button{
+    font-size:12px;
+  }
+
+}
 *{
   margin:0;
   padding:0;
