@@ -1,24 +1,34 @@
  <!DOCTYPE html>
 <html lang="hi">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>वसुधैव कुटुम्बकम् 🇮🇳</title>
 
+<meta name="description"
+content="वसुधैव कुटुम्बकम् — एक परिवार • एक भारत • एक दुनिया">
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+
 *{
-  box-sizing:border-box;
   margin:0;
   padding:0;
+  box-sizing:border-box;
 }
 
 body{
-  font-family:Arial,sans-serif;
-  background:#f3f5f7;
+  font-family:Arial, sans-serif;
+  background:#f4f6f8;
   color:#222;
+}
+
+button{
+  border:0;
+  cursor:pointer;
 }
 
 .app{
@@ -30,1154 +40,1607 @@ body{
 
 header{
   background:linear-gradient(135deg,#ff9933,#ffffff,#138808);
-  padding:18px 15px;
+  padding:18px;
   text-align:center;
-}
-
-header h1{
-  font-size:24px;
-}
-
-header p{
-  margin-top:6px;
-  font-size:13px;
-}
-
-.login-box{
-  min-height:100vh;
-  padding:25px 18px;
-  background:linear-gradient(180deg,#fff8ef,#fff,#f0fff2);
+  border-bottom:1px solid #ddd;
 }
 
 .logo{
-  text-align:center;
-  font-size:50px;
-  margin:20px 0 10px;
+  font-size:27px;
+  font-weight:bold;
 }
 
-.login-title{
-  text-align:center;
-  font-size:24px;
+.tagline{
+  margin-top:5px;
+  font-size:14px;
 }
 
-.login-subtitle{
+.login-box{
+  margin:40px 20px;
+  padding:25px;
+  border-radius:18px;
+  background:white;
+  box-shadow:0 5px 25px rgba(0,0,0,.12);
+}
+
+.login-box h2{
+  text-align:center;
+  margin-bottom:8px;
+}
+
+.login-box p{
   text-align:center;
   color:#666;
-  margin:8px 0 20px;
+  margin-bottom:20px;
 }
 
-.login-card{
-  background:white;
-  padding:20px;
-  border-radius:18px;
-  box-shadow:0 4px 18px rgba(0,0,0,.08);
-}
-
-.login-card input{
+input,
+textarea{
   width:100%;
   padding:13px;
-  margin-top:10px;
-  border:1px solid #ccc;
-  border-radius:9px;
+  margin:8px 0;
+  border:1px solid #ddd;
+  border-radius:10px;
   font-size:15px;
+  outline:none;
+}
+
+input:focus,
+textarea:focus{
+  border-color:#ff7a00;
 }
 
 .primary{
   width:100%;
-  padding:12px;
-  margin-top:12px;
-  border:0;
-  border-radius:9px;
-  background:#138808;
+  padding:13px;
+  margin-top:10px;
+  background:#ff7a00;
   color:white;
+  border-radius:10px;
+  font-size:16px;
   font-weight:bold;
-  font-size:15px;
 }
 
 .secondary{
   width:100%;
-  padding:11px;
+  padding:12px;
   margin-top:10px;
-  border:1px solid #138808;
-  border-radius:9px;
-  background:white;
-  color:#138808;
+  background:#eee;
+  color:#333;
+  border-radius:10px;
+  font-size:15px;
+}
+
+.forgot{
+  background:none;
+  color:#e65100;
+  margin-top:12px;
+  font-size:14px;
+}
+
+.app-content{
+  display:none;
+}
+
+.profile-bar{
+  padding:15px;
+  background:#fff;
+  border-bottom:1px solid #eee;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.profile-name{
   font-weight:bold;
 }
 
-.login-note{
-  font-size:12px;
-  color:#777;
-  text-align:center;
-  margin-top:15px;
-  line-height:1.5;
+.logout{
+  background:#eee;
+  padding:8px 12px;
+  border-radius:8px;
 }
 
 nav{
   display:flex;
-  overflow-x:auto;
-  background:#fff;
+  justify-content:space-around;
+  padding:10px 5px;
+  border-top:1px solid #ddd;
   border-bottom:1px solid #ddd;
+  background:white;
   position:sticky;
   top:0;
   z-index:10;
 }
 
 nav button{
-  flex:1;
-  min-width:75px;
-  padding:12px 7px;
-  border:0;
-  background:white;
+  background:none;
   font-size:13px;
+  color:#555;
 }
 
-nav button:hover{
-  background:#f1f1f1;
+nav button.active{
+  color:#ff6f00;
+  font-weight:bold;
 }
 
-.page{
-  display:none;
-  padding:14px;
+.section{
+  padding:15px;
 }
 
-.page.active{
-  display:block;
+.hero{
+  background:linear-gradient(135deg,#fff3e0,#e8f5e9);
+  padding:20px;
+  border-radius:16px;
+  margin-bottom:15px;
+}
+
+.hero h2{
+  margin-bottom:8px;
 }
 
 .card{
   background:white;
-  border:1px solid #ddd;
-  border-radius:14px;
-  padding:14px;
-  margin-bottom:14px;
-  box-shadow:0 2px 8px rgba(0,0,0,.05);
-}
-
-.composer textarea{
-  width:100%;
-  min-height:80px;
-  padding:12px;
-  border:1px solid #ccc;
-  border-radius:10px;
-  resize:none;
-}
-
-select{
-  padding:9px;
-  border:1px solid #ccc;
-  border-radius:8px;
-  margin-top:8px;
-}
-
-.post h3{
-  font-size:16px;
-  margin-bottom:7px;
-}
-
-.post p{
-  line-height:1.5;
-}
-
-.actions{
-  display:flex;
-  gap:8px;
-  margin-top:12px;
-}
-
-.actions button{
-  flex:1;
-  padding:8px;
-  border:1px solid #ddd;
-  border-radius:8px;
-  background:#fafafa;
-}
-
-.badge{
-  display:inline-block;
-  background:#fff1df;
-  padding:5px 8px;
-  border-radius:20px;
-  font-size:12px;
-  margin-bottom:8px;
-}
-
-.reel{
-  height:220px;
+  border:1px solid #eee;
   border-radius:15px;
-  background:linear-gradient(135deg,#ff9933,#138808);
-  color:white;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  margin-bottom:14px;
-  font-size:20px;
-  font-weight:bold;
+  padding:15px;
+  margin-bottom:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,.04);
 }
 
-.community{
+.card-header{
   display:flex;
-  justify-content:space-between;
   align-items:center;
-  padding:12px;
-  border:1px solid #ddd;
-  border-radius:10px;
+  gap:10px;
   margin-bottom:10px;
 }
 
-.community button{
-  padding:7px 12px;
-  border:0;
-  border-radius:7px;
-  background:#138808;
-  color:white;
-}
-
-.profile{
-  text-align:center;
-}
-
 .avatar{
-  width:80px;
-  height:80px;
+  width:42px;
+  height:42px;
   border-radius:50%;
-  margin:auto;
-  background:#ff9933;
+  background:#ff9800;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:35px;
+  color:white;
+  font-weight:bold;
 }
 
-footer{
-  text-align:center;
-  padding:20px;
-  color:#777;
-  font-size:12px;
+.post-actions{
+  display:flex;
+  gap:10px;
+  margin-top:12px;
+}
+
+.post-actions button{
+  background:#f3f3f3;
+  padding:8px 12px;
+  border-radius:8px;
+}
+
+.community{
+  padding:15px;
+  border:1px solid #eee;
+  border-radius:12px;
+  margin-bottom:10px;
 }
 
 .toast{
   position:fixed;
-  bottom:20px;
   left:50%;
+  bottom:25px;
   transform:translateX(-50%);
   background:#222;
   color:white;
-  padding:10px 16px;
-  border-radius:20px;
+  padding:12px 18px;
+  border-radius:10px;
   display:none;
-  z-index:99;
+  z-index:100;
   max-width:90%;
   text-align:center;
 }
 
-#mainApp{
-  display:none;
+.hidden{
+  display:none !important;
 }
+
 </style>
+
 </head>
 
 <body>
 
-<!-- LOGIN -->
+<div class="app">
 
-<div id="loginScreen" class="login-box">
+<!-- =========================
+     LOGIN
+========================= -->
 
-<div class="logo">🇮🇳</div>
+<div id="loginScreen">
 
-<h1 class="login-title">
-वसुधैव कुटुम्बकम्
-</h1>
+<header>
 
-<p class="login-subtitle">
+<div class="logo">
+🇮🇳 वसुधैव कुटुम्बकम्
+</div>
+
+<div class="tagline">
 एक परिवार • एक भारत • एक दुनिया
+</div>
+
+</header>
+
+<div class="login-box">
+
+<h2>Welcome</h2>
+
+<p>
+लोगों से जुड़ें • सीखें • साझा करें
 </p>
-
-<div class="login-card">
-
-<h2>🔐 Login</h2>
 
 <input
 id="userEmail"
 type="email"
+placeholder="Email"
 autocomplete="email"
-placeholder="Email">
+>
 
 <input
 id="userPassword"
 type="password"
+placeholder="Password"
 autocomplete="current-password"
-placeholder="Password">
+>
 
-<button class="primary" onclick="loginUser()">
-Login
+<button
+class="primary"
+onclick="loginUser()">
+🔐 Login
 </button>
-
-<button class="secondary" onclick="registerUser()">
-Create New Account
-</button>
-
-<p class="login-note">
-🔒 आपका password Supabase Authentication द्वारा सुरक्षित रूप से संभाला जाता है।
-</p>
-
-</div>
-
-</div>
-
-
-<!-- MAIN APP -->
-
-<div id="mainApp">
-
-<div class="app">
-
-<header>
-<h1>🇮🇳 वसुधैव कुटुम्बकम्</h1>
-<p>एक परिवार • एक भारत • एक दुनिया</p>
-</header>
-
-<nav>
-<button onclick="showPage('home')">🏠 Home</button>
-<button onclick="showPage('reels')">🎬 Reels</button>
-<button onclick="showPage('post')">✍️ Post</button>
-<button onclick="showPage('community')">👥 Community</button>
-<button onclick="showPage('profile')">👤 Profile</button>
-</nav>
-
-
-<!-- HOME -->
-
-<section id="home" class="page active">
-
-<div class="card composer">
-
-<b>आप क्या साझा करना चाहते हैं?</b>
-
-<textarea
-id="quickPost"
-placeholder="कुछ अच्छा लिखें..."></textarea>
-
-<select id="quickLang">
-<option>हिन्दी</option>
-<option>English</option>
-<option>भोजपुरी</option>
-<option>मराठी</option>
-<option>தமிழ்</option>
-<option>తెలుగు</option>
-</select>
-
-<button class="primary" onclick="createQuickPost()">
-पोस्ट करें
-</button>
-
-</div>
-
-<div id="feed">
-
-<div class="card post">
-
-<span class="badge">🇮🇳 भारत</span>
-
-<h3>वसुधैव कुटुम्बकम्</h3>
-
-<p>
-हमारी सोच सरल है — हर इंसान का सम्मान,
-भारतीय भाषाओं का सम्मान और उपयोगी जानकारी
-को प्राथमिकता।
-</p>
-
-<div class="actions">
-
-<button onclick="likePost(this)">
-❤️ Like 0
-</button>
-
-<button onclick="toast('Comment Demo')">
-💬 Comment
-</button>
-
-<button onclick="translatePost(this)">
-🌐 Translate
-</button>
-
-</div>
-
-</div>
-
-
-<div class="card post">
-
-<span class="badge">📚 शिक्षा</span>
-
-<h3>आज की अच्छी बात</h3>
-
-<p>
-ज्ञान जितना साझा किया जाए, उतना ही बढ़ता है।
-आइए एक-दूसरे को आगे बढ़ाने वाला समाज बनाएं।
-</p>
-
-<div class="actions">
-
-<button onclick="likePost(this)">
-❤️ Like 0
-</button>
-
-<button onclick="toast('Comment Demo')">
-💬 Comment
-</button>
-
-<button onclick="translatePost(this)">
-🌐 Translate
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-
-<!-- REELS -->
-
-<section id="reels" class="page">
-
-<div class="reel">
-🎬<br>
-भारत की कहानी<br>
-भारत की भाषा में
-</div>
-
-<div class="reel">
-🙏<br>
-भक्ति • संस्कृति • ज्ञान
-</div>
-
-<div class="reel">
-💼<br>
-Business • Jobs • Skills
-</div>
-
-</section>
-
-
-<!-- POST -->
-
-<section id="post" class="page">
-
-<div class="card">
-
-<h2>✍️ नई पोस्ट</h2>
-
-<textarea
-id="postText"
-placeholder="अपनी बात लिखें..."
-style="width:100%;height:130px;margin-top:12px;padding:12px;border-radius:10px;border:1px solid #ccc;">
-</textarea>
-
-<select id="postLang">
-
-<option>हिन्दी</option>
-<option>English</option>
-<option>भोजपुरी</option>
-<option>मराठी</option>
-<option>தமிழ்</option>
-<option>తెలుగు</option>
-
-</select>
-
-<button class="primary" onclick="createPost()">
-पोस्ट प्रकाशित करें
-</button>
-
-</div>
-
-</section>
-
-
-<!-- COMMUNITY -->
-
-<section id="community" class="page">
-
-<div class="card">
-
-<h2>👥 भारतीय Communities</h2>
-
-<p style="margin-top:6px;">
-अपनी रुचि के लोगों से जुड़ें।
-</p>
-
-</div>
-
-
-<div class="community">
-<span>🙏 भारतीय संस्कृति</span>
-<button onclick="join(this)">Join</button>
-</div>
-
-<div class="community">
-<span>💼 Jobs & Skills</span>
-<button onclick="join(this)">Join</button>
-</div>
-
-<div class="community">
-<span>🏪 Indian Business</span>
-<button onclick="join(this)">Join</button>
-</div>
-
-<div class="community">
-<span>📚 Education</span>
-<button onclick="join(this)">Join</button>
-</div>
-
-</section>
-
-
-<!-- PROFILE -->
-
-<section id="profile" class="page">
-
-<div class="card profile">
-
-<div class="avatar">
-🇮🇳
-</div>
-
-<h2 id="profileName" style="margin-top:10px;">
-वसुधैव परिवार
-</h2>
-
-<p id="profileEmail" style="margin-top:6px;">
-सम्मान • सुरक्षा • सहयोग
-</p>
-
-<hr style="margin:15px 0;">
-
-<p>🔐 Privacy First</p>
-
-<p style="margin-top:8px;">
-🌐 भारतीय भाषाओं का समर्थन
-</p>
-
-<p style="margin-top:8px;">
-🤖 AI Translation
-</p>
 
 <button
 class="secondary"
+onclick="registerUser()">
+📝 Create New Account
+</button>
+
+<button
+class="forgot"
+onclick="resetPassword()">
+🔑 Forgot Password
+</button>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     RESET PASSWORD SCREEN
+========================= -->
+
+<div id="resetScreen" class="hidden">
+
+<header>
+
+<div class="logo">
+🇮🇳 वसुधैव कुटुम्बकम्
+</div>
+
+<div class="tagline">
+नया Password सेट करें
+</div>
+
+</header>
+
+<div class="login-box">
+
+<h2>🔑 Reset Password</h2>
+
+<p>
+अपना नया Password दर्ज करें
+</p>
+
+<input
+id="newPassword"
+type="password"
+placeholder="New Password"
+autocomplete="new-password"
+>
+
+<input
+id="confirmPassword"
+type="password"
+placeholder="Confirm New Password"
+autocomplete="new-password"
+>
+
+<button
+class="primary"
+onclick="setNewPassword()">
+✅ नया Password सेट करें
+</button>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     MAIN APP
+========================= -->
+
+<div id="mainApp" class="app-content">
+
+<header>
+
+<div class="logo">
+🇮🇳 वसुधैव कुटुम्बकम्
+</div>
+
+<div class="tagline">
+एक परिवार • एक भारत • एक दुनिया
+</div>
+
+</header>
+
+
+<div class="profile-bar">
+
+<div class="profile-name">
+👤 <span id="profileName">User</span>
+</div>
+
+<button
+class="logout"
 onclick="logoutUser()">
 Logout
 </button>
 
 </div>
 
+
+<!-- NAVIGATION -->
+
+<nav>
+
+<button
+id="navHome"
+class="active"
+onclick="showSection('home')">
+🏠 Home
+</button>
+
+<button
+id="navReels"
+onclick="showSection('reels')">
+🎬 Reels
+</button>
+
+<button
+id="navPost"
+onclick="showSection('post')">
+➕ Post
+</button>
+
+<button
+id="navCommunity"
+onclick="showSection('community')">
+👥 Community
+</button>
+
+<button
+id="navProfile"
+onclick="showSection('profile')">
+👤 Profile
+</button>
+
+</nav>
+
+
+<!-- =========================
+     HOME
+========================= -->
+
+<section
+id="home"
+class="section">
+
+<div class="hero">
+
+<h2>
+🌍 एक परिवार • एक भारत • एक दुनिया
+</h2>
+
+<p>
+यहाँ उपयोगी जानकारी, ज्ञान, संस्कृति,
+समुदाय और सकारात्मक विचार साझा करें।
+</p>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-header">
+
+<div class="avatar">
+🇮🇳
+</div>
+
+<div>
+
+<strong>
+वसुधैव कुटुम्बकम्
+</strong>
+
+<br>
+
+<small>
+Official Community
+</small>
+
+</div>
+
+</div>
+
+<p>
+🙏 स्वागत है। यह एक family-friendly
+भारतीय social platform का prototype है।
+</p>
+
+<div class="post-actions">
+
+<button onclick="likePost(this)">
+❤️ Like
+</button>
+
+<button onclick="translatePost(this)">
+🌐 Translate
+</button>
+
+<button onclick="toast('Comment feature जल्द आएगा')">
+💬 Comment
+</button>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+📢 आज का विचार
+</h3>
+
+<br>
+
+<p>
+"ज्ञान बाँटने से बढ़ता है और सम्मान देने से
+समाज मजबूत होता है।"
+</p>
+
+<div class="post-actions">
+
+<button onclick="likePost(this)">
+❤️ Like
+</button>
+
+<button onclick="translatePost(this)">
+🌐 Translate
+</button>
+
+</div>
+
+</div>
+
 </section>
 
 
-<footer>
+<!-- =========================
+     REELS
+========================= -->
 
-🇮🇳 वसुधैव कुटुम्बकम्<br>
-एक परिवार • एक भारत • एक दुनिया
+<section
+id="reels"
+class="section hidden">
 
-</footer>
+<div class="card">
+
+<h2>
+🎬 Reels
+</h2>
+
+<br>
+
+<p>
+भारत की संस्कृति, शिक्षा, ज्ञान,
+कौशल और उपयोगी short videos।
+</p>
+
+<br>
+
+<button
+class="primary"
+onclick="toast('Reels upload feature जल्द आएगा')">
+🎥 Reel बनाएं
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>
+🇮🇳 भारत की संस्कृति
+</h3>
+
+<br>
+
+<p>
+यहाँ educational और cultural reels
+share की जा सकती हैं।
+</p>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     CREATE POST
+========================= -->
+
+<section
+id="post"
+class="section hidden">
+
+<div class="card">
+
+<h2>
+➕ Create Post
+</h2>
+
+<br>
+
+<textarea
+id="postText"
+rows="5"
+placeholder="आप क्या साझा करना चाहते हैं?"
+></textarea>
+
+<button
+class="primary"
+onclick="createPost()">
+📤 Post करें
+</button>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     COMMUNITY
+========================= -->
+
+<section
+id="community"
+class="section hidden">
+
+<div class="card">
+
+<h2>
+👥 India Communities
+</h2>
+
+<br>
+
+<div class="community">
+
+<strong>
+📍 Deoria Community
+</strong>
+
+<p>
+Local news, jobs, business और useful information
+</p>
+
+<br>
+
+<button
+class="secondary"
+onclick="join('Deoria')">
+Join
+</button>
+
+</div>
+
+
+<div class="community">
+
+<strong>
+🇮🇳 भारत ज्ञान Community
+</strong>
+
+<p>
+शिक्षा, संस्कृति और सामान्य ज्ञान
+</p>
+
+<br>
+
+<button
+class="secondary"
+onclick="join('भारत ज्ञान')">
+Join
+</button>
+
+</div>
+
+
+<div class="community">
+
+<strong>
+💼 Business & Skills
+</strong>
+
+<p>
+Business, AI, technology और रोजगार
+</p>
+
+<br>
+
+<button
+class="secondary"
+onclick="join('Business & Skills')">
+Join
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     PROFILE
+========================= -->
+
+<section
+id="profile"
+class="section hidden">
+
+<div class="card">
+
+<h2>
+👤 My Profile
+</h2>
+
+<br>
+
+<p>
+<strong>Name:</strong>
+<span id="profileName2">
+User
+</span>
+</p>
+
+<br>
+
+<p>
+<strong>Email:</strong>
+<span id="profileEmail">
+-
+</span>
+</p>
+
+<br>
+
+<p>
+🔒 Privacy-first profile
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+⚙️ Account
+</h3>
+
+<br>
+
+<button
+class="secondary"
+onclick="resetPassword()">
+🔑 Change / Reset Password
+</button>
+
+<button
+class="secondary"
+onclick="logoutUser()">
+🚪 Logout
+</button>
+
+</div>
+
+</section>
 
 </div>
 
 </div>
 
 
-<div id="toast" class="toast"></div>
+<div
+id="toast"
+class="toast">
+</div>
 
 
 <script>
 
-/* ==========================================
-   SUPABASE CONFIG
-   ========================================== */
-
-/*
-   ⬇️ सिर्फ इन 2 जगह अपनी Supabase जानकारी डालें
-*/
+/* =========================================
+   SUPABASE CONNECTION
+========================================= */
 
 const SUPABASE_URL =
-  https://yshlbmmosrfwjnzxlgpz.supabase.co
+"https://yshlbmmosrfwjnzxlgpz.supabase.co";
 
 const SUPABASE_KEY =
-sb_publishable_Uq4wF9xUhFl5foMSRWyhvQ_iyqXgpt2
+"sb_publishable_Uq4wF9xUhFl5foMSRWyhvQ_iyqXgpt2";
 
-
-/* Supabase connection */
 
 let supabaseClient = null;
 
-try{
-
-supabaseClient =
-supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
-);
-
-}catch(error){
-
-console.error("Supabase connection error:",error);
-
-}
-
-
-/* ==========================================
-   LOGIN
-   ========================================== */
-
-async function loginUser(){
-
-let email =
-document.getElementById("userEmail").value.trim();
-
-let password =
-document.getElementById("userPassword").value;
-
-if(!email || !password){
-
-toast("Email और Password भरें");
-
-return;
-
-}
-
-if(!supabaseClient){
-
-toast("Supabase connection सेट नहीं है");
-
-return;
-
-}
-
-toast("Login हो रहा है...");
-
-const { data, error } =
-await supabaseClient.auth.signInWithPassword({
-
-email:email,
-password:password
-
-});
-
-if(error){
-
-console.error(error);
-
-toast("Login Error: "+error.message);
-
-return;
-
-}
-
-if(data && data.user){
-
-showApp();
-
-loadProfile(data.user);
-
-toast("Login सफल ✓");
-
-}
-
-}
-
-
-/* ==========================================
-   REGISTER
-   ========================================== */
-
-async function registerUser(){
-
-let email =
-document.getElementById("userEmail").value.trim();
-
-let password =
-document.getElementById("userPassword").value;
-
-if(!email || !password){
-
-toast("Email और Password भरें");
-
-return;
-
-}
-
-if(password.length < 6){
-
-toast("Password कम से कम 6 characters का रखें");
-
-return;
-
-}
-
-if(!supabaseClient){
-
-toast("Supabase connection सेट नहीं है");
-
-return;
-
-}
-
-toast("Account बनाया जा रहा है...");
-
-const { data, error } =
-await supabaseClient.auth.signUp({
-
-email:email,
-password:password
-
-});
-
-if(error){
-
-console.error(error);
-
-toast("Signup Error: "+error.message);
-
-return;
-
-}
-
-if(data.session){
-
-showApp();
-
-if(data.user){
-loadProfile(data.user);
-}
-
-toast("Account बनाया गया ✓");
-
-}else{
-
-toast("Account बन गया। Email verification करें।");
-
-}
-
-}
-
-
-/* ==========================================
-   LOGOUT
-   ========================================== */
-
-async function logoutUser(){
-
-if(!supabaseClient) return;
-
-const { error } =
-await supabaseClient.auth.signOut();
-
-if(error){
-
-toast(error.message);
-
-return;
-
-}
-
-document.getElementById("mainApp").style.display="none";
-
-document.getElementById("loginScreen").style.display="block";
-
-document.getElementById("userPassword").value="";
-
-toast("Logout हो गया ✓");
-
-}
-
-
-/* ==========================================
-   SHOW APP
-   ========================================== */
-
-function showApp(){
-
-document.getElementById("loginScreen").style.display="none";
-
-document.getElementById("mainApp").style.display="block";
-
-}
-
-
-/* ==========================================
-   PROFILE
-   ========================================== */
-
-async function loadProfile(user){
-
-if(!user || !supabaseClient) return;
-
-document.getElementById("profileEmail").innerText =
-user.email || "";
 
 try{
 
-const { data, error } =
-await supabaseClient
-.from("profiles")
-.select("*")
-.eq("id",user.id)
-.maybeSingle();
-
-if(error){
-
-console.log("Profile query:",error.message);
-
-return;
-
-}
-
-if(data){
-
-document.getElementById("profileName").innerText =
-data.display_name ||
-data.username ||
-"वसुधैव परिवार";
-
-}
+  supabaseClient =
+    supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
 
 }catch(error){
 
-console.log(error);
-
-}
-
-}
-
-
-/* ==========================================
-   PAGE
-   ========================================== */
-
-function showPage(page){
-
-document.querySelectorAll(".page")
-.forEach(function(p){
-
-p.classList.remove("active");
-
-});
-
-let selected =
-document.getElementById(page);
-
-if(selected){
-
-selected.classList.add("active");
-
-}
-
-window.scrollTo(0,0);
+  console.error(
+    "Supabase initialization error:",
+    error
+  );
 
 }
 
 
-/* ==========================================
+/* =========================================
    TOAST
-   ========================================== */
+========================================= */
 
 function toast(message){
 
-let t =
-document.getElementById("toast");
+  const box =
+    document.getElementById("toast");
 
-t.innerText=message;
+  box.innerText = message;
 
-t.style.display="block";
+  box.style.display = "block";
 
-setTimeout(function(){
+  setTimeout(function(){
 
-t.style.display="none";
+    box.style.display = "none";
 
-},3500);
-
-}
-
-
-/* ==========================================
-   LIKE
-   ========================================== */
-
-function likePost(button){
-
-let match =
-button.innerText.match(/\d+/);
-
-let number =
-match ? parseInt(match[0]) : 0;
-
-number++;
-
-button.innerText =
-"❤️ Like "+number;
+  },3000);
 
 }
 
 
-/* ==========================================
-   TRANSLATION DEMO
-   ========================================== */
+/* =========================================
+   LOGIN
+========================================= */
 
-function translatePost(button){
+async function loginUser(){
 
-let post =
-button.closest(".post");
+  const email =
+    document
+    .getElementById("userEmail")
+    .value
+    .trim();
 
-let text =
-post.querySelector("p");
-
-if(!text.dataset.original){
-
-text.dataset.original =
-text.innerText;
-
-text.innerText =
-"🌐 AI Translation Demo: यह पोस्ट दूसरी भारतीय भाषाओं में भी पढ़ी जा सकती है।";
-
-}else{
-
-text.innerText =
-text.dataset.original;
-
-delete text.dataset.original;
-
-}
-
-}
+  const password =
+    document
+    .getElementById("userPassword")
+    .value;
 
 
-/* ==========================================
-   CREATE POST
-   ========================================== */
+  if(!email){
 
-function createPost(){
+    toast("अपना Email डालें");
 
-let text =
-document.getElementById("postText").value.trim();
+    return;
+  }
 
-if(!text){
 
-toast("पहले कुछ लिखें");
+  if(!password){
 
-return;
+    toast("अपना Password डालें");
 
-}
+    return;
+  }
 
-let article =
-document.createElement("div");
 
-article.className="card post";
+  if(!supabaseClient){
 
-article.innerHTML=`
+    toast("Supabase connection नहीं है");
 
-<span class="badge">🆕 नई पोस्ट</span>
+    return;
+  }
 
-<h3>वसुधैव परिवार</h3>
 
-<p>${escapeHtml(text)}</p>
+  toast("Login हो रहा है...");
 
-<div class="actions">
 
-<button onclick="likePost(this)">
-❤️ Like 0
-</button>
+  const { data, error } =
+    await supabaseClient.auth.signInWithPassword({
 
-<button onclick="toast('Comment Demo')">
-💬 Comment
-</button>
+      email: email,
 
-<button onclick="translatePost(this)">
-🌐 Translate
-</button>
+      password: password
 
-</div>
-`;
+    });
 
-document.getElementById("feed")
-.prepend(article);
 
-document.getElementById("postText").value="";
+  if(error){
 
-showPage("home");
+    console.error(error);
 
-toast("पोस्ट प्रकाशित हो गई ✓");
+    toast(
+      "Login Error: " +
+      error.message
+    );
+
+    return;
+  }
+
+
+  toast("Login सफल हुआ ✓");
+
+
+  if(data && data.user){
+
+    showApp();
+
+    loadProfile(data.user);
+
+  }
 
 }
 
 
-/* ==========================================
-   QUICK POST
-   ========================================== */
+/* =========================================
+   REGISTER
+========================================= */
 
-function createQuickPost(){
+async function registerUser(){
 
-let text =
-document.getElementById("quickPost").value.trim();
+  const email =
+    document
+    .getElementById("userEmail")
+    .value
+    .trim();
 
-if(!text){
+  const password =
+    document
+    .getElementById("userPassword")
+    .value;
 
-toast("पहले कुछ लिखें");
 
-return;
+  if(!email){
+
+    toast("पहले Email डालें");
+
+    return;
+  }
+
+
+  if(!password){
+
+    toast("Password डालें");
+
+    return;
+  }
+
+
+  if(password.length < 6){
+
+    toast(
+      "Password कम से कम 6 characters का रखें"
+    );
+
+    return;
+  }
+
+
+  if(!supabaseClient){
+
+    toast("Supabase connection नहीं है");
+
+    return;
+  }
+
+
+  toast("Account बनाया जा रहा है...");
+
+
+  const { data, error } =
+    await supabaseClient.auth.signUp({
+
+      email: email,
+
+      password: password
+
+    });
+
+
+  if(error){
+
+    console.error(error);
+
+    toast(
+      "Registration Error: " +
+      error.message
+    );
+
+    return;
+  }
+
+
+  if(data.user && !data.session){
+
+    toast(
+      "Account बन गया ✓ Email check करके verification करें"
+    );
+
+    return;
+  }
+
+
+  toast("Account बन गया ✓");
+
+
+  if(data.user){
+
+    showApp();
+
+    loadProfile(data.user);
+
+  }
 
 }
 
-let article =
-document.createElement("div");
 
-article.className="card post";
+/* =========================================
+   FORGOT PASSWORD
+========================================= */
 
-article.innerHTML=`
+async function resetPassword(){
 
-<span class="badge">🆕 नई पोस्ट</span>
+  const email =
+    document
+    .getElementById("userEmail")
+    .value
+    .trim();
 
-<h3>आपकी पोस्ट</h3>
 
-<p>${escapeHtml(text)}</p>
+  if(!email){
 
-<div class="actions">
+    toast("पहले अपना Email डालें");
 
-<button onclick="likePost(this)">
-❤️ Like 0
-</button>
+    return;
+  }
 
-<button onclick="toast('Comment Demo')">
-💬 Comment
-</button>
 
-<button onclick="translatePost(this)">
-🌐 Translate
-</button>
+  if(!supabaseClient){
 
-</div>
-`;
+    toast("Supabase connection सेट नहीं है");
 
-document.getElementById("feed")
-.prepend(article);
+    return;
+  }
 
-document.getElementById("quickPost").value="";
 
-toast("पोस्ट प्रकाशित हो गई ✓");
+  toast("Reset link भेजा जा रहा है...");
+
+
+  const { error } =
+    await supabaseClient.auth
+    .resetPasswordForEmail(
+
+      email,
+
+      {
+
+        redirectTo:
+        "https://mk906036875-create.github.io/vasudhaiva-kutumbakam/"
+
+      }
+
+    );
+
+
+  if(error){
+
+    console.error(error);
+
+    toast(
+      "Reset Error: " +
+      error.message
+    );
+
+    return;
+  }
+
+
+  toast(
+    "Password reset link Email पर भेज दिया गया ✓"
+  );
 
 }
 
 
-/* ==========================================
-   HTML SECURITY
-   ========================================== */
+/* =========================================
+   SHOW RESET SCREEN
+========================================= */
 
-function escapeHtml(text){
+function showResetScreen(){
 
-let div =
-document.createElement("div");
-
-div.innerText=text;
-
-return div.innerHTML;
-
-}
+  document
+  .getElementById("loginScreen")
+  .classList.add("hidden");
 
 
-/* ==========================================
-   COMMUNITY
-   ========================================== */
+  document
+  .getElementById("mainApp")
+  .style.display = "none";
 
-function join(button){
 
-button.innerText="Joined ✓";
-
-button.style.background="#555";
+  document
+  .getElementById("resetScreen")
+  .classList.remove("hidden");
 
 }
 
 
-/* ==========================================
-   AUTH SESSION CHECK
-   ========================================== */
+/* =========================================
+   SET NEW PASSWORD
+========================================= */
+
+async function setNewPassword(){
+
+  const password =
+    document
+    .getElementById("newPassword")
+    .value;
+
+
+  const confirmPassword =
+    document
+    .getElementById("confirmPassword")
+    .value;
+
+
+  if(!password){
+
+    toast("नया Password डालें");
+
+    return;
+  }
+
+
+  if(password.length < 6){
+
+    toast(
+      "Password कम से कम 6 characters का रखें"
+    );
+
+    return;
+  }
+
+
+  if(password !== confirmPassword){
+
+    toast(
+      "दोनों Password समान नहीं हैं"
+    );
+
+    return;
+  }
+
+
+  if(!supabaseClient){
+
+    toast("Supabase connection नहीं है");
+
+    return;
+  }
+
+
+  toast("Password update हो रहा है...");
+
+
+  const { error } =
+    await supabaseClient.auth.updateUser({
+
+      password: password
+
+    });
+
+
+  if(error){
+
+    console.error(error);
+
+    toast(
+      "Password Update Error: " +
+      error.message
+    );
+
+    return;
+  }
+
+
+  toast(
+    "Password सफलतापूर्वक बदल गया ✓"
+  );
+
+
+  document
+  .getElementById("newPassword")
+  .value = "";
+
+
+  document
+  .getElementById("confirmPassword")
+  .value = "";
+
+
+  document
+  .getElementById("resetScreen")
+  .classList.add("hidden");
+
+
+  document
+  .getElementById("loginScreen")
+  .classList.remove("hidden");
+
+
+  document
+  .getElementById("mainApp")
+  .style.display = "none";
+
+}
+
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+async function logoutUser(){
+
+  if(!supabaseClient){
+
+    return;
+  }
+
+
+  const { error } =
+    await supabaseClient.auth.signOut();
+
+
+  if(error){
+
+    toast(
+      "Logout Error: " +
+      error.message
+    );
+
+    return;
+  }
+
+
+  document
+  .getElementById("mainApp")
+  .style.display = "none";
+
+
+  document
+  .getElementById("resetScreen")
+  .classList.add("hidden");
+
+
+  document
+  .getElementById("loginScreen")
+  .classList.remove("hidden");
+
+
+  document
+  .getElementById("userPassword")
+  .value = "";
+
+
+  toast("Logout हो गया ✓");
+
+}
+
+
+/* =========================================
+   SHOW APP
+========================================= */
+
+function showApp(){
+
+  document
+  .getElementById("loginScreen")
+  .classList.add("hidden");
+
+
+  document
+  .getElementById("resetScreen")
+  .classList.add("hidden");
+
+
+  document
+  .getElementById("mainApp")
+  .style.display = "block";
+
+}
+
+
+/* =========================================
+   LOAD PROFILE
+========================================= */
+
+async function loadProfile(user){
+
+  if(!user){
+
+    return;
+  }
+
+
+  const email =
+    user.email || "-";
+
+
+  document
+  .getElementById("profileEmail")
+  .innerText = email;
+
+
+  let displayName =
+    email.split("@")[0];
+
+
+  if(supabaseClient){
+
+    try{
+
+      const { data, error } =
+        await supabaseClient
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .maybeSingle();
+
+
+      if(!error && data){
+
+        displayName =
+          data.display_name ||
+          data.name ||
+          displayName;
+
+      }
+
+    }catch(error){
+
+      console.log(
+        "Profile load skipped:",
+        error
+      );
+
+    }
+
+  }
+
+
+  document
+  .getElementById("profileName")
+  .innerText =
+    displayName;
+
+
+  document
+  .getElementById("profileName2")
+  .innerText =
+    displayName;
+
+}
+
+
+/* =========================================
+   SESSION CHECK
+========================================= */
 
 async function checkSession(){
 
-if(!supabaseClient){
+  if(!supabaseClient){
 
-document.getElementById("loginScreen").style.display="block";
+    return;
+  }
 
-document.getElementById("mainApp").style.display="none";
 
-return;
+  const { data, error } =
+    await supabaseClient.auth.getSession();
 
-}
 
-const { data, error } =
-await supabaseClient.auth.getSession();
+  if(error){
 
-if(error){
+    console.error(error);
 
-console.log(error);
+    return;
+  }
 
-return;
 
-}
+  if(data.session){
 
-if(data.session){
+    showApp();
 
-showApp();
+    loadProfile(
+      data.session.user
+    );
 
-loadProfile(data.session.user);
-
-}else{
-
-document.getElementById("loginScreen").style.display="block";
-
-document.getElementById("mainApp").style.display="none";
-
-}
+  }
 
 }
 
 
-/* ==========================================
-   START
-   ========================================== */
-
-window.addEventListener("load",function(){
-
-checkSession();
-
-});
-
-
-/* ==========================================
-   AUTH STATE
-   ========================================== */
+/* =========================================
+   AUTH STATE CHANGE
+========================================= */
 
 if(supabaseClient){
 
-supabaseClient.auth.onAuthStateChange(
-function(event,session){
+  supabaseClient.auth
+  .onAuthStateChange(
 
-if(session){
+    async function(event, session){
 
-showApp();
+      console.log(
+        "Auth event:",
+        event
+      );
 
-setTimeout(function(){
 
-loadProfile(session.user);
+      if(event === "PASSWORD_RECOVERY"){
 
-},0);
+        showResetScreen();
+
+        return;
+      }
+
+
+      if(
+        event === "SIGNED_IN" &&
+        session
+      ){
+
+        showApp();
+
+        loadProfile(
+          session.user
+        );
+
+      }
+
+
+      if(event === "SIGNED_OUT"){
+
+        document
+        .getElementById("mainApp")
+        .style.display = "none";
+
+
+        document
+        .getElementById("loginScreen")
+        .classList.remove("hidden");
+
+      }
+
+    }
+
+  );
 
 }
 
-});
+
+/* =========================================
+   NAVIGATION
+========================================= */
+
+function showSection(section){
+
+  const sections = [
+
+    "home",
+    "reels",
+    "post",
+    "community",
+    "profile"
+
+  ];
+
+
+  sections.forEach(function(name){
+
+    const element =
+      document.getElementById(name);
+
+
+    if(name === section){
+
+      element.classList.remove("hidden");
+
+    }else{
+
+      element.classList.add("hidden");
+
+    }
+
+  });
+
+
+  const navButtons = [
+
+    "navHome",
+    "navReels",
+    "navPost",
+    "navCommunity",
+    "navProfile"
+
+  ];
+
+
+  navButtons.forEach(function(id){
+
+    document
+    .getElementById(id)
+    .classList.remove("active");
+
+  });
+
+
+  const activeMap = {
+
+    home:"navHome",
+
+    reels:"navReels",
+
+    post:"navPost",
+
+    community:"navCommunity",
+
+    profile:"navProfile"
+
+  };
+
+
+  if(activeMap[section]){
+
+    document
+    .getElementById(activeMap[section])
+    .classList.add("active");
+
+  }
 
 }
+
+
+/* =========================================
+   CREATE POST
+========================================= */
+
+function createPost(){
+
+  const text =
+    document
+    .getElementById("postText")
+    .value
+    .trim();
+
+
+  if(!text){
+
+    toast("पहले Post लिखें");
+
+    return;
+  }
+
+
+  toast(
+    "Post तैयार है ✓"
+  );
+
+
+  document
+  .getElementById("postText")
+  .value = "";
+
+}
+
+
+/* =========================================
+   LIKE
+========================================= */
+
+function likePost(button){
+
+  button.innerText =
+    "❤️ Liked";
+
+  button.disabled = true;
+
+}
+
+
+/* =========================================
+   TRANSLATE
+========================================= */
+
+function translatePost(button){
+
+  toast(
+    "AI Translation feature जल्द आएगा 🌐"
+  );
+
+}
+
+
+/* =========================================
+   JOIN COMMUNITY
+========================================= */
+
+function join(name){
+
+  toast(
+    name +
+    " Community में Join request भेजी गई ✓"
+  );
+
+}
+
+
+/* =========================================
+   HTML ESCAPE
+========================================= */
+
+function escapeHtml(text){
+
+  const div =
+    document.createElement("div");
+
+  div.textContent = text;
+
+  return div.innerHTML;
+
+}
+
+
+/* =========================================
+   START
+========================================= */
+
+checkSession();
 
 </script>
 
