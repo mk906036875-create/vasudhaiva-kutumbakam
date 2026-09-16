@@ -1,10 +1,12 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>वसुधैव कुटुम्बकम् 🇮🇳</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 *{
@@ -296,25 +298,25 @@ footer{
 
 <input
 id="userEmail"
-type="text"
-placeholder="मोबाइल नंबर या ईमेल">
+type="email"
+placeholder="Email">
 
 <input
 id="userPassword"
 type="password"
 placeholder="Password">
 
-<button class="primary" onclick="loginDemo()">
+<button class="primary" onclick="loginUser()">
 Login
 </button>
 
-<button class="secondary" onclick="registerDemo()">
+<button class="secondary" onclick="registerUser()">
 Create New Account
 </button>
 
 <p class="login-note">
-🔒 यह अभी Demo Login है।<br>
-आपका password किसी server पर save नहीं किया जाता।
+🔒 आपका password Supabase Authentication द्वारा सुरक्षित रूप से संभाला जाता है।<br>
+यह demo अब वास्तविक Email Authentication से जुड़ा है।
 </p>
 
 </div>
@@ -564,11 +566,11 @@ Join
 🇮🇳
 </div>
 
-<h2 style="margin-top:10px;">
+<h2 id="profileName" style="margin-top:10px;">
 वसुधैव परिवार
 </h2>
 
-<p style="margin-top:6px;">
+<p id="profileEmail" style="margin-top:6px;">
 सम्मान • सुरक्षा • सहयोग
 </p>
 
@@ -588,7 +590,7 @@ Join
 
 <button
 class="secondary"
-onclick="logoutDemo()">
+onclick="logoutUser()">
 Logout
 </button>
 
@@ -614,47 +616,161 @@ Logout
 
 <script>
 
-function loginDemo(){
+/* ==========================================
+   SUPABASE CONFIG
+   ========================================== */
 
-let email=document.getElementById("userEmail").value.trim();
-let password=document.getElementById("userPassword").value.trim();
+const SUPABASE_URL = "PASTE_YOUR_PROJECT_URL_HERE";
+
+const SUPABASE_KEY = "PASTE_YOUR_PUBLISHABLE_OR_ANON_KEY_HERE";
+
+const supabaseClient =
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+/* ==========================================
+   LOGIN
+   ========================================== */
+
+async function loginUser(){
+
+let email =
+document.getElementById("userEmail").value.trim();
+
+let password =
+document.getElementById("userPassword").value.trim();
 
 if(!email || !password){
 
-toast("मोबाइल/ईमेल और Password भरें");
+toast("Email और Password भरें");
 
 return;
+
 }
 
-localStorage.setItem("vkDemoUser",email);
+const { data, error } =
+await supabaseClient.auth.signInWithPassword({
+
+email: email,
+password: password
+
+});
+
+if(error){
+
+toast(error.message);
+
+return;
+
+}
 
 showApp();
 
-toast("Login Demo सफल");
+loadProfile(data.user);
+
+toast("Login सफल ✓");
 
 }
 
 
-function registerDemo(){
+/* ==========================================
+   REGISTER
+   ========================================== */
 
-let email=document.getElementById("userEmail").value.trim();
-let password=document.getElementById("userPassword").value.trim();
+async function registerUser(){
+
+let email =
+document.getElementById("userEmail").value.trim();
+
+let password =
+document.getElementById("userPassword").value.trim();
 
 if(!email || !password){
 
-toast("मोबाइल/ईमेल और Password भरें");
+toast("Email और Password भरें");
 
 return;
+
 }
 
-localStorage.setItem("vkDemoUser",email);
+if(password.length < 6){
+
+toast("Password कम से कम 6 characters का रखें");
+
+return;
+
+}
+
+const { data, error } =
+await supabaseClient.auth.signUp({
+
+email: email,
+password: password
+
+});
+
+if(error){
+
+toast(error.message);
+
+return;
+
+}
+
+if(data.user){
+
+loadProfile(data.user);
+}
+
+if(data.session){
 
 showApp();
 
-toast("Account Demo बनाया गया");
+toast("Account बनाया गया ✓");
+
+}else{
+
+toast("Account बन गया। Email verification करें।");
 
 }
 
+}
+
+
+/* ==========================================
+   LOGOUT
+   ========================================== */
+
+async function logoutUser(){
+
+const { error } =
+await supabaseClient.auth.signOut();
+
+if(error){
+
+toast(error.message);
+
+return;
+
+}
+
+document.getElementById("mainApp").style.display="none";
+
+document.getElementById("loginScreen").style.display="block";
+
+document.getElementById("userPassword").value="";
+
+toast("Logout हो गया ✓");
+
+}
+
+
+/* ==========================================
+   SHOW APP
+   ========================================== */
 
 function showApp(){
 
@@ -665,18 +781,39 @@ document.getElementById("mainApp").style.display="block";
 }
 
 
-function logoutDemo(){
+/* ==========================================
+   PROFILE
+   ========================================== */
 
-localStorage.removeItem("vkDemoUser");
+async function loadProfile(user){
 
-document.getElementById("mainApp").style.display="none";
+if(!user) return;
 
-document.getElementById("loginScreen").style.display="block";
+document.getElementById("profileEmail").innerText =
+user.email || "";
 
-toast("Logout हो गया");
+const { data } =
+await supabaseClient
+.from("profiles")
+.select("*")
+.eq("id",user.id)
+.maybeSingle();
+
+if(data){
+
+document.getElementById("profileName").innerText =
+data.display_name ||
+data.username ||
+"वसुधैव परिवार";
 
 }
 
+}
+
+
+/* ==========================================
+   PAGE
+   ========================================== */
 
 function showPage(page){
 
@@ -695,6 +832,10 @@ window.scrollTo(0,0);
 }
 
 
+/* ==========================================
+   TOAST
+   ========================================== */
+
 function toast(message){
 
 let t=document.getElementById("toast");
@@ -707,10 +848,14 @@ setTimeout(function(){
 
 t.style.display="none";
 
-},1800);
+},2500);
 
 }
 
+
+/* ==========================================
+   LIKE
+   ========================================== */
 
 function likePost(button){
 
@@ -724,6 +869,10 @@ button.innerText="❤️ Like "+number;
 
 }
 
+
+/* ==========================================
+   TRANSLATION DEMO
+   ========================================== */
 
 function translatePost(button){
 
@@ -749,9 +898,14 @@ delete text.dataset.original;
 }
 
 
+/* ==========================================
+   CREATE POST
+   ========================================== */
+
 function createPost(){
 
-let text=document.getElementById("postText").value.trim();
+let text=
+document.getElementById("postText").value.trim();
 
 if(!text){
 
@@ -761,7 +915,8 @@ return;
 
 }
 
-let article=document.createElement("div");
+let article=
+document.createElement("div");
 
 article.className="card post";
 
@@ -790,20 +945,26 @@ article.innerHTML=`
 </div>
 `;
 
-document.getElementById("feed").prepend(article);
+document.getElementById("feed")
+.prepend(article);
 
 document.getElementById("postText").value="";
 
 showPage("home");
 
-toast("पोस्ट प्रकाशित हो गई");
+toast("पोस्ट प्रकाशित हो गई ✓");
 
 }
 
 
+/* ==========================================
+   QUICK POST
+   ========================================== */
+
 function createQuickPost(){
 
-let text=document.getElementById("quickPost").value.trim();
+let text=
+document.getElementById("quickPost").value.trim();
 
 if(!text){
 
@@ -813,7 +974,8 @@ return;
 
 }
 
-let article=document.createElement("div");
+let article=
+document.createElement("div");
 
 article.className="card post";
 
@@ -842,14 +1004,19 @@ article.innerHTML=`
 </div>
 `;
 
-document.getElementById("feed").prepend(article);
+document.getElementById("feed")
+.prepend(article);
 
 document.getElementById("quickPost").value="";
 
-toast("पोस्ट प्रकाशित हो गई");
+toast("पोस्ट प्रकाशित हो गई ✓");
 
 }
 
+
+/* ==========================================
+   HTML SECURITY
+   ========================================== */
 
 function escapeHtml(text){
 
@@ -862,6 +1029,10 @@ return div.innerHTML;
 }
 
 
+/* ==========================================
+   COMMUNITY
+   ========================================== */
+
 function join(button){
 
 button.innerText="Joined ✓";
@@ -871,17 +1042,59 @@ button.style.background="#555";
 }
 
 
-window.onload=function(){
+/* ==========================================
+   AUTH SESSION CHECK
+   ========================================== */
 
-let user=localStorage.getItem("vkDemoUser");
+async function checkSession(){
 
-if(user){
+const { data } =
+await supabaseClient.auth.getSession();
+
+if(data.session){
 
 showApp();
 
+loadProfile(data.session.user);
+
+}else{
+
+document.getElementById("loginScreen").style.display="block";
+
+document.getElementById("mainApp").style.display="none";
+
 }
 
-};
+}
+
+
+/* ==========================================
+   START
+   ========================================== */
+
+window.addEventListener("load",function(){
+
+checkSession();
+
+});
+
+
+/* ==========================================
+   AUTH STATE
+   ========================================== */
+
+supabaseClient.auth.onAuthStateChange(
+function(event,session){
+
+if(session){
+
+showApp();
+
+loadProfile(session.user);
+
+}
+
+});
 
 </script>
 
