@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
@@ -268,6 +268,8 @@ footer{
   border-radius:20px;
   display:none;
   z-index:99;
+  max-width:90%;
+  text-align:center;
 }
 
 #mainApp{
@@ -294,16 +296,18 @@ footer{
 
 <div class="login-card">
 
-<h2 id="authTitle">🔐 Login</h2>
+<h2>🔐 Login</h2>
 
 <input
 id="userEmail"
 type="email"
+autocomplete="email"
 placeholder="Email">
 
 <input
 id="userPassword"
 type="password"
+autocomplete="current-password"
 placeholder="Password">
 
 <button class="primary" onclick="loginUser()">
@@ -315,8 +319,7 @@ Create New Account
 </button>
 
 <p class="login-note">
-🔒 आपका password Supabase Authentication द्वारा सुरक्षित रूप से संभाला जाता है।<br>
-यह demo अब वास्तविक Email Authentication से जुड़ा है।
+🔒 आपका password Supabase Authentication द्वारा सुरक्षित रूप से संभाला जाता है।
 </p>
 
 </div>
@@ -511,46 +514,23 @@ style="width:100%;height:130px;margin-top:12px;padding:12px;border-radius:10px;b
 
 
 <div class="community">
-
 <span>🙏 भारतीय संस्कृति</span>
-
-<button onclick="join(this)">
-Join
-</button>
-
+<button onclick="join(this)">Join</button>
 </div>
 
-
 <div class="community">
-
 <span>💼 Jobs & Skills</span>
-
-<button onclick="join(this)">
-Join
-</button>
-
+<button onclick="join(this)">Join</button>
 </div>
 
-
 <div class="community">
-
 <span>🏪 Indian Business</span>
-
-<button onclick="join(this)">
-Join
-</button>
-
+<button onclick="join(this)">Join</button>
 </div>
 
-
 <div class="community">
-
 <span>📚 Education</span>
-
-<button onclick="join(this)">
-Join
-</button>
-
+<button onclick="join(this)">Join</button>
 </div>
 
 </section>
@@ -576,9 +556,7 @@ Join
 
 <hr style="margin:15px 0;">
 
-<p>
-🔐 Privacy First
-</p>
+<p>🔐 Privacy First</p>
 
 <p style="margin-top:8px;">
 🌐 भारतीय भाषाओं का समर्थन
@@ -620,15 +598,34 @@ Logout
    SUPABASE CONFIG
    ========================================== */
 
-const SUPABASE_URL = "PASTE_YOUR_PROJECT_URL_HERE";
+/*
+   ⬇️ सिर्फ इन 2 जगह अपनी Supabase जानकारी डालें
+*/
 
-const SUPABASE_KEY = "PASTE_YOUR_PUBLISHABLE_OR_ANON_KEY_HERE";
+const SUPABASE_URL =
+"PASTE_YOUR_PROJECT_URL_HERE";
 
-const supabaseClient =
+const SUPABASE_KEY =
+"PASTE_YOUR_PUBLISHABLE_OR_ANON_KEY_HERE";
+
+
+/* Supabase connection */
+
+let supabaseClient = null;
+
+try{
+
+supabaseClient =
 supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
+SUPABASE_URL,
+SUPABASE_KEY
 );
+
+}catch(error){
+
+console.error("Supabase connection error:",error);
+
+}
 
 
 /* ==========================================
@@ -641,7 +638,7 @@ let email =
 document.getElementById("userEmail").value.trim();
 
 let password =
-document.getElementById("userPassword").value.trim();
+document.getElementById("userPassword").value;
 
 if(!email || !password){
 
@@ -651,27 +648,43 @@ return;
 
 }
 
+if(!supabaseClient){
+
+toast("Supabase connection सेट नहीं है");
+
+return;
+
+}
+
+toast("Login हो रहा है...");
+
 const { data, error } =
 await supabaseClient.auth.signInWithPassword({
 
-email: email,
-password: password
+email:email,
+password:password
 
 });
 
 if(error){
 
-toast(error.message);
+console.error(error);
+
+toast("Login Error: "+error.message);
 
 return;
 
 }
+
+if(data && data.user){
 
 showApp();
 
 loadProfile(data.user);
 
 toast("Login सफल ✓");
+
+}
 
 }
 
@@ -686,7 +699,7 @@ let email =
 document.getElementById("userEmail").value.trim();
 
 let password =
-document.getElementById("userPassword").value.trim();
+document.getElementById("userPassword").value;
 
 if(!email || !password){
 
@@ -704,30 +717,41 @@ return;
 
 }
 
-const { data, error } =
-await supabaseClient.auth.signUp({
+if(!supabaseClient){
 
-email: email,
-password: password
-
-});
-
-if(error){
-
-toast(error.message);
+toast("Supabase connection सेट नहीं है");
 
 return;
 
 }
 
-if(data.user){
+toast("Account बनाया जा रहा है...");
 
-loadProfile(data.user);
+const { data, error } =
+await supabaseClient.auth.signUp({
+
+email:email,
+password:password
+
+});
+
+if(error){
+
+console.error(error);
+
+toast("Signup Error: "+error.message);
+
+return;
+
 }
 
 if(data.session){
 
 showApp();
+
+if(data.user){
+loadProfile(data.user);
+}
 
 toast("Account बनाया गया ✓");
 
@@ -745,6 +769,8 @@ toast("Account बन गया। Email verification करें।");
    ========================================== */
 
 async function logoutUser(){
+
+if(!supabaseClient) return;
 
 const { error } =
 await supabaseClient.auth.signOut();
@@ -787,17 +813,27 @@ document.getElementById("mainApp").style.display="block";
 
 async function loadProfile(user){
 
-if(!user) return;
+if(!user || !supabaseClient) return;
 
 document.getElementById("profileEmail").innerText =
 user.email || "";
 
-const { data } =
+try{
+
+const { data, error } =
 await supabaseClient
 .from("profiles")
 .select("*")
 .eq("id",user.id)
 .maybeSingle();
+
+if(error){
+
+console.log("Profile query:",error.message);
+
+return;
+
+}
 
 if(data){
 
@@ -805,6 +841,12 @@ document.getElementById("profileName").innerText =
 data.display_name ||
 data.username ||
 "वसुधैव परिवार";
+
+}
+
+}catch(error){
+
+console.log(error);
 
 }
 
@@ -824,8 +866,14 @@ p.classList.remove("active");
 
 });
 
-document.getElementById(page)
-.classList.add("active");
+let selected =
+document.getElementById(page);
+
+if(selected){
+
+selected.classList.add("active");
+
+}
 
 window.scrollTo(0,0);
 
@@ -838,7 +886,8 @@ window.scrollTo(0,0);
 
 function toast(message){
 
-let t=document.getElementById("toast");
+let t =
+document.getElementById("toast");
 
 t.innerText=message;
 
@@ -848,7 +897,7 @@ setTimeout(function(){
 
 t.style.display="none";
 
-},2500);
+},3500);
 
 }
 
@@ -859,13 +908,16 @@ t.style.display="none";
 
 function likePost(button){
 
-let match=button.innerText.match(/\d+/);
+let match =
+button.innerText.match(/\d+/);
 
-let number=match ? parseInt(match[0]) : 0;
+let number =
+match ? parseInt(match[0]) : 0;
 
 number++;
 
-button.innerText="❤️ Like "+number;
+button.innerText =
+"❤️ Like "+number;
 
 }
 
@@ -876,20 +928,24 @@ button.innerText="❤️ Like "+number;
 
 function translatePost(button){
 
-let post=button.closest(".post");
+let post =
+button.closest(".post");
 
-let text=post.querySelector("p");
+let text =
+post.querySelector("p");
 
 if(!text.dataset.original){
 
-text.dataset.original=text.innerText;
+text.dataset.original =
+text.innerText;
 
-text.innerText=
+text.innerText =
 "🌐 AI Translation Demo: यह पोस्ट दूसरी भारतीय भाषाओं में भी पढ़ी जा सकती है।";
 
 }else{
 
-text.innerText=text.dataset.original;
+text.innerText =
+text.dataset.original;
 
 delete text.dataset.original;
 
@@ -904,7 +960,7 @@ delete text.dataset.original;
 
 function createPost(){
 
-let text=
+let text =
 document.getElementById("postText").value.trim();
 
 if(!text){
@@ -915,7 +971,7 @@ return;
 
 }
 
-let article=
+let article =
 document.createElement("div");
 
 article.className="card post";
@@ -963,7 +1019,7 @@ toast("पोस्ट प्रकाशित हो गई ✓");
 
 function createQuickPost(){
 
-let text=
+let text =
 document.getElementById("quickPost").value.trim();
 
 if(!text){
@@ -974,7 +1030,7 @@ return;
 
 }
 
-let article=
+let article =
 document.createElement("div");
 
 article.className="card post";
@@ -1020,7 +1076,8 @@ toast("पोस्ट प्रकाशित हो गई ✓");
 
 function escapeHtml(text){
 
-let div=document.createElement("div");
+let div =
+document.createElement("div");
 
 div.innerText=text;
 
@@ -1048,8 +1105,26 @@ button.style.background="#555";
 
 async function checkSession(){
 
-const { data } =
+if(!supabaseClient){
+
+document.getElementById("loginScreen").style.display="block";
+
+document.getElementById("mainApp").style.display="none";
+
+return;
+
+}
+
+const { data, error } =
 await supabaseClient.auth.getSession();
+
+if(error){
+
+console.log(error);
+
+return;
+
+}
 
 if(data.session){
 
@@ -1083,6 +1158,8 @@ checkSession();
    AUTH STATE
    ========================================== */
 
+if(supabaseClient){
+
 supabaseClient.auth.onAuthStateChange(
 function(event,session){
 
@@ -1090,13 +1167,19 @@ if(session){
 
 showApp();
 
+setTimeout(function(){
+
 loadProfile(session.user);
+
+},0);
 
 }
 
 });
 
+}
+
 </script>
 
 </body>
- </html>
+</html>
