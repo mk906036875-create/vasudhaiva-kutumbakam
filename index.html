@@ -41,6 +41,76 @@ header p{
   font-size:13px;
 }
 
+.login-box{
+  min-height:100vh;
+  padding:25px 18px;
+  background:linear-gradient(180deg,#fff8ef,#fff,#f0fff2);
+}
+
+.logo{
+  text-align:center;
+  font-size:50px;
+  margin:20px 0 10px;
+}
+
+.login-title{
+  text-align:center;
+  font-size:24px;
+}
+
+.login-subtitle{
+  text-align:center;
+  color:#666;
+  margin:8px 0 20px;
+}
+
+.login-card{
+  background:white;
+  padding:20px;
+  border-radius:18px;
+  box-shadow:0 4px 18px rgba(0,0,0,.08);
+}
+
+.login-card input{
+  width:100%;
+  padding:13px;
+  margin-top:10px;
+  border:1px solid #ccc;
+  border-radius:9px;
+  font-size:15px;
+}
+
+.primary{
+  width:100%;
+  padding:12px;
+  margin-top:12px;
+  border:0;
+  border-radius:9px;
+  background:#138808;
+  color:white;
+  font-weight:bold;
+  font-size:15px;
+}
+
+.secondary{
+  width:100%;
+  padding:11px;
+  margin-top:10px;
+  border:1px solid #138808;
+  border-radius:9px;
+  background:white;
+  color:#138808;
+  font-weight:bold;
+}
+
+.login-note{
+  font-size:12px;
+  color:#777;
+  text-align:center;
+  margin-top:15px;
+  line-height:1.5;
+}
+
 nav{
   display:flex;
   overflow-x:auto;
@@ -96,17 +166,6 @@ select{
   border:1px solid #ccc;
   border-radius:8px;
   margin-top:8px;
-}
-
-.primary{
-  width:100%;
-  padding:11px;
-  margin-top:10px;
-  border:0;
-  border-radius:9px;
-  background:#138808;
-  color:white;
-  font-weight:bold;
 }
 
 .post h3{
@@ -208,48 +267,106 @@ footer{
   display:none;
   z-index:99;
 }
+
+#mainApp{
+  display:none;
+}
 </style>
 </head>
 
 <body>
 
+<!-- LOGIN -->
+
+<div id="loginScreen" class="login-box">
+
+<div class="logo">🇮🇳</div>
+
+<h1 class="login-title">
+वसुधैव कुटुम्बकम्
+</h1>
+
+<p class="login-subtitle">
+एक परिवार • एक भारत • एक दुनिया
+</p>
+
+<div class="login-card">
+
+<h2 id="authTitle">🔐 Login</h2>
+
+<input
+id="userEmail"
+type="text"
+placeholder="मोबाइल नंबर या ईमेल">
+
+<input
+id="userPassword"
+type="password"
+placeholder="Password">
+
+<button class="primary" onclick="loginDemo()">
+Login
+</button>
+
+<button class="secondary" onclick="registerDemo()">
+Create New Account
+</button>
+
+<p class="login-note">
+🔒 यह अभी Demo Login है।<br>
+आपका password किसी server पर save नहीं किया जाता।
+</p>
+
+</div>
+
+</div>
+
+
+<!-- MAIN APP -->
+
+<div id="mainApp">
+
 <div class="app">
 
 <header>
-  <h1>🇮🇳 वसुधैव कुटुम्बकम्</h1>
-  <p>एक परिवार • एक भारत • एक दुनिया</p>
+<h1>🇮🇳 वसुधैव कुटुम्बकम्</h1>
+<p>एक परिवार • एक भारत • एक दुनिया</p>
 </header>
 
 <nav>
-  <button onclick="showPage('home')">🏠 Home</button>
-  <button onclick="showPage('reels')">🎬 Reels</button>
-  <button onclick="showPage('post')">✍️ Post</button>
-  <button onclick="showPage('community')">👥 Community</button>
-  <button onclick="showPage('profile')">👤 Profile</button>
+<button onclick="showPage('home')">🏠 Home</button>
+<button onclick="showPage('reels')">🎬 Reels</button>
+<button onclick="showPage('post')">✍️ Post</button>
+<button onclick="showPage('community')">👥 Community</button>
+<button onclick="showPage('profile')">👤 Profile</button>
 </nav>
+
 
 <!-- HOME -->
 
 <section id="home" class="page active">
 
 <div class="card composer">
-  <b>आप क्या साझा करना चाहते हैं?</b>
 
-  <textarea id="quickPost"
-  placeholder="कुछ अच्छा लिखें..."></textarea>
+<b>आप क्या साझा करना चाहते हैं?</b>
 
-  <select id="quickLang">
-    <option>हिन्दी</option>
-    <option>English</option>
-    <option>भोजपुरी</option>
-    <option>मराठी</option>
-    <option>தமிழ்</option>
-    <option>తెలుగు</option>
-  </select>
+<textarea
+id="quickPost"
+placeholder="कुछ अच्छा लिखें..."></textarea>
 
-  <button class="primary" onclick="createQuickPost()">
-    पोस्ट करें
-  </button>
+<select id="quickLang">
+<option>हिन्दी</option>
+<option>English</option>
+<option>भोजपुरी</option>
+<option>मराठी</option>
+<option>தமிழ்</option>
+<option>తెలుగు</option>
+</select>
+
+<button class="primary" onclick="createQuickPost()">
+पोस्ट करें
+</button>
+
 </div>
 
 <div id="feed">
@@ -267,12 +384,23 @@ footer{
 </p>
 
 <div class="actions">
-<button onclick="likePost(this)">❤️ Like 0</button>
-<button onclick="toast('Comment Demo')">💬 Comment</button>
-<button onclick="translatePost(this)">🌐 Translate</button>
+
+<button onclick="likePost(this)">
+❤️ Like 0
+</button>
+
+<button onclick="toast('Comment Demo')">
+💬 Comment
+</button>
+
+<button onclick="translatePost(this)">
+🌐 Translate
+</button>
+
 </div>
 
 </div>
+
 
 <div class="card post">
 
@@ -286,9 +414,19 @@ footer{
 </p>
 
 <div class="actions">
-<button onclick="likePost(this)">❤️ Like 0</button>
-<button onclick="toast('Comment Demo')">💬 Comment</button>
-<button onclick="translatePost(this)">🌐 Translate</button>
+
+<button onclick="likePost(this)">
+❤️ Like 0
+</button>
+
+<button onclick="toast('Comment Demo')">
+💬 Comment
+</button>
+
+<button onclick="translatePost(this)">
+🌐 Translate
+</button>
+
 </div>
 
 </div>
@@ -296,6 +434,7 @@ footer{
 </div>
 
 </section>
+
 
 <!-- REELS -->
 
@@ -319,6 +458,7 @@ Business • Jobs • Skills
 
 </section>
 
+
 <!-- POST -->
 
 <section id="post" class="page">
@@ -327,18 +467,21 @@ Business • Jobs • Skills
 
 <h2>✍️ नई पोस्ट</h2>
 
-<textarea id="postText"
+<textarea
+id="postText"
 placeholder="अपनी बात लिखें..."
 style="width:100%;height:130px;margin-top:12px;padding:12px;border-radius:10px;border:1px solid #ccc;">
 </textarea>
 
 <select id="postLang">
+
 <option>हिन्दी</option>
 <option>English</option>
 <option>भोजपुरी</option>
 <option>मराठी</option>
 <option>தமிழ்</option>
 <option>తెలుగు</option>
+
 </select>
 
 <button class="primary" onclick="createPost()">
@@ -349,38 +492,67 @@ style="width:100%;height:130px;margin-top:12px;padding:12px;border-radius:10px;b
 
 </section>
 
+
 <!-- COMMUNITY -->
 
 <section id="community" class="page">
 
 <div class="card">
+
 <h2>👥 भारतीय Communities</h2>
+
 <p style="margin-top:6px;">
 अपनी रुचि के लोगों से जुड़ें।
 </p>
+
 </div>
 
+
 <div class="community">
+
 <span>🙏 भारतीय संस्कृति</span>
-<button onclick="join(this)">Join</button>
+
+<button onclick="join(this)">
+Join
+</button>
+
 </div>
 
+
 <div class="community">
+
 <span>💼 Jobs & Skills</span>
-<button onclick="join(this)">Join</button>
+
+<button onclick="join(this)">
+Join
+</button>
+
 </div>
 
+
 <div class="community">
+
 <span>🏪 Indian Business</span>
-<button onclick="join(this)">Join</button>
+
+<button onclick="join(this)">
+Join
+</button>
+
 </div>
 
+
 <div class="community">
+
 <span>📚 Education</span>
-<button onclick="join(this)">Join</button>
+
+<button onclick="join(this)">
+Join
+</button>
+
 </div>
 
 </section>
+
 
 <!-- PROFILE -->
 
@@ -388,7 +560,9 @@ style="width:100%;height:130px;margin-top:12px;padding:12px;border-radius:10px;b
 
 <div class="card profile">
 
-<div class="avatar">🇮🇳</div>
+<div class="avatar">
+🇮🇳
+</div>
 
 <h2 style="margin-top:10px;">
 वसुधैव परिवार
@@ -412,155 +586,304 @@ style="width:100%;height:130px;margin-top:12px;padding:12px;border-radius:10px;b
 🤖 AI Translation
 </p>
 
+<button
+class="secondary"
+onclick="logoutDemo()">
+Logout
+</button>
+
 </div>
 
 </section>
 
+
 <footer>
+
 🇮🇳 वसुधैव कुटुम्बकम्<br>
 एक परिवार • एक भारत • एक दुनिया
+
 </footer>
 
 </div>
 
+</div>
+
+
 <div id="toast" class="toast"></div>
+
 
 <script>
 
+function loginDemo(){
+
+let email=document.getElementById("userEmail").value.trim();
+let password=document.getElementById("userPassword").value.trim();
+
+if(!email || !password){
+
+toast("मोबाइल/ईमेल और Password भरें");
+
+return;
+}
+
+localStorage.setItem("vkDemoUser",email);
+
+showApp();
+
+toast("Login Demo सफल");
+
+}
+
+
+function registerDemo(){
+
+let email=document.getElementById("userEmail").value.trim();
+let password=document.getElementById("userPassword").value.trim();
+
+if(!email || !password){
+
+toast("मोबाइल/ईमेल और Password भरें");
+
+return;
+}
+
+localStorage.setItem("vkDemoUser",email);
+
+showApp();
+
+toast("Account Demo बनाया गया");
+
+}
+
+
+function showApp(){
+
+document.getElementById("loginScreen").style.display="none";
+
+document.getElementById("mainApp").style.display="block";
+
+}
+
+
+function logoutDemo(){
+
+localStorage.removeItem("vkDemoUser");
+
+document.getElementById("mainApp").style.display="none";
+
+document.getElementById("loginScreen").style.display="block";
+
+toast("Logout हो गया");
+
+}
+
+
 function showPage(page){
 
-document.querySelectorAll('.page')
+document.querySelectorAll(".page")
 .forEach(function(p){
-p.classList.remove('active');
+
+p.classList.remove("active");
+
 });
 
 document.getElementById(page)
-.classList.add('active');
+.classList.add("active");
 
 window.scrollTo(0,0);
+
 }
+
 
 function toast(message){
 
-let t=document.getElementById('toast');
+let t=document.getElementById("toast");
 
 t.innerText=message;
-t.style.display='block';
+
+t.style.display="block";
 
 setTimeout(function(){
-t.style.display='none';
+
+t.style.display="none";
+
 },1800);
+
 }
+
 
 function likePost(button){
 
-let number=parseInt(
-button.innerText.match(/\d+/)[0]
-);
+let match=button.innerText.match(/\d+/);
+
+let number=match ? parseInt(match[0]) : 0;
 
 number++;
 
-button.innerText='❤️ Like '+number;
+button.innerText="❤️ Like "+number;
+
 }
+
 
 function translatePost(button){
 
-let post=button.closest('.post');
-let text=post.querySelector('p');
+let post=button.closest(".post");
+
+let text=post.querySelector("p");
 
 if(!text.dataset.original){
+
 text.dataset.original=text.innerText;
-text.innerText='🌐 AI Translation Demo: यह पोस्ट दूसरी भारतीय भाषाओं में भी पढ़ी जा सकती है।';
+
+text.innerText=
+"🌐 AI Translation Demo: यह पोस्ट दूसरी भारतीय भाषाओं में भी पढ़ी जा सकती है।";
+
 }else{
+
 text.innerText=text.dataset.original;
+
 delete text.dataset.original;
+
 }
 
 }
+
 
 function createPost(){
 
-let text=document.getElementById('postText').value.trim();
+let text=document.getElementById("postText").value.trim();
 
 if(!text){
-toast('पहले कुछ लिखें');
+
+toast("पहले कुछ लिखें");
+
 return;
+
 }
 
-let article=document.createElement('div');
+let article=document.createElement("div");
 
-article.className='card post';
+article.className="card post";
 
 article.innerHTML=`
+
 <span class="badge">🆕 नई पोस्ट</span>
+
 <h3>वसुधैव परिवार</h3>
+
 <p>${escapeHtml(text)}</p>
 
 <div class="actions">
-<button onclick="likePost(this)">❤️ Like 0</button>
-<button onclick="toast('Comment Demo')">💬 Comment</button>
-<button onclick="translatePost(this)">🌐 Translate</button>
+
+<button onclick="likePost(this)">
+❤️ Like 0
+</button>
+
+<button onclick="toast('Comment Demo')">
+💬 Comment
+</button>
+
+<button onclick="translatePost(this)">
+🌐 Translate
+</button>
+
 </div>
 `;
 
-document.getElementById('feed').prepend(article);
+document.getElementById("feed").prepend(article);
 
-document.getElementById('postText').value='';
+document.getElementById("postText").value="";
 
-showPage('home');
+showPage("home");
 
-toast('पोस्ट प्रकाशित हो गई');
+toast("पोस्ट प्रकाशित हो गई");
+
 }
+
 
 function createQuickPost(){
 
-let text=document.getElementById('quickPost').value.trim();
+let text=document.getElementById("quickPost").value.trim();
 
 if(!text){
-toast('पहले कुछ लिखें');
+
+toast("पहले कुछ लिखें");
+
 return;
+
 }
 
-let article=document.createElement('div');
+let article=document.createElement("div");
 
-article.className='card post';
+article.className="card post";
 
 article.innerHTML=`
+
 <span class="badge">🆕 नई पोस्ट</span>
+
 <h3>आपकी पोस्ट</h3>
+
 <p>${escapeHtml(text)}</p>
 
 <div class="actions">
-<button onclick="likePost(this)">❤️ Like 0</button>
-<button onclick="toast('Comment Demo')">💬 Comment</button>
-<button onclick="translatePost(this)">🌐 Translate</button>
+
+<button onclick="likePost(this)">
+❤️ Like 0
+</button>
+
+<button onclick="toast('Comment Demo')">
+💬 Comment
+</button>
+
+<button onclick="translatePost(this)">
+🌐 Translate
+</button>
+
 </div>
 `;
 
-document.getElementById('feed').prepend(article);
+document.getElementById("feed").prepend(article);
 
-document.getElementById('quickPost').value='';
+document.getElementById("quickPost").value="";
 
-toast('पोस्ट प्रकाशित हो गई');
+toast("पोस्ट प्रकाशित हो गई");
+
 }
+
 
 function escapeHtml(text){
 
-let div=document.createElement('div');
+let div=document.createElement("div");
 
 div.innerText=text;
 
 return div.innerHTML;
+
 }
+
 
 function join(button){
 
-button.innerText='Joined ✓';
-button.style.background='#555';
+button.innerText="Joined ✓";
+
+button.style.background="#555";
 
 }
+
+
+window.onload=function(){
+
+let user=localStorage.getItem("vkDemoUser");
+
+if(user){
+
+showApp();
+
+}
+
+};
 
 </script>
 
 </body>
-  </html>
+ </html>
