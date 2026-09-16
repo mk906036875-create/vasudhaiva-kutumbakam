@@ -1,261 +1,613 @@
  <!DOCTYPE html>
 <html lang="hi">
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>वसुधैव कुटुम्बकम् 🇮🇳</title>
 
 <meta name="description"
-      content="वसुधैव कुटुम्बकम् — एक परिवार • एक भारत • एक दुनिया">
+content="वसुधैव कुटुम्बकम् — एक परिवार • एक भारत • एक दुनिया">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
 }
 
+:root{
+  --saffron:#ff6b00;
+  --deep:#172033;
+  --light:#f5f7fb;
+  --white:#fff;
+  --muted:#6b7280;
+  --border:#e8ebf0;
+  --green:#138808;
+}
+
 body{
-  font-family:Arial,sans-serif;
-  background:#f4f6f8;
-  color:#222;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--light);
+  color:var(--deep);
+}
+
+button,
+input,
+textarea,
+select{
+  font-family:inherit;
 }
 
 button{
-  border:0;
   cursor:pointer;
 }
 
-input,textarea,select{
-  width:100%;
-  padding:13px;
-  margin:7px 0;
-  border:1px solid #ddd;
-  border-radius:10px;
-  font-size:15px;
+.hidden{
+  display:none!important;
 }
 
-.auth-screen{
+/* =========================
+   AUTH
+========================= */
+
+.auth{
   min-height:100vh;
   display:flex;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
   padding:20px;
-  background:linear-gradient(135deg,#fff7ed,#eef7ff);
+  background:
+    radial-gradient(circle at top left,#fff1df,transparent 35%),
+    radial-gradient(circle at bottom right,#e8f7ed,transparent 35%),
+    #f7f8fb;
 }
 
-.auth-box{
+.auth-card{
   width:100%;
-  max-width:420px;
+  max-width:430px;
   background:#fff;
-  padding:28px;
-  border-radius:20px;
-  box-shadow:0 10px 35px rgba(0,0,0,.12);
-  text-align:center;
+  border:1px solid var(--border);
+  border-radius:28px;
+  padding:30px 24px;
+  box-shadow:0 18px 60px rgba(23,32,51,.12);
 }
 
-.logo{
-  font-size:32px;
+.flag{
+  text-align:center;
+  font-size:44px;
   margin-bottom:8px;
 }
 
-.title{
-  font-size:26px;
-  font-weight:bold;
-  margin-bottom:5px;
+.auth-title{
+  text-align:center;
+  font-size:28px;
+  font-weight:800;
 }
 
-.subtitle{
-  color:#666;
-  margin-bottom:20px;
+.auth-sub{
+  text-align:center;
+  color:var(--muted);
+  margin:7px 0 24px;
 }
 
-.primary{
+.auth-input{
   width:100%;
-  padding:13px;
-  border-radius:10px;
-  background:#ff6b00;
+  border:1px solid #dfe3e9;
+  border-radius:13px;
+  padding:14px;
+  margin-bottom:11px;
+  outline:none;
+  font-size:15px;
+}
+
+.auth-input:focus{
+  border-color:var(--saffron);
+}
+
+.main-btn{
+  width:100%;
+  border:0;
+  padding:14px;
+  border-radius:13px;
+  background:linear-gradient(135deg,#ff7a18,#ed4b00);
   color:white;
   font-size:16px;
-  margin-top:8px;
+  font-weight:700;
+  margin-top:5px;
 }
 
-.secondary{
+.alt-btn{
   width:100%;
-  padding:12px;
-  border-radius:10px;
-  background:#eef2f5;
-  color:#222;
-  font-size:15px;
-  margin-top:8px;
+  border:1px solid var(--border);
+  padding:13px;
+  border-radius:13px;
+  background:#f8fafc;
+  color:var(--deep);
+  font-weight:600;
+  margin-top:10px;
 }
 
-.link-btn{
+.text-btn{
+  display:block;
+  margin:16px auto 0;
+  border:0;
   background:none;
   color:#e65100;
-  margin-top:15px;
-  font-size:14px;
+  font-weight:600;
 }
 
-.hidden{
-  display:none !important;
+.auth-note{
+  text-align:center;
+  color:#8a919d;
+  font-size:12px;
+  margin-top:20px;
 }
+
+/* =========================
+   APP HEADER
+========================= */
 
 .app{
   min-height:100vh;
-  padding-bottom:75px;
+  padding-bottom:78px;
 }
 
 .topbar{
   position:sticky;
   top:0;
-  z-index:10;
-  background:#fff;
+  z-index:50;
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(15px);
+  border-bottom:1px solid var(--border);
+}
+
+.topbar-inner{
+  max-width:1000px;
+  margin:auto;
   padding:13px 16px;
-  border-bottom:1px solid #eee;
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
 }
 
 .brand{
-  font-weight:bold;
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.brand-icon{
+  font-size:26px;
+}
+
+.brand-name{
+  font-weight:800;
   font-size:17px;
 }
 
-.logout{
-  background:#f1f1f1;
-  padding:8px 12px;
-  border-radius:8px;
+.brand-tag{
+  font-size:10px;
+  color:var(--muted);
+  margin-top:2px;
 }
 
+.logout-btn{
+  border:0;
+  background:#f1f3f6;
+  padding:9px 13px;
+  border-radius:10px;
+  font-weight:600;
+}
+
+/* =========================
+   MAIN
+========================= */
+
 .container{
-  max-width:700px;
+  width:100%;
+  max-width:760px;
   margin:auto;
-  padding:15px;
+  padding:16px;
 }
 
 .card{
-  background:#fff;
-  padding:16px;
-  border-radius:15px;
-  margin-bottom:15px;
-  box-shadow:0 2px 8px rgba(0,0,0,.06);
+  background:white;
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:18px;
+  margin-bottom:14px;
+  box-shadow:0 5px 20px rgba(20,30,50,.04);
 }
 
+/* =========================
+   HERO
+========================= */
+
 .hero{
-  text-align:center;
-  padding:25px 15px;
+  overflow:hidden;
+  position:relative;
+  padding:27px 20px;
+  color:white;
+  background:
+    linear-gradient(135deg,#ff7a18,#ef4b00 48%,#138808);
 }
 
 .hero h1{
-  font-size:27px;
-}
-
-.hero p{
-  color:#666;
-  margin-top:7px;
-}
-
-.section-title{
-  font-size:20px;
-  font-weight:bold;
-  margin-bottom:10px;
-}
-
-.post-user{
-  font-weight:bold;
+  font-size:29px;
+  line-height:1.2;
   margin-bottom:8px;
 }
 
+.hero p{
+  opacity:.95;
+  font-size:14px;
+}
+
+.hero-badges{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  margin-top:18px;
+}
+
+.badge{
+  padding:7px 10px;
+  background:rgba(255,255,255,.17);
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:20px;
+  font-size:12px;
+}
+
+/* =========================
+   SECTION
+========================= */
+
+.section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:13px;
+}
+
+.section-title{
+  font-size:19px;
+  font-weight:800;
+}
+
+.section-link{
+  border:0;
+  background:none;
+  color:#e65100;
+  font-weight:600;
+}
+
+/* =========================
+   COMPOSER
+========================= */
+
+.composer{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+
+.avatar{
+  width:44px;
+  height:44px;
+  flex:none;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,#ff7a18,#138808);
+  color:white;
+  font-weight:800;
+}
+
+.composer-btn{
+  flex:1;
+  border:1px solid var(--border);
+  background:#f8fafc;
+  color:#777;
+  text-align:left;
+  padding:13px;
+  border-radius:13px;
+}
+
+/* =========================
+   POST
+========================= */
+
+.post-head{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+.post-name{
+  font-weight:800;
+}
+
+.post-time{
+  color:#8b929e;
+  font-size:11px;
+  margin-top:3px;
+}
+
 .post-text{
-  line-height:1.6;
+  line-height:1.65;
+  margin:14px 0;
   white-space:pre-wrap;
 }
 
 .post-actions{
   display:flex;
   gap:8px;
-  margin-top:12px;
-  flex-wrap:wrap;
+  border-top:1px solid var(--border);
+  padding-top:12px;
 }
 
-.action{
-  background:#f1f3f5;
-  padding:8px 12px;
-  border-radius:8px;
+.post-action{
+  flex:1;
+  border:0;
+  background:#f7f8fa;
+  padding:9px;
+  border-radius:10px;
+  font-size:13px;
 }
+
+/* =========================
+   TRENDING
+========================= */
+
+.trends{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+
+.trend{
+  padding:15px;
+  border-radius:15px;
+  background:#f8fafc;
+  border:1px solid var(--border);
+}
+
+.trend strong{
+  display:block;
+  margin-bottom:4px;
+}
+
+.trend span{
+  color:var(--muted);
+  font-size:12px;
+}
+
+/* =========================
+   COMMUNITY
+========================= */
+
+.community{
+  display:flex;
+  gap:13px;
+  align-items:center;
+}
+
+.community-icon{
+  width:50px;
+  height:50px;
+  border-radius:15px;
+  background:#fff3e9;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:24px;
+}
+
+.community-info{
+  flex:1;
+}
+
+.community-info strong{
+  display:block;
+}
+
+.community-info span{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.join{
+  border:0;
+  background:#fff0e5;
+  color:#e65100;
+  padding:8px 11px;
+  border-radius:9px;
+  font-weight:700;
+}
+
+/* =========================
+   REELS
+========================= */
+
+.reel-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+.reel{
+  min-height:190px;
+  border-radius:18px;
+  padding:15px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  color:white;
+  background:linear-gradient(160deg,#172033,#ff6b00);
+}
+
+.reel:nth-child(2){
+  background:linear-gradient(160deg,#138808,#172033);
+}
+
+.reel:nth-child(3){
+  background:linear-gradient(160deg,#ff6b00,#7c3aed);
+}
+
+.reel:nth-child(4){
+  background:linear-gradient(160deg,#0f766e,#172033);
+}
+
+.reel-icon{
+  font-size:32px;
+  margin-bottom:auto;
+}
+
+/* =========================
+   PROFILE
+========================= */
+
+.profile-top{
+  text-align:center;
+  padding:25px 15px;
+}
+
+.big-avatar{
+  width:88px;
+  height:88px;
+  border-radius:50%;
+  margin:auto auto 12px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#ff7a18,#138808);
+  color:white;
+  font-size:30px;
+  font-weight:800;
+}
+
+.profile-email{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:5px;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.field{
+  width:100%;
+  padding:13px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  margin:7px 0;
+  outline:none;
+}
+
+.field:focus{
+  border-color:var(--saffron);
+}
+
+textarea.field{
+  resize:vertical;
+  min-height:130px;
+}
+
+/* =========================
+   BOTTOM NAV
+========================= */
 
 .bottom-nav{
   position:fixed;
   bottom:0;
   left:0;
   right:0;
-  height:65px;
-  background:#fff;
-  border-top:1px solid #ddd;
+  z-index:60;
+  height:68px;
+  background:rgba(255,255,255,.97);
+  backdrop-filter:blur(15px);
+  border-top:1px solid var(--border);
+  display:flex;
+  justify-content:center;
+}
+
+.nav-inner{
+  width:100%;
+  max-width:760px;
   display:flex;
   justify-content:space-around;
-  align-items:center;
-  z-index:20;
 }
 
 .nav-btn{
+  width:20%;
+  border:0;
   background:none;
-  font-size:13px;
-  color:#555;
+  color:#7b818c;
+  font-size:11px;
+}
+
+.nav-btn span{
+  display:block;
+  font-size:21px;
+  margin-bottom:2px;
 }
 
 .nav-btn.active{
   color:#e65100;
-  font-weight:bold;
+  font-weight:800;
 }
 
-.profile-avatar{
-  width:80px;
-  height:80px;
-  border-radius:50%;
-  background:#ff6b00;
-  color:white;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:30px;
-  margin:0 auto 12px;
-}
+/* =========================
+   TOAST
+========================= */
 
 .toast{
   position:fixed;
-  bottom:80px;
   left:50%;
+  bottom:85px;
   transform:translateX(-50%);
-  background:#222;
+  background:#172033;
   color:white;
-  padding:12px 18px;
-  border-radius:10px;
-  display:none;
+  padding:12px 17px;
+  border-radius:12px;
   z-index:100;
+  display:none;
   max-width:90%;
   text-align:center;
-}
-
-.small{
   font-size:13px;
-  color:#777;
-  margin-top:8px;
 }
 
-hr{
-  border:0;
-  border-top:1px solid #eee;
-  margin:15px 0;
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:520px){
+
+  .container{
+    padding:12px;
+  }
+
+  .hero h1{
+    font-size:25px;
+  }
+
+  .brand-name{
+    font-size:15px;
+  }
+
+  .trends{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .reel-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
 }
 
 </style>
@@ -264,54 +616,56 @@ hr{
 <body>
 
 
-<!-- =========================================
-     LOGIN SCREEN
-========================================= -->
+<!-- =====================================
+     LOGIN
+===================================== -->
 
-<div id="loginScreen" class="auth-screen">
+<div id="loginScreen" class="auth">
 
-  <div class="auth-box">
+  <div class="auth-card">
 
-    <div class="logo">🇮🇳</div>
+    <div class="flag">🇮🇳</div>
 
-    <div class="title">
+    <div class="auth-title">
       वसुधैव कुटुम्बकम्
     </div>
 
-    <div class="subtitle">
+    <div class="auth-sub">
       एक परिवार • एक भारत • एक दुनिया
     </div>
 
     <input
       id="userEmail"
+      class="auth-input"
       type="email"
       placeholder="Email">
 
     <input
       id="userPassword"
+      class="auth-input"
       type="password"
       placeholder="Password">
 
     <button
-      class="primary"
+      class="main-btn"
       onclick="loginUser()">
-      Login
+      Login करें
     </button>
 
     <button
-      class="secondary"
+      class="alt-btn"
       onclick="showRegisterScreen()">
-      Create New Account
+      नया Account बनाएं
     </button>
 
     <button
-      class="link-btn"
+      class="text-btn"
       onclick="resetPassword()">
-      Forgot Password?
+      Password भूल गए?
     </button>
 
-    <div class="small">
-      Privacy-first • Respectful • Indian Languages
+    <div class="auth-note">
+      सुरक्षित • सम्मानजनक • उपयोगी • भारतीय
     </div>
 
   </div>
@@ -319,48 +673,51 @@ hr{
 </div>
 
 
-<!-- =========================================
-     REGISTER SCREEN
-========================================= -->
+<!-- =====================================
+     REGISTER
+===================================== -->
 
 <div id="registerScreen"
-     class="auth-screen hidden">
+     class="auth hidden">
 
-  <div class="auth-box">
+  <div class="auth-card">
 
-    <div class="logo">🇮🇳</div>
+    <div class="flag">🇮🇳</div>
 
-    <div class="title">
+    <div class="auth-title">
       नया Account
     </div>
 
-    <div class="subtitle">
-      वसुधैव कुटुम्बकम् परिवार में जुड़ें
+    <div class="auth-sub">
+      हमारे भारतीय परिवार से जुड़ें
     </div>
 
     <input
       id="registerName"
+      class="auth-input"
       type="text"
       placeholder="आपका नाम">
 
     <input
       id="registerEmail"
+      class="auth-input"
       type="email"
       placeholder="Email">
 
     <input
       id="registerPassword"
+      class="auth-input"
       type="password"
       placeholder="Password">
 
     <button
-      class="primary"
+      class="main-btn"
       onclick="registerUser()">
-      Register
+      Account बनाएं
     </button>
 
     <button
-      class="secondary"
+      class="alt-btn"
       onclick="showLoginScreen()">
       वापस Login
     </button>
@@ -370,37 +727,39 @@ hr{
 </div>
 
 
-<!-- =========================================
-     RESET PASSWORD SCREEN
-========================================= -->
+<!-- =====================================
+     RESET PASSWORD
+===================================== -->
 
 <div id="resetScreen"
-     class="auth-screen hidden">
+     class="auth hidden">
 
-  <div class="auth-box">
+  <div class="auth-card">
 
-    <div class="logo">🔐</div>
+    <div class="flag">🔐</div>
 
-    <div class="title">
+    <div class="auth-title">
       नया Password
     </div>
 
-    <div class="subtitle">
+    <div class="auth-sub">
       अपना नया Password सेट करें
     </div>
 
     <input
       id="newPassword"
+      class="auth-input"
       type="password"
       placeholder="New Password">
 
     <input
       id="confirmPassword"
+      class="auth-input"
       type="password"
       placeholder="Confirm Password">
 
     <button
-      class="primary"
+      class="main-btn"
       onclick="setNewPassword()">
       Password Update करें
     </button>
@@ -410,26 +769,45 @@ hr{
 </div>
 
 
-<!-- =========================================
+<!-- =====================================
      MAIN APP
-========================================= -->
+===================================== -->
 
-<div id="app"
-     class="app hidden">
+<div id="app" class="app hidden">
 
-  <div class="topbar">
+  <header class="topbar">
 
-    <div class="brand">
-      🇮🇳 वसुधैव कुटुम्बकम्
+    <div class="topbar-inner">
+
+      <div class="brand">
+
+        <div class="brand-icon">
+          🇮🇳
+        </div>
+
+        <div>
+
+          <div class="brand-name">
+            वसुधैव कुटुम्बकम्
+          </div>
+
+          <div class="brand-tag">
+            एक परिवार • एक भारत • एक दुनिया
+          </div>
+
+        </div>
+
+      </div>
+
+      <button
+        class="logout-btn"
+        onclick="logoutUser()">
+        Logout
+      </button>
+
     </div>
 
-    <button
-      class="logout"
-      onclick="logoutUser()">
-      Logout
-    </button>
-
-  </div>
+  </header>
 
 
   <main class="container">
@@ -442,30 +820,104 @@ hr{
       <div class="card hero">
 
         <h1>
-          🇮🇳 वसुधैव कुटुम्बकम्
+          एक परिवार,<br>
+          एक भारत, एक दुनिया 🇮🇳
         </h1>
 
         <p>
-          एक परिवार • एक भारत • एक दुनिया
+          जुड़ें • सीखें • साझा करें • सम्मान करें
         </p>
+
+        <div class="hero-badges">
+
+          <div class="badge">
+            🔒 Privacy First
+          </div>
+
+          <div class="badge">
+            🌐 भारतीय भाषाएँ
+          </div>
+
+          <div class="badge">
+            🤝 Respect First
+          </div>
+
+        </div>
 
       </div>
 
+
+      <!-- COMPOSER -->
 
       <div class="card">
 
-        <div class="section-title">
-          आज का विचार
-        </div>
+        <div class="composer">
 
-        <p>
-          उपयोगी जानकारी साझा करें,
-          एक-दूसरे का सम्मान करें और
-          भारत को ज्ञान एवं सहयोग से जोड़ें।
-        </p>
+          <div
+            class="avatar"
+            id="miniAvatar">
+            👤
+          </div>
+
+          <button
+            class="composer-btn"
+            onclick="showPage('postPage',document.querySelectorAll('.nav-btn')[2])">
+            आपके मन में क्या है? कुछ उपयोगी साझा करें...
+          </button>
+
+        </div>
 
       </div>
 
+
+      <!-- TRENDING -->
+
+      <div class="card">
+
+        <div class="section-head">
+
+          <div class="section-title">
+            🔥 आज की रुचियाँ
+          </div>
+
+        </div>
+
+        <div class="trends">
+
+          <div class="trend">
+            <strong>🤖 AI & Technology</strong>
+            <span>नई तकनीक सीखें</span>
+          </div>
+
+          <div class="trend">
+            <strong>💼 Jobs</strong>
+            <span>काम और अवसर</span>
+          </div>
+
+          <div class="trend">
+            <strong>📚 Education</strong>
+            <span>ज्ञान साझा करें</span>
+          </div>
+
+          <div class="trend">
+            <strong>🇮🇳 India</strong>
+            <span>भारत की बातें</span>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- POSTS -->
+
+      <div class="section-head">
+
+        <div class="section-title">
+          📰 आपके लिए
+        </div>
+
+      </div>
 
       <div id="postsContainer"></div>
 
@@ -474,8 +926,7 @@ hr{
 
     <!-- REELS -->
 
-    <section id="reelsPage"
-             class="hidden">
+    <section id="reelsPage" class="hidden">
 
       <div class="card">
 
@@ -483,10 +934,69 @@ hr{
           🎬 Reels
         </div>
 
-        <p>
-          यहाँ आगे short videos और useful reels
-          दिखाई जाएँगी।
+        <p style="color:#6b7280;margin-top:6px">
+          उपयोगी short videos और भारतीय content।
         </p>
+
+      </div>
+
+      <div class="reel-grid">
+
+        <div class="reel">
+
+          <div class="reel-icon">🇮🇳</div>
+
+          <strong>
+            मेरा भारत
+          </strong>
+
+          <small>
+            भारत की प्रेरक बातें
+          </small>
+
+        </div>
+
+        <div class="reel">
+
+          <div class="reel-icon">🤖</div>
+
+          <strong>
+            AI सीखें
+          </strong>
+
+          <small>
+            आसान AI tips
+          </small>
+
+        </div>
+
+        <div class="reel">
+
+          <div class="reel-icon">📚</div>
+
+          <strong>
+            Education
+          </strong>
+
+          <small>
+            सीखने की बातें
+          </small>
+
+        </div>
+
+        <div class="reel">
+
+          <div class="reel-icon">💼</div>
+
+          <strong>
+            Career
+          </strong>
+
+          <small>
+            Jobs और skills
+          </small>
+
+        </div>
 
       </div>
 
@@ -495,28 +1005,33 @@ hr{
 
     <!-- POST -->
 
-    <section id="postPage"
-             class="hidden">
+    <section id="postPage" class="hidden">
 
       <div class="card">
 
         <div class="section-title">
-          ✍️ पोस्ट करें
+          ✍️ नई पोस्ट
         </div>
+
+        <p style="color:#6b7280;margin:6px 0 14px">
+          उपयोगी, सम्मानजनक और सकारात्मक content साझा करें।
+        </p>
 
         <textarea
           id="postText"
-          rows="6"
-          placeholder="कुछ उपयोगी साझा करें..."></textarea>
+          class="field"
+          placeholder="कुछ लिखें..."></textarea>
 
-        <select id="postLanguage">
+        <select
+          id="postLanguage"
+          class="field">
 
           <option value="hi">
-            हिंदी
+            🇮🇳 हिंदी
           </option>
 
           <option value="en">
-            English
+            🇬🇧 English
           </option>
 
           <option value="bho">
@@ -542,9 +1057,9 @@ hr{
         </select>
 
         <button
-          class="primary"
+          class="main-btn"
           onclick="createPost()">
-          पोस्ट करें
+          🚀 पोस्ट प्रकाशित करें
         </button>
 
       </div>
@@ -554,60 +1069,98 @@ hr{
 
     <!-- COMMUNITY -->
 
-    <section id="communityPage"
-             class="hidden">
+    <section id="communityPage" class="hidden">
 
       <div class="card">
 
         <div class="section-title">
-          👥 भारत की Communities
+          👥 Communities
         </div>
 
-        <p>
-          अपने शहर, भाषा और रुचि के अनुसार
-          communities से जुड़ें।
+        <p style="color:#6b7280;margin-top:6px">
+          अपने शहर, भाषा और रुचि के लोगों से जुड़ें।
         </p>
 
       </div>
 
 
-      <div class="card">
-        🏙️ Deoria Community
+      <div class="card community">
+
+        <div class="community-icon">
+          🏙️
+        </div>
+
+        <div class="community-info">
+          <strong>Deoria Community</strong>
+          <span>स्थानीय जानकारी और लोग</span>
+        </div>
+
         <button
-          class="action"
+          class="join"
           onclick="joinCommunity('Deoria')">
           Join
         </button>
+
       </div>
 
 
-      <div class="card">
-        🇮🇳 India Jobs
+      <div class="card community">
+
+        <div class="community-icon">
+          💼
+        </div>
+
+        <div class="community-info">
+          <strong>India Jobs</strong>
+          <span>Jobs और career opportunities</span>
+        </div>
+
         <button
-          class="action"
+          class="join"
           onclick="joinCommunity('India Jobs')">
           Join
         </button>
+
       </div>
 
 
-      <div class="card">
-        🤖 AI & Technology
+      <div class="card community">
+
+        <div class="community-icon">
+          🤖
+        </div>
+
+        <div class="community-info">
+          <strong>AI & Technology</strong>
+          <span>AI और नई technology</span>
+        </div>
+
         <button
-          class="action"
+          class="join"
           onclick="joinCommunity('AI & Technology')">
           Join
         </button>
+
       </div>
 
 
-      <div class="card">
-        📚 Education
+      <div class="card community">
+
+        <div class="community-icon">
+          📚
+        </div>
+
+        <div class="community-info">
+          <strong>Education</strong>
+          <span>Students और learning</span>
+        </div>
+
         <button
-          class="action"
+          class="join"
           onclick="joinCommunity('Education')">
           Join
         </button>
+
       </div>
 
     </section>
@@ -615,14 +1168,13 @@ hr{
 
     <!-- PROFILE -->
 
-    <section id="profilePage"
-             class="hidden">
+    <section id="profilePage" class="hidden">
 
-      <div class="card"
-           style="text-align:center">
+      <div class="card profile-top">
 
-        <div class="profile-avatar"
-             id="profileAvatar">
+        <div
+          class="big-avatar"
+          id="profileAvatar">
           👤
         </div>
 
@@ -630,10 +1182,10 @@ hr{
           User
         </h2>
 
-        <p
-          id="profileEmail"
-          class="small">
-        </p>
+        <div
+          class="profile-email"
+          id="profileEmail">
+        </div>
 
       </div>
 
@@ -641,19 +1193,34 @@ hr{
       <div class="card">
 
         <div class="section-title">
-          ⚙️ Profile
+          ⚙️ Profile Settings
         </div>
 
         <input
           id="profileNameInput"
+          class="field"
           type="text"
-          placeholder="नाम">
+          placeholder="आपका नाम">
 
         <button
-          class="primary"
+          class="main-btn"
           onclick="saveProfile()">
           Profile Save करें
         </button>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="section-title">
+          🛡️ Privacy
+        </div>
+
+        <p style="color:#6b7280;line-height:1.6;margin-top:7px">
+          आपका account आपके control में रहेगा।
+          आगे चलकर privacy और feed controls यहाँ जोड़े जाएंगे।
+        </p>
 
       </div>
 
@@ -663,56 +1230,76 @@ hr{
   </main>
 
 
-  <!-- =========================================
-       BOTTOM NAVIGATION
-  ========================================= -->
+  <!-- BOTTOM NAV -->
 
   <nav class="bottom-nav">
 
-    <button
-      class="nav-btn active"
-      onclick="showPage('homePage',this)">
-      🏠<br>Home
-    </button>
+    <div class="nav-inner">
 
-    <button
-      class="nav-btn"
-      onclick="showPage('reelsPage',this)">
-      🎬<br>Reels
-    </button>
+      <button
+        class="nav-btn active"
+        onclick="showPage('homePage',this)">
 
-    <button
-      class="nav-btn"
-      onclick="showPage('postPage',this)">
-      ➕<br>Post
-    </button>
+        <span>🏠</span>
+        Home
 
-    <button
-      class="nav-btn"
-      onclick="showPage('communityPage',this)">
-      👥<br>Community
-    </button>
+      </button>
 
-    <button
-      class="nav-btn"
-      onclick="showPage('profilePage',this)">
-      👤<br>Profile
-    </button>
 
-  </nav>
+      <button
+        class="nav-btn"
+        onclick="showPage('reelsPage',this)">
+
+        <span>🎬</span>
+        Reels
+
+      </button>
+
+
+      <button
+        class="nav-btn"
+        onclick="showPage('postPage',this)">
+
+        <span>➕</span>
+        Post
+
+      </button>
+
+
+      <button
+  class="nav-btn"
+  onclick="showPage('communityPage',this)">
+
+  <span>👥</span>
+  Community
+
+</button>
+
+
+<button
+  class="nav-btn"
+  onclick="showPage('profilePage',this)">
+
+  <span>👤</span>
+  Profile
+
+</button>
+
+</div>
+
+</nav>
 
 </div>
 
 
-<div id="toast"
-     class="toast">
-</div>
+<div id="toast" class="toast"></div>
 
 
 <script>
+ <script>
 
 /* =========================================
-   SUPABASE CONFIG
+   SUPABASE
 ========================================= */
 
 const SUPABASE_URL =
@@ -721,20 +1308,46 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_Uq4wF9xUhFl5foMSRWyhvQ_iyqXgpt2";
 
-let supabaseClient = null;
+const supabaseClient =
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
-try{
 
-  supabaseClient =
-    window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
+/* =========================================
+   PAGE NAVIGATION
+========================================= */
 
-}catch(error){
+function showPage(pageId, button){
 
-  console.error(error);
+  document
+    .querySelectorAll(".page")
+    .forEach(page => {
+      page.classList.remove("active");
+    });
 
+  const page =
+    document.getElementById(pageId);
+
+  if(page){
+    page.classList.add("active");
+  }
+
+  document
+    .querySelectorAll(".nav-btn")
+    .forEach(btn => {
+      btn.classList.remove("active");
+    });
+
+  if(button){
+    button.classList.add("active");
+  }
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
 }
 
 
@@ -742,63 +1355,67 @@ try{
    TOAST
 ========================================= */
 
-function toast(message){
+function showToast(message){
 
-  const box =
+  const toast =
     document.getElementById("toast");
 
-  box.innerText = message;
+  if(!toast) return;
 
-  box.style.display = "block";
+  toast.textContent = message;
 
-  setTimeout(function(){
+  toast.classList.add("show");
 
-    box.style.display = "none";
-
-  },3000);
-
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2500);
 }
 
 
 /* =========================================
-   SCREEN FUNCTIONS
+   LOGIN
 ========================================= */
 
-function hideAllAuth(){
+async function loginUser(){
 
-  document
-    .getElementById("loginScreen")
-    .classList.add("hidden");
+  const email =
+    document
+      .getElementById("userEmail")
+      .value
+      .trim();
 
-  document
-    .getElementById("registerScreen")
-    .classList.add("hidden");
+  const password =
+    document
+      .getElementById("userPassword")
+      .value;
 
-  document
-    .getElementById("resetScreen")
-    .classList.add("hidden");
+  if(!email || !password){
 
-}
+    showToast("Email और Password डालें");
 
+    return;
+  }
 
-function showLoginScreen(){
+  const { data, error } =
+    await supabaseClient.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
 
-  hideAllAuth();
+  if(error){
 
-  document
-    .getElementById("loginScreen")
-    .classList.remove("hidden");
+    showToast(error.message);
 
-}
+    return;
+  }
 
+  showToast("Login सफल हुआ 🇮🇳");
 
-function showRegisterScreen(){
+  if(data.user){
 
-  hideAllAuth();
+    showApp(data.user);
 
-  document
-    .getElementById("registerScreen")
-    .classList.remove("hidden");
+  }
 
 }
 
@@ -828,40 +1445,32 @@ async function registerUser(){
 
   if(!name || !email || !password){
 
-    toast("सभी जानकारी भरें");
+    showToast(
+      "नाम, Email और Password भरें"
+    );
 
     return;
   }
 
   if(password.length < 6){
 
-    toast("Password कम से कम 6 characters का रखें");
+    showToast(
+      "Password कम से कम 6 अक्षर का रखें"
+    );
 
     return;
   }
 
-  if(!supabaseClient){
-
-    toast("Supabase connection नहीं है");
-
-    return;
-  }
-
-  toast("Account बनाया जा रहा है...");
-
-  const {
-    data,
-    error
-  } =
+  const { data, error } =
     await supabaseClient.auth.signUp({
 
-      email:email,
+      email: email,
 
-      password:password,
+      password: password,
 
-      options:{
-        data:{
-          full_name:name
+      options: {
+        data: {
+          full_name: name
         }
       }
 
@@ -870,55 +1479,27 @@ async function registerUser(){
 
   if(error){
 
-    console.error(error);
-
-    toast(
-      "Register Error: " +
-      error.message
-    );
+    showToast(error.message);
 
     return;
   }
 
 
-  if(data.user){
-
-    try{
-
-      await supabaseClient
-        .from("profiles")
-        .upsert({
-
-          id:data.user.id,
-
-          full_name:name,
-
-          email:email
-
-        });
-
-    }catch(profileError){
-
-      console.log(profileError);
-
-    }
-
-  }
-
-
   if(data.session){
 
-    toast("Account बन गया ✓");
+    showToast(
+      "Account बन गया 🇮🇳"
+    );
 
     showApp(data.user);
 
   }else{
 
-    toast(
-      "Account बन गया। Email में confirmation link देखें।"
+    showToast(
+      "Email पर confirmation link भेजा गया है"
     );
 
-    showLoginScreen();
+    showLogin();
 
   }
 
@@ -926,71 +1507,64 @@ async function registerUser(){
 
 
 /* =========================================
-   LOGIN
+   SHOW LOGIN
 ========================================= */
 
-async function loginUser(){
+function showLogin(){
 
-  const email =
-    document
-      .getElementById("userEmail")
-      .value
-      .trim();
+  document
+    .getElementById("loginScreen")
+    .style.display = "flex";
 
-  const password =
-    document
-      .getElementById("userPassword")
-      .value;
+  document
+    .getElementById("registerScreen")
+    .style.display = "none";
 
+  document
+    .getElementById("resetScreen")
+    .style.display = "none";
 
-  if(!email || !password){
-
-    toast("Email और Password डालें");
-
-    return;
-  }
+}
 
 
-  if(!supabaseClient){
+/* =========================================
+   SHOW REGISTER
+========================================= */
 
-    toast("Supabase connection सेट नहीं है");
+function showRegister(){
 
-    return;
-  }
+  document
+    .getElementById("loginScreen")
+    .style.display = "none";
 
+  document
+    .getElementById("registerScreen")
+    .style.display = "flex";
 
-  toast("Login हो रहा है...");
+  document
+    .getElementById("resetScreen")
+    .style.display = "none";
 
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient.auth.signInWithPassword({
-
-      email:email,
-
-      password:password
-
-    });
+}
 
 
-  if(error){
+/* =========================================
+   SHOW RESET
+========================================= */
 
-    console.error(error);
+function showReset(){
 
-    toast(
-      "Login Error: " +
-      error.message
-    );
+  document
+    .getElementById("loginScreen")
+    .style.display = "none";
 
-    return;
-  }
+  document
+    .getElementById("registerScreen")
+    .style.display = "none";
 
-
-  toast("Login सफल ✓");
-
-  showApp(data.user);
+  document
+    .getElementById("resetScreen")
+    .style.display = "flex";
 
 }
 
@@ -1003,77 +1577,38 @@ async function resetPassword(){
 
   const email =
     document
-      .getElementById("userEmail")
+      .getElementById("resetEmail")
       .value
       .trim();
 
-
   if(!email){
 
-    toast("पहले अपना Email डालें");
-
-    return;
-  }
-
-
-  if(!supabaseClient){
-
-    toast("Supabase connection सेट नहीं है");
-
-    return;
-  }
-
-
-  toast("Reset link भेजा जा रहा है...");
-
-
-  const {
-    error
-  } =
-    await supabaseClient.auth
-      .resetPasswordForEmail(
-
-        email,
-
-        {
-          redirectTo:
-          "https://mk906036875-create.github.io/vasudhaiva-kutumbakam/"
-        }
-
-      );
-
-
-  if(error){
-
-    console.error(error);
-
-    toast(
-      "Reset Error: " +
-      error.message
+    showToast(
+      "अपना Email डालें"
     );
 
     return;
   }
 
+  const { error } =
+   
+    await supabaseClient.auth
+      .resetPasswordForEmail(
+        email,
+        {
+          redirectTo:
+          "https://mk906036875-create.github.io/vasudhaiva-kutumbakam/"
+               }
+      );
 
-  toast(
-    "Password reset link Email पर भेज दिया गया ✓"
-  );
+  if(error){
 
-}
+    showToast(
+      "Password reset email भेजा गया है"
+    );
 
-
-/* =========================================
-   SHOW RESET SCREEN
-========================================= */
-
-function showResetScreen(){
-
-  hideAllAuth();
-
-  document
-    .getElementById("resetScreen")
-    .classList.remove("hidden");
+    return;
+  }
 
 }
 
@@ -1094,64 +1629,76 @@ async function setNewPassword(){
       .getElementById("confirmPassword")
       .value;
 
-
   if(!password || !confirmPassword){
 
-    toast("दोनों Password भरें");
-
-    return;
-  }
-
-
-  if(password.length < 6){
-
-    toast("Password कम से कम 6 characters का रखें");
-
-    return;
-  }
-
-
-  if(password !== confirmPassword){
-
-    toast("दोनों Password अलग हैं");
-
-    return;
-  }
-
-
-  const {
-    error
-  } =
-    await supabaseClient.auth.updateUser({
-
-      password:password
-
-    });
-
-
-  if(error){
-
-    console.error(error);
-
-    toast(
-      "Password Update Error: " +
-      error.message
+    showToast(
+      "दोनों Password भरें"
     );
 
     return;
   }
 
+  if(password !== confirmPassword){
 
-  toast(
-    "Password सफलतापूर्वक बदल गया ✓"
+    showToast(
+      "दोनों Password समान नहीं हैं"
+    );
+
+    return;
+  }
+
+  if(password.length < 6){
+
+    showToast(
+      "Password कम से कम 6 अक्षर का रखें"
+    );
+
+    return;
+  }
+
+  const { error } =
+    await supabaseClient.auth
+      .updateUser({
+        password: password
+      });
+
+  if(error){
+
+    showToast(error.message);
+
+    return;
+  }
+
+  showToast(
+    "Password सफलतापूर्वक बदल गया"
   );
 
+  showLogin();
 
-  setTimeout(function(){
+ }
+ /* =========================================
+   SHOW APP
+========================================= */
 
-    showLoginScreen();
+function showApp(user){
 
-  },1500);
+  document
+    .getElementById("loginScreen")
+    .style.display = "none";
+
+  document
+    .getElementById("registerScreen")
+    .style.display = "none";
+
+  document
+    .getElementById("resetScreen")
+    .style.display = "none";
+
+  document
+    .getElementById("mainApp")
+    .style.display = "block";
+
+  loadProfile(user);
 
 }
 
@@ -1162,69 +1709,129 @@ async function setNewPassword(){
 
 async function logoutUser(){
 
-  if(supabaseClient){
+  await supabaseClient.auth.signOut();
 
-    await supabaseClient.auth.signOut();
+  document
+    .getElementById("mainApp")
+    .style.display = "none";
 
+  showLogin();
+
+  showToast(
+    "आप Logout हो गए"
+  );
+
+}
+
+
+/* =========================================
+   PROFILE
+========================================= */
+
+async function loadProfile(user){
+
+  if(!user) return;
+
+  const name =
+    user.user_metadata?.full_name ||
+    user.email?.split("@")[0] ||
+    "भारत परिवार";
+
+  const profileName =
+    document.getElementById("profileName");
+
+  if(profileName){
+    profileName.textContent = name;
   }
 
-  document
-    .getElementById("app")
-    .classList.add("hidden");
+  const profileEmail =
+    document.getElementById("profileEmail");
 
-  showLoginScreen();
+  if(profileEmail){
+    profileEmail.textContent =
+      user.email || "";
+  }
 
-  toast("Logout हो गया");
-
-}
-
-
-/* =========================================
-   SHOW APP
+ }
+ /* =========================================
+   SAVE PROFILE
 ========================================= */
 
-function showApp(user){
+async function saveProfile(){
 
-  hideAllAuth();
+  const nameInput =
+    document.getElementById("profileEditName");
 
-  document
-    .getElementById("app")
-    .classList.remove("hidden");
+  if(!nameInput) return;
 
-  loadProfile(user);
+  const name =
+    nameInput.value.trim();
 
-  loadDemoPosts();
+  if(!name){
 
-}
-
-
-/* =========================================
-   SESSION CHECK
-========================================= */
-
-async function checkSession(){
-
-  if(!supabaseClient){
-
-    showLoginScreen();
+    showToast(
+      "नाम खाली नहीं हो सकता"
+    );
 
     return;
   }
 
+  const { error } =
+    await supabaseClient.auth
+      .updateUser({
+
+        data:{
+          full_name:name
+        }
+
+      });
+
+  if(error){
+
+    showToast(error.message);
+
+    return;
+  }
+
+  showToast(
+    "Profile अपडेट हो गई"
+  );
+
+ }
+ /* =========================================
+   CHECK SESSION
+========================================= */
+
+async function checkSession(){
 
   const {
-    data
+    data,
+    error
   } =
-    await supabaseClient.auth.getSession();
+    await supabaseClient.auth
+      .getSession();
 
+  if(error){
 
-  if(data && data.session){
+    console.log(error);
 
-    showApp(data.session.user);
+    showLogin();
+
+    return;
+  }
+
+  const session =
+    data.session;
+
+  if(session?.user){
+
+    showApp(
+      session.user
+    );
 
   }else{
 
-    showLoginScreen();
+    showLogin();
 
   }
 
@@ -1235,584 +1842,32 @@ async function checkSession(){
    AUTH STATE
 ========================================= */
 
-if(supabaseClient){
+supabaseClient.auth
+  .onAuthStateChange(
+    (event, session) => {
 
-  supabaseClient.auth
-    .onAuthStateChange(
+      if(
+        event ===
+        "PASSWORD_RECOVERY"
+      ){
 
-      function(event,session){
+        showReset();
 
-        console.log(
-          "Auth event:",
-          event
+        return;
+      }
+
+      if(
+        session?.user
+      ){
+
+        showApp(
+          session.user
         );
 
-
-        if(event ===
-           "PASSWORD_RECOVERY"){
-
-          showResetScreen();
-
-        }
-
-
-        if(event ===
-           "SIGNED_IN"){
-
-          if(session &&
-             session.user){
-
-            showApp(
-              session.user
-            );
-
-          }
-
-        }
-
-
-        if(event ===
-           "SIGNED_OUT"){
-
-          document
-            .getElementById("app")
-            .classList.add("hidden");
-
-          showLoginScreen();
-
-        }
-
-      }
-
-    );
-
-}
-
-
-/* =========================================
-   PROFILE LOAD
-========================================= */
-
-async function loadProfile(user){
-
-  if(!user) return;
-
-
-  let name =
-    user.user_metadata &&
-    user.user_metadata.full_name
-      ? user.user_metadata.full_name
-      : "User";
-
-
-  if(supabaseClient){
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-        .from("profiles")
-        .select("*")
-        .eq("id",user.id)
-        .maybeSingle();
-
-
-    if(!error && data){
-
-      if(data.full_name){
-
-        name = data.full_name;
-
       }
 
     }
-
-  }
-
-
-  document
-    .getElementById("profileName")
-    .innerText = name;
-
-
-  document
-    .getElementById("profileEmail")
-    .innerText =
-      user.email || "";
-
-
-  document
-    .getElementById("profileNameInput")
-    .value = name;
-
-
-  const firstLetter =
-    name
-      .trim()
-      .charAt(0)
-      .toUpperCase();
-
-
-  document
-    .getElementById("profileAvatar")
-    .innerText =
-      firstLetter || "👤";
-
-}
-
-
-/* =========================================
-   SAVE PROFILE
-========================================= */
-
-async function saveProfile(){
-
-  const name =
-    document
-      .getElementById("profileNameInput")
-      .value
-      .trim();
-
-
-  if(!name){
-
-    toast("नाम डालें");
-
-    return;
-  }
-
-
-  const {
-    data
-  } =
-    await supabaseClient.auth.getUser();
-
-
-  if(!data.user){
-
-    toast("पहले Login करें");
-
-    return;
-  }
-
-
-  const {
-    error
-  } =
-    await supabaseClient
-  .from("profiles")
-  .upsert({
-    id: data.user.id,
-    full_name: name,
-    email: data.user.email
-  });  if(error){
-
-    console.error(error);
-
-    toast(
-      "Profile Error: " +
-      error.message
-    );
-
-    return;
-  }
-
-
-  await supabaseClient.auth.updateUser({
-
-    data:{
-      full_name:name
-    }
-
-  });
-
-
-  loadProfile(data.user);
-
-  toast("Profile Save हो गई ✓");
-
-}
-
-
-/* =========================================
-   NAVIGATION
-========================================= */
-
-function showPage(pageId,button){
-
-  const pages = [
-
-    "homePage",
-
-    "reelsPage",
-
-    "postPage",
-
-    "communityPage",
-
-    "profilePage"
-
-  ];
-
-
-  pages.forEach(function(id){
-
-    document
-      .getElementById(id)
-      .classList.add("hidden");
-
-  });
-
-
-  document
-    .getElementById(pageId)
-    .classList.remove("hidden");
-
-
-  document
-    .querySelectorAll(".nav-btn")
-    .forEach(function(btn){
-
-      btn.classList.remove("active");
-
-    });
-
-
-  if(button){
-
-    button.classList.add("active");
-
-  }
-
-}
-
-
-/* =========================================
-   CREATE POST
-========================================= */
-
-function createPost(){
-
-  const text =
-    document
-      .getElementById("postText")
-      .value
-      .trim();
-
-
-  const language =
-    document
-      .getElementById("postLanguage")
-      .value;
-
-
-  if(!text){
-
-    toast("पहले कुछ लिखें");
-
-    return;
-  }
-
-
-  const posts =
-    JSON.parse(
-      localStorage.getItem(
-        "vk_demo_posts"
-      ) || "[]"
-    );
-
-
-  posts.unshift({
-
-    id:Date.now(),
-
-    text:text,
-
-    language:language,
-
-    likes:0,
-
-    user:"आप"
-
-  });
-
-
-  localStorage.setItem(
-
-    "vk_demo_posts",
-
-    JSON.stringify(posts)
-
   );
-
-
-  document
-    .getElementById("postText")
-    .value = "";
-
-
-  toast("पोस्ट हो गई ✓");
-
-
-  loadDemoPosts();
-
-
-  showPage(
-    "homePage",
-    document.querySelector(".nav-btn")
-  );
-
-}
-
-
-/* =========================================
-   LOAD DEMO POSTS
-========================================= */
-
-function loadDemoPosts(){
-
-  const container =
-    document
-      .getElementById("postsContainer");
-
-
-  if(!container) return;
-
-
-  const posts =
-    JSON.parse(
-      localStorage.getItem(
-        "vk_demo_posts"
-      ) || "[]"
-    );
-
-
-  if(posts.length === 0){
-
-    container.innerHTML = `
-
-      <div class="card">
-
-        <div class="section-title">
-          🌱 पहली पोस्ट
-        </div>
-
-        <p>
-          अभी कोई पोस्ट नहीं है।
-          आप पहली उपयोगी पोस्ट करें।
-        </p>
-
-      </div>
-
-    `;
-
-    return;
-  }
-
-
-  container.innerHTML =
-    posts
-      .map(function(post){
-
-        return `
-
-          <div class="card">
-
-            <div class="post-user">
-              👤 ${escapeHtml(post.user)}
-            </div>
-
-            <div class="post-text">
-              ${escapeHtml(post.text)}
-            </div>
-
-            <div class="post-actions">
-
-              <button
-                class="action"
-                onclick="likePost(${post.id})">
-                ❤️ ${post.likes}
-              </button>
-
-              <button
-                class="action"
-                onclick="translatePost(${post.id})">
-                🌐 Translate
-              </button>
-
-              <button
-                class="action"
-                onclick="sharePost(${post.id})">
-                ↗️ Share
-              </button>
-
-            </div>
-
-          </div>
-
-        `;
-
-      })
-      .join("");
-
-}
-
-
-/* =========================================
-   LIKE
-========================================= */
-
-function likePost(id){
-
-  const posts =
-    JSON.parse(
-      localStorage.getItem(
-        "vk_demo_posts"
-      ) || "[]"
-    );
-
-
-  const post =
-    posts.find(function(item){
-
-      return item.id === id;
-
-    });
-
-
-  if(post){
-
-    post.likes++;
-
-  }
-
-
-  localStorage.setItem(
-
-    "vk_demo_posts",
-
-    JSON.stringify(posts)
-
-  );
-
-
-  loadDemoPosts();
-
-}
-
-
-/* =========================================
-   TRANSLATE DEMO
-========================================= */
-
-function translatePost(id){
-
-  toast(
-    "AI Translation जल्द जोड़ा जाएगा 🌐"
-  );
-
-}
-
-
-/* =========================================
-   SHARE
-========================================= */
-
-async function sharePost(id){
-
-  const posts =
-    JSON.parse(
-      localStorage.getItem(
-        "vk_demo_posts"
-      ) || "[]"
-    );
-
-
-  const post =
-    posts.find(function(item){
-
-      return item.id === id;
-
-    });
-
-
-  if(!post) return;
-
-
-  const text =
-    "🇮🇳 वसुधैव कुटुम्बकम्\n\n" +
-    post.text;
-
-
-  if(
-    navigator.share
-  ){
-
-    try{
-
-      await navigator.share({
-
-        title:
-          "वसुधैव कुटुम्बकम्",
-
-        text:text
-
-      });
-
-    }catch(error){
-
-      console.log(error);
-
-    }
-
-  }else{
-
-    try{
-
-      await navigator.clipboard.writeText(text);
-
-      toast("Post copy हो गई ✓");
-
-    }catch(error){
-
-      toast("Share उपलब्ध नहीं है");
-
-    }
-
-  }
-
-}
-
-
-/* =========================================
-   COMMUNITY JOIN
-========================================= */
-
-function joinCommunity(name){
-
-  toast(
-    name +
-    " Community में Join request भेजी गई ✓"
-  );
-
-}
-
-
-/* =========================================
-   HTML ESCAPE
-========================================= */
-
-function escapeHtml(text){
-
-  const div =
-    document.createElement("div");
-
-  div.textContent = text;
-
-  return div.innerHTML;
-
-}
 
 
 /* =========================================
