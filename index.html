@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
@@ -255,8 +255,8 @@ select{
 }
 
 .avatar{
-  width:80px;
-  height:80px;
+  width:90px;
+  height:90px;
   border-radius:50%;
   margin:auto;
   background:#ff9933;
@@ -264,6 +264,23 @@ select{
   align-items:center;
   justify-content:center;
   font-size:35px;
+  overflow:hidden;
+  border:3px solid #138808;
+}
+
+.avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.profile-info{
+  margin-top:12px;
+}
+
+.profile-info p{
+  margin-top:8px;
+  line-height:1.5;
 }
 
 footer{
@@ -543,7 +560,7 @@ style="width:100%;height:130px;margin-top:12px;padding:12px;border-radius:10px;b
 
 <div class="card profile">
 
-<div class="avatar">
+<div class="avatar" id="profileAvatar">
 🇮🇳
 </div>
 
@@ -551,9 +568,21 @@ style="width:100%;height:130px;margin-top:12px;padding:12px;border-radius:10px;b
 वसुधैव परिवार
 </h2>
 
-<p id="profileEmail" style="margin-top:6px;">
-सम्मान • सुरक्षा • सहयोग
+<p id="profileUsername" style="margin-top:6px;">
+@username
 </p>
+
+<p id="profileEmail" style="margin-top:6px;">
+Email
+</p>
+
+<div class="profile-info">
+
+<p id="profileBio">
+🙏 सम्मान • सुरक्षा • सहयोग
+</p>
+
+</div>
 
 <hr style="margin:15px 0;">
 
@@ -605,7 +634,6 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 'sb_publishable_Uq4wF9xUhFl5foMSRWyhvQ_iyqXgpt2';
 
-
 let supabaseClient = null;
 
 try{
@@ -641,7 +669,6 @@ document.getElementById("userPassword").value;
 if(!email || !password){
 
 toast("Email और Password भरें");
-
 return;
 
 }
@@ -649,7 +676,6 @@ return;
 if(!supabaseClient){
 
 toast("Supabase connection सेट नहीं है");
-
 return;
 
 }
@@ -669,7 +695,6 @@ if(error){
 console.error(error);
 
 toast("Login Error: "+error.message);
-
 return;
 
 }
@@ -702,7 +727,6 @@ document.getElementById("userPassword").value;
 if(!email || !password){
 
 toast("Email और Password भरें");
-
 return;
 
 }
@@ -710,7 +734,6 @@ return;
 if(password.length < 6){
 
 toast("Password कम से कम 6 characters का रखें");
-
 return;
 
 }
@@ -718,7 +741,6 @@ return;
 if(!supabaseClient){
 
 toast("Supabase connection सेट नहीं है");
-
 return;
 
 }
@@ -738,7 +760,6 @@ if(error){
 console.error(error);
 
 toast("Signup Error: "+error.message);
-
 return;
 
 }
@@ -758,7 +779,7 @@ toast("Account बनाया गया ✓");
 }else{
 
 toast(
-"Account बन गया। Email verification करें।"
+"Account बन गया।"
 );
 
 }
@@ -780,7 +801,6 @@ await supabaseClient.auth.signOut();
 if(error){
 
 toast(error.message);
-
 return;
 
 }
@@ -821,23 +841,34 @@ document
 
 /* ==========================================
    PROFILE
+   Supabase columns:
+   id
+   created_at
+   username
+   display_name
+   bio
+   avatar
 ========================================== */
 
 async function loadProfile(user){
 
 if(!user || !supabaseClient) return;
 
+
+/* Email */
+
 document
 .getElementById("profileEmail")
 .innerText =
-user.email || "";
+user.email || "Email उपलब्ध नहीं";
+
 
 try{
 
 const { data, error } =
 await supabaseClient
 .from("profiles")
-.select("*")
+.select("id,created_at,username,display_name,bio,avatar")
 .eq("id",user.id)
 .maybeSingle();
 
@@ -852,7 +883,12 @@ return;
 
 }
 
+
+/* Profile मिला */
+
 if(data){
+
+/* Display Name */
 
 document
 .getElementById("profileName")
@@ -861,11 +897,52 @@ data.display_name ||
 data.username ||
 "वसुधैव परिवार";
 
+
+/* Username */
+
+document
+.getElementById("profileUsername")
+.innerText =
+data.username
+? "@"+data.username
+: "@username";
+
+
+/* Bio */
+
+document
+.getElementById("profileBio")
+.innerText =
+data.bio ||
+"🙏 सम्मान • सुरक्षा • सहयोग";
+
+
+/* Avatar */
+
+let avatarBox =
+document.getElementById("profileAvatar");
+
+if(data.avatar){
+
+avatarBox.innerHTML =
+'<img src="' +
+escapeAttribute(data.avatar) +
+'" alt="Profile Avatar">';
+
+}else{
+
+avatarBox.innerText="🇮🇳";
+
+}
+
 }
 
 }catch(error){
 
-console.log(error);
+console.log(
+"Profile load error:",
+error
+);
 
 }
 
@@ -988,7 +1065,6 @@ document
 if(!text){
 
 toast("पहले कुछ लिखें");
-
 return;
 
 }
@@ -1052,7 +1128,6 @@ document
 if(!text){
 
 toast("पहले कुछ लिखें");
-
 return;
 
 }
@@ -1117,6 +1192,21 @@ return div.innerHTML;
 
 
 /* ==========================================
+   ATTRIBUTE SECURITY
+========================================== */
+
+function escapeAttribute(text){
+
+return String(text)
+.replace(/&/g,"&amp;")
+.replace(/"/g,"&quot;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;");
+
+}
+
+
+/* ==========================================
    COMMUNITY
 ========================================== */
 
@@ -1155,7 +1245,6 @@ await supabaseClient.auth.getSession();
 if(error){
 
 console.log(error);
-
 return;
 
 }
@@ -1225,4 +1314,4 @@ loadProfile(session.user);
 </script>
 
 </body>
-</html> 
+</html>
