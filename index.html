@@ -1584,8 +1584,8 @@ onclick="likePost(this)">
 ❤️ Like 0
 </button>
 
-<button
-onclick="toast('Comment Demo')">
+ <button
+onclick="openComments('${escapeAttribute(post.id)}')">
 💬 Comment
 </button>
 
@@ -1827,7 +1827,82 @@ null;
 ========================================== */
 
 checkSession();
+/* ==========================================
+   REAL COMMENTS
+========================================== */
 
+async function openComments(postId){
+
+if(!supabaseClient){
+toast("Supabase connection नहीं है");
+return;
+}
+
+const text = prompt("अपना Comment लिखें:");
+
+if(!text || !text.trim()){
+return;
+}
+
+try{
+
+const {
+data:{
+user
+}
+} = await supabaseClient
+.auth
+.getUser();
+
+if(!user){
+
+toast("पहले Login करें");
+return;
+
+}
+
+const {
+error
+} = await supabaseClient
+.from("comments")
+.insert({
+
+post_id: postId,
+user_id: user.id,
+content: text.trim()
+
+});
+
+if(error){
+
+console.error("Comment Error:",error);
+
+toast(
+"Comment save नहीं हुआ: " +
+error.message
+);
+
+return;
+
+}
+
+toast("Comment save हो गया ✓");
+
+}catch(error){
+
+console.error(
+"Comment Exception:",
+error
+);
+
+toast(
+"Comment करते समय समस्या हुई: " +
+error.message
+);
+
+}
+
+ }
 </script>
 
 </body>
