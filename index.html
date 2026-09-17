@@ -1,5 +1,6 @@
  <!DOCTYPE html>
 <html lang="hi">
+
 <head>
 
 <meta charset="UTF-8">
@@ -189,6 +190,7 @@ margin-bottom:7px;
 
 .post p{
 line-height:1.5;
+white-space:pre-wrap;
 }
 
 .actions{
@@ -214,6 +216,17 @@ padding:5px 8px;
 border-radius:20px;
 font-size:12px;
 margin-bottom:8px;
+}
+
+.delete-btn{
+margin-top:10px;
+width:100%;
+padding:9px;
+border:0;
+border-radius:10px;
+background:#f1f1f1;
+color:#b00020;
+font-weight:bold;
 }
 
 .reel{
@@ -314,9 +327,9 @@ display:none;
 <body>
 
 
-<!-- ==============================
+<!-- ==========================================
      LOGIN
-================================ -->
+========================================== -->
 
 <div id="loginScreen" class="login-box">
 
@@ -377,9 +390,9 @@ Create New Account
 </div>
 
 
-<!-- ==============================
+<!-- ==========================================
      MAIN APP
-================================ -->
+========================================== -->
 
 <div id="mainApp">
 
@@ -399,7 +412,9 @@ Create New Account
 </header>
 
 
-<!-- NAVIGATION -->
+<!-- ==========================================
+     NAVIGATION
+========================================== -->
 
 <nav>
 
@@ -426,9 +441,9 @@ Create New Account
 </nav>
 
 
-<!-- ==============================
+<!-- ==========================================
      HOME
-================================ -->
+========================================== -->
 
 <section
 id="home"
@@ -448,15 +463,10 @@ placeholder="कुछ अच्छा लिखें...">
 <select id="quickLang">
 
 <option>हिन्दी</option>
-
 <option>English</option>
-
 <option>भोजपुरी</option>
-
 <option>मराठी</option>
-
 <option>தமிழ்</option>
-
 <option>తెలుగు</option>
 
 </select>
@@ -474,84 +484,21 @@ onclick="createQuickPost()">
 
 <div id="feed">
 
+<p
+style="text-align:center;padding:20px;">
 
-<div class="card post">
+Posts load हो रही हैं...
 
-<span class="badge">
-🇮🇳 भारत
-</span>
-
-<h3>
-वसुधैव कुटुम्बकम्
-</h3>
-
-<p>
-हमारी सोच सरल है — हर इंसान का सम्मान,
-भारतीय भाषाओं का सम्मान और उपयोगी जानकारी
-को प्राथमिकता।
 </p>
-
-<div class="actions">
-
-<button onclick="likePost(this)">
-❤️ Like 0
-</button>
-
-<button onclick="toast('Comment Demo')">
-💬 Comment
-</button>
-
-<button onclick="translatePost(this)">
-🌐 Translate
-</button>
-
-</div>
-
-</div>
-
-
-<div class="card post">
-
-<span class="badge">
-📚 शिक्षा
-</span>
-
-<h3>
-आज की अच्छी बात
-</h3>
-
-<p>
-ज्ञान जितना साझा किया जाए, उतना ही बढ़ता है।
-आइए एक-दूसरे को आगे बढ़ाने वाला समाज बनाएं।
-</p>
-
-<div class="actions">
-
-<button onclick="likePost(this)">
-❤️ Like 0
-</button>
-
-<button onclick="toast('Comment Demo')">
-💬 Comment
-</button>
-
-<button onclick="translatePost(this)">
-🌐 Translate
-</button>
-
-</div>
-
-</div>
-
 
 </div>
 
 </section>
 
 
-<!-- ==============================
+<!-- ==========================================
      REELS
-================================ -->
+========================================== -->
 
 <section
 id="reels"
@@ -582,9 +529,9 @@ Business • Jobs • Skills
 </section>
 
 
-<!-- ==============================
+<!-- ==========================================
      POST
-================================ -->
+========================================== -->
 
 <section
 id="post"
@@ -612,15 +559,10 @@ border:1px solid #ccc;
 <select id="postLang">
 
 <option>हिन्दी</option>
-
 <option>English</option>
-
 <option>भोजपुरी</option>
-
 <option>मराठी</option>
-
 <option>தமிழ்</option>
-
 <option>తెలుగు</option>
 
 </select>
@@ -638,9 +580,9 @@ onclick="createPost()">
 </section>
 
 
-<!-- ==============================
+<!-- ==========================================
      COMMUNITY
-================================ -->
+========================================== -->
 
 <section
 id="community"
@@ -653,7 +595,9 @@ class="page">
 </h2>
 
 <p style="margin-top:6px;">
+
 अपनी रुचि के लोगों से जुड़ें।
+
 </p>
 
 </div>
@@ -713,9 +657,9 @@ Join
 </section>
 
 
-<!-- ==============================
+<!-- ==========================================
      PROFILE
-================================ -->
+========================================== -->
 
 <section
 id="profile"
@@ -910,7 +854,6 @@ await supabaseClient
 .signInWithPassword({
 
 email:email,
-
 password:password
 
 });
@@ -935,7 +878,7 @@ return;
 
 if(data && data.user){
 
-showApp();
+await showApp();
 
 await loadProfile(
 data.user
@@ -1031,7 +974,6 @@ await supabaseClient
 .signUp({
 
 email:email,
-
 password:password
 
 });
@@ -1056,7 +998,7 @@ return;
 
 if(data.session){
 
-showApp();
+await showApp();
 
 if(data.user){
 
@@ -1073,7 +1015,7 @@ toast(
 }else{
 
 toast(
-"Account बन गया।"
+"Account बन गया। Email verification करें।"
 );
 
 }
@@ -1150,23 +1092,25 @@ toast(
    SHOW APP
 ========================================== */
 
- async function showApp(){
+async function showApp(){
 
 document
 .getElementById("loginScreen")
 .style.display="none";
 
+
 document
 .getElementById("mainApp")
 .style.display="block";
 
+
 await loadPosts();
 
- }
+}
 
 
 /* ==========================================
-   LOAD PROFILE
+   PROFILE
 ========================================== */
 
 async function loadProfile(user){
@@ -1313,6 +1257,10 @@ const t =
 document.getElementById("toast");
 
 
+if(!t)
+return;
+
+
 t.innerText =
 message;
 
@@ -1360,7 +1308,7 @@ number;
 
 
 /* ==========================================
-   TRANSLATION
+   TRANSLATE
 ========================================== */
 
 function translatePost(button){
@@ -1369,8 +1317,16 @@ const post =
 button.closest(".post");
 
 
+if(!post)
+return;
+
+
 const text =
 post.querySelector("p");
+
+
+if(!text)
+return;
 
 
 if(!text.dataset.original){
@@ -1396,7 +1352,7 @@ delete text.dataset.original;
 
 
 /* ==========================================
-   CREATE POST - SUPABASE
+   CREATE POST
 ========================================== */
 
 async function createPost(){
@@ -1472,9 +1428,7 @@ await supabaseClient
 .insert({
 
 user_id:user.id,
-
 content:text,
-
 language:language
 
 });
@@ -1502,9 +1456,9 @@ document
 .value="";
 
 
-showPage(
-"home"
-);
+await loadPosts();
+
+showPage("home");
 
 
 toast(
@@ -1529,7 +1483,7 @@ error.message
 }
 
 
- /* ==========================================
+/* ==========================================
    QUICK POST
 ========================================== */
 
@@ -1564,8 +1518,10 @@ return;
 }
 
 
+try{
+
 const {
-data: {
+data:{
 user
 }
 } =
@@ -1585,19 +1541,16 @@ return;
 }
 
 
-let language = "हिंदी";
-
-
 const quickLang =
 document.getElementById("quickLang");
 
 
-if(quickLang){
-
-language =
-quickLang.value || "हिंदी";
-
-}
+const language =
+quickLang
+?
+quickLang.value || "हिन्दी"
+:
+"हिन्दी";
 
 
 toast(
@@ -1613,9 +1566,7 @@ await supabaseClient
 .insert({
 
 user_id:user.id,
-
 content:text,
-
 language:language
 
 });
@@ -1640,7 +1591,7 @@ return;
 
 document
 .getElementById("quickPost")
-.value = "";
+.value="";
 
 
 await loadPosts();
@@ -1649,6 +1600,21 @@ await loadPosts();
 toast(
 "पोस्ट Supabase में save हो गई ✓"
 );
+
+
+}catch(error){
+
+console.error(
+"Quick Post Exception:",
+error
+);
+
+toast(
+"Post Error: " +
+error.message
+);
+
+}
 
 }
 
@@ -1663,8 +1629,12 @@ const div =
 document.createElement("div");
 
 
-div.innerText =
-text;
+div.textContent =
+text == null
+?
+""
+:
+String(text);
 
 
 return div.innerHTML;
@@ -1708,22 +1678,249 @@ button.style.background =
 
 
 /* ==========================================
-   SESSION CHECK
+   LOAD POSTS
 ========================================== */
 
-async function checkSession(){
+async function loadPosts(){
 
 if(!supabaseClient){
 
-document
-.getElementById("loginScreen")
-.style.display="block";
+return;
+
+}
 
 
-document
-.getElementById("mainApp")
-.style.display="none";
+const feed =
+document.getElementById("feed");
 
+
+if(!feed){
+
+return;
+
+}
+
+
+/* Current logged-in user */
+
+let currentUser = null;
+
+
+try{
+
+const {
+data:{
+user
+}
+} =
+await supabaseClient
+.auth
+.getUser();
+
+currentUser = user;
+
+}catch(error){
+
+console.log(
+"User check error:",
+error
+);
+
+}
+
+
+/* Supabase से posts */
+
+const {
+data,
+error
+} =
+await supabaseClient
+.from("posts")
+.select(
+"id,created_at,content,language,user_id"
+)
+.order(
+"created_at",
+{
+ascending:false
+}
+);
+
+
+if(error){
+
+console.error(
+"Load Posts Error:",
+error
+);
+
+feed.innerHTML =
+"<p style='text-align:center;padding:20px;'>Posts load नहीं हुई।</p>";
+
+return;
+
+}
+
+
+/* पुराने/demo posts पूरी तरह साफ */
+
+feed.innerHTML = "";
+
+
+/* कोई post नहीं */
+
+if(!data || data.length === 0){
+
+feed.innerHTML =
+"<p style='text-align:center;padding:20px;'>अभी कोई पोस्ट नहीं है। पहली पोस्ट आप करें 🇮🇳</p>";
+
+return;
+
+}
+
+
+/* Posts display */
+
+data.forEach(function(post){
+
+const div =
+document.createElement("div");
+
+
+div.className =
+"card post";
+
+
+div.setAttribute(
+"data-post-id",
+post.id
+);
+
+
+/* केवल अपनी post पर Delete */
+
+const isOwner =
+currentUser &&
+currentUser.id === post.user_id;
+
+
+let deleteButton = "";
+
+
+if(isOwner){
+
+deleteButton = `
+
+<button
+class="delete-btn"
+onclick="deletePost('${escapeAttribute(post.id)}')">
+
+🗑️ Delete Post
+
+</button>
+
+`;
+
+}
+
+
+div.innerHTML = `
+
+<span class="badge">
+
+🇮🇳 वसुधैव कुटुम्बकम्
+
+</span>
+
+
+<h3>
+
+नई पोस्ट
+
+</h3>
+
+
+<p>
+
+${escapeHtml(post.content)}
+
+</p>
+
+
+<div
+style="
+font-size:12px;
+color:#777;
+margin-top:8px;
+">
+
+${escapeHtml(
+post.language || "हिन्दी"
+)}
+
+•
+
+${formatPostDate(
+post.created_at
+)}
+
+</div>
+
+
+<div class="actions">
+
+<button
+onclick="likePost(this)">
+
+❤️ Like 0
+
+</button>
+
+
+<button
+onclick="toast('Comment Demo')">
+
+💬 Comment
+
+</button>
+
+
+<button
+onclick="translatePost(this)">
+
+🌐 Translate
+
+</button>
+
+</div>
+
+
+${deleteButton}
+
+`;
+
+
+feed.appendChild(
+div
+);
+
+});
+
+}
+
+
+/* ==========================================
+   DELETE POST
+========================================== */
+
+async function deletePost(postId){
+
+if(!supabaseClient){
+
+toast(
+"Supabase connection नहीं है"
+);
 
 return;
 
@@ -1732,20 +1929,21 @@ return;
 
 try{
 
+/* Current user */
+
 const {
-data,
-error
+data: {
+user
+}
 } =
 await supabaseClient
 .auth
-.getSession();
+.getUser();
 
+if(!user){
 
-if(error){
-
-console.log(
-"Session error:",
-error
+toast(
+"पहले Login करें"
 );
 
 return;
@@ -1753,31 +1951,180 @@ return;
 }
 
 
-if(data.session){
+/* Confirm */
 
-showApp();
+const ok =
+confirm(
+"क्या आप यह पोस्ट Delete करना चाहते हैं?"
+);
+
+if(!ok){
+
+return;
+
+}
+
+
+/* Delete only own post */
+
+const {
+data,
+error
+} =
+await supabaseClient
+.from("posts")
+.delete()
+.eq("id",postId)
+.eq("user_id",user.id)
+.select("id");
+
+
+if(error){
+
+console.error(
+"Delete Post Error:",
+error
+);
+
+toast(
+"Post Delete नहीं हुई: " +
+error.message
+);
+
+return;
+
+}
+
+
+/* Check whether deleted */
+
+if(!data || data.length === 0){
+
+toast(
+"Post Delete करने की permission नहीं है"
+);
+
+return;
+
+}
+
+
+/* Remove card immediately */
+
+const card =
+document.querySelector(
+'[data-post-id="' +
+postId +
+'"]'
+);
+
+
+if(card){
+
+card.remove();
+
+}
+
+
+/* Reload from Supabase */
+
+await loadPosts();
+
+
+toast(
+"Post Delete हो गई ✓"
+);
+
+
+}catch(error){
+
+console.error(
+"Delete Post Exception:",
+error
+);
+
+toast(
+"Delete करते समय समस्या हुई: " +
+error.message
+);
+
+}
+
+}
+
+
+/* ==========================================
+   FORMAT POST DATE
+========================================== */
+
+function formatPostDate(date){
+
+if(!date){
+
+return "";
+
+}
+
+try{
+
+return new Date(date)
+.toLocaleString(
+"hi-IN",
+{
+dateStyle:"medium",
+timeStyle:"short"
+}
+);
+
+}catch(error){
+
+return "";
+
+}
+
+}
+
+
+/* ==========================================
+   START SESSION CHECK
+========================================== */
+
+async function checkSession(){
+
+if(!supabaseClient){
+
+return;
+
+}
+
+try{
+
+const {
+data
+} =
+await supabaseClient
+.auth
+.getSession();
+
+
+if(
+data &&
+data.session &&
+data.session.user
+){
+
+await showApp();
 
 await loadProfile(
 data.session.user
 );
 
-}else{
-
-document
-.getElementById("loginScreen")
-.style.display="block";
-
-
-document
-.getElementById("mainApp")
-.style.display="none";
-
 }
 
 }catch(error){
 
-console.log(
-"Session exception:",
+console.error(
+"Session Error:",
 error
 );
 
@@ -1787,20 +2134,7 @@ error
 
 
 /* ==========================================
-   START
-========================================== */
-
-window.addEventListener(
-"load",
-function(){
-
-checkSession();
-
-});
-
-
-/* ==========================================
-   AUTH STATE
+   AUTH STATE LISTENER
 ========================================== */
 
 if(supabaseClient){
@@ -1808,23 +2142,28 @@ if(supabaseClient){
 supabaseClient
 .auth
 .onAuthStateChange(
-function(event,session){
+async function(event,session){
 
-if(session){
+if(
+session &&
+session.user
+){
 
-showApp();
+await showApp();
 
-
-setTimeout(
-function(){
-
-loadProfile(
+await loadProfile(
 session.user
 );
 
-},
-0
-);
+}else{
+
+document
+.getElementById("mainApp")
+.style.display="none";
+
+document
+.getElementById("loginScreen")
+.style.display="block";
 
 }
 
@@ -1832,136 +2171,16 @@ session.user
 );
 
 }
- async function loadPosts(){
-
-  if(!supabaseClient){
-    return;
-  }
-
-  const { data, error } = await supabaseClient
-    .from("posts")
-    .select("id, created_at, content, language, user_id")
-    .order("created_at", { ascending: false });
-
-  if(error){
-    console.error("Load Posts Error:", error);
-    return;
-  }
-
-  const feed =
-    document.getElementById("feed");
-
-  if(!feed){
-    return;
-  }
-
-  feed.innerHTML = "";
-
-  if(!data || data.length === 0){
-
-    feed.innerHTML =
-      "<p style='text-align:center;padding:20px;'>अभी कोई पोस्ट नहीं है। पहली पोस्ट आप करें 🇮🇳</p>";
-
-    return;
-  }
-
-  data.forEach(post => {
-
-    const div =
-      document.createElement("div");
-
-    div.className = "post-card";
-
-    div.innerHTML = `
-      <div style="font-weight:bold;margin-bottom:8px;">
-        🇮🇳 वसुधैव कुटुम्बकम्
-      </div>
-
-      <div style="font-size:16px;margin-bottom:10px;">
-        ${escapeHtml(post.content)}
-      </div>
-
-      <div style="font-size:12px;color:#777;">
-        ${post.language || "हिंदी"} • ${formatPostDate(post.created_at)}
-      </div>
-
-      <button
-        onclick="deletePost('${post.id}')"
-        style="
-          margin-top:12px;
-          padding:7px 12px;
-          border:0;
-          border-radius:6px;
-          cursor:pointer;
-        ">
-        🗑️ Delete
-      </button>
-    `;
-
-    feed.appendChild(div);
-
-  });
-}
 
 
-async function deletePost(postId){
+/* ==========================================
+   APP START
+========================================== */
 
-  const confirmDelete =
-    confirm("क्या आप यह पोस्ट delete करना चाहते हैं?");
+checkSession();
 
-  if(!confirmDelete){
-    return;
-  }
-
-  const { error } =
-    await supabaseClient
-      .from("posts")
-      .delete()
-      .eq("id", postId);
-
-  if(error){
-
-    console.error(
-      "Delete Post Error:",
-      error
-    );
-
-    toast(
-      "Post delete नहीं हुई: " +
-      error.message
-    );
-
-    return;
-  }
-
-  await loadPosts();
-
-  toast(
-    "Post delete हो गई ✓"
-  );
- }
-
-
-function escapeHtml(text){
-
-  const div =
-    document.createElement("div");
-
-  div.textContent = text;
-
-  return div.innerHTML;
-}
-
-
-function formatPostDate(date){
-
-  return new Date(date)
-    .toLocaleString("hi-IN", {
-      dateStyle:"medium",
-      timeStyle:"short"
-    });
- }
 </script>
 
 </body>
-              </html>
+
+</html>
