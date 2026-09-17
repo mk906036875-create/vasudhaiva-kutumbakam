@@ -1832,7 +1832,7 @@ session.user
 );
 
 }
-async function loadPosts(){
+ async function loadPosts(){
 
   if(!supabaseClient){
     return;
@@ -1884,12 +1884,62 @@ async function loadPosts(){
       <div style="font-size:12px;color:#777;">
         ${post.language || "हिंदी"} • ${formatPostDate(post.created_at)}
       </div>
+
+      <button
+        onclick="deletePost('${post.id}')"
+        style="
+          margin-top:12px;
+          padding:7px 12px;
+          border:0;
+          border-radius:6px;
+          cursor:pointer;
+        ">
+        🗑️ Delete
+      </button>
     `;
 
     feed.appendChild(div);
 
   });
 }
+
+
+async function deletePost(postId){
+
+  const confirmDelete =
+    confirm("क्या आप यह पोस्ट delete करना चाहते हैं?");
+
+  if(!confirmDelete){
+    return;
+  }
+
+  const { error } =
+    await supabaseClient
+      .from("posts")
+      .delete()
+      .eq("id", postId);
+
+  if(error){
+
+    console.error(
+      "Delete Post Error:",
+      error
+    );
+
+    toast(
+      "Post delete नहीं हुई: " +
+      error.message
+    );
+
+    return;
+  }
+
+  await loadPosts();
+
+  toast(
+    "Post delete हो गई ✓"
+  );
+ }
 
 
 function escapeHtml(text){
