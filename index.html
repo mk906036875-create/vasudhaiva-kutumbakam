@@ -1150,18 +1150,19 @@ toast(
    SHOW APP
 ========================================== */
 
-function showApp(){
+ async function showApp(){
 
 document
 .getElementById("loginScreen")
 .style.display="none";
 
-
 document
 .getElementById("mainApp")
 .style.display="block";
 
-}
+await loadPosts();
+
+ }
 
 
 /* ==========================================
@@ -1789,7 +1790,85 @@ session.user
 );
 
 }
+async function loadPosts(){
 
+  if(!supabaseClient){
+    return;
+  }
+
+  const { data, error } = await supabaseClient
+    .from("posts")
+    .select("id, created_at, content, language, user_id")
+    .order("created_at", { ascending: false });
+
+  if(error){
+    console.error("Load Posts Error:", error);
+    return;
+  }
+
+  const feed =
+    document.getElementById("feed");
+
+  if(!feed){
+    return;
+  }
+
+  feed.innerHTML = "";
+
+  if(!data || data.length === 0){
+
+    feed.innerHTML =
+      "<p style='text-align:center;padding:20px;'>अभी कोई पोस्ट नहीं है। पहली पोस्ट आप करें 🇮🇳</p>";
+
+    return;
+  }
+
+  data.forEach(post => {
+
+    const div =
+      document.createElement("div");
+
+    div.className = "post-card";
+
+    div.innerHTML = `
+      <div style="font-weight:bold;margin-bottom:8px;">
+        🇮🇳 वसुधैव कुटुम्बकम्
+      </div>
+
+      <div style="font-size:16px;margin-bottom:10px;">
+        ${escapeHtml(post.content)}
+      </div>
+
+      <div style="font-size:12px;color:#777;">
+        ${post.language || "हिंदी"} • ${formatPostDate(post.created_at)}
+      </div>
+    `;
+
+    feed.appendChild(div);
+
+  });
+}
+
+
+function escapeHtml(text){
+
+  const div =
+    document.createElement("div");
+
+  div.textContent = text;
+
+  return div.innerHTML;
+}
+
+
+function formatPostDate(date){
+
+  return new Date(date)
+    .toLocaleString("hi-IN", {
+      dateStyle:"medium",
+      timeStyle:"short"
+    });
+ }
 </script>
 
 </body>
