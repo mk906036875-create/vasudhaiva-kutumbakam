@@ -1529,11 +1529,11 @@ error.message
 }
 
 
-/* ==========================================
+ /* ==========================================
    QUICK POST
 ========================================== */
 
-function createQuickPost(){
+async function createQuickPost(){
 
 const text =
 document
@@ -1553,59 +1553,101 @@ return;
 }
 
 
-const article =
-document.createElement("div");
+if(!supabaseClient){
+
+toast(
+"Supabase connection नहीं है"
+);
+
+return;
+
+}
 
 
-article.className =
-"card post";
+const {
+data: {
+user
+}
+} =
+await supabaseClient
+.auth
+.getUser();
 
 
-article.innerHTML = `
+if(!user){
 
-<span class="badge">
-🆕 नई पोस्ट
-</span>
+toast(
+"पहले Login करें"
+);
 
-<h3>
-आपकी पोस्ट
-</h3>
+return;
 
-<p>
-${escapeHtml(text)}
-</p>
-
-<div class="actions">
-
-<button onclick="likePost(this)">
-❤️ Like 0
-</button>
-
-<button onclick="toast('Comment Demo')">
-💬 Comment
-</button>
-
-<button onclick="translatePost(this)">
-🌐 Translate
-</button>
-
-</div>
-
-`;
+}
 
 
-document
-.getElementById("feed")
-.prepend(article);
+let language = "हिंदी";
+
+
+const quickLang =
+document.getElementById("quickLang");
+
+
+if(quickLang){
+
+language =
+quickLang.value || "हिंदी";
+
+}
+
+
+toast(
+"पोस्ट save हो रही है..."
+);
+
+
+const {
+error
+} =
+await supabaseClient
+.from("posts")
+.insert({
+
+user_id:user.id,
+
+content:text,
+
+language:language
+
+});
+
+
+if(error){
+
+console.error(
+"Quick Post Error:",
+error
+);
+
+toast(
+"Post save नहीं हुई: " +
+error.message
+);
+
+return;
+
+}
 
 
 document
 .getElementById("quickPost")
-.value="";
+.value = "";
+
+
+await loadPosts();
 
 
 toast(
-"पोस्ट प्रकाशित हो गई ✓"
+"पोस्ट Supabase में save हो गई ✓"
 );
 
 }
