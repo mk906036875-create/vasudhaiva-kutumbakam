@@ -1784,46 +1784,45 @@ error.message
 ========================================== */
 
 async function checkSession(){
-
-if(!supabaseClient)
-return;
-
-try{
+ async function checkSession(){
 
 const {
-data
+data:{
+session
+}
 } =
 await supabaseClient
 .auth
 .getSession();
 
-if(
-data &&
-data.session &&
-data.session.user
-){
+if(session){
 
 currentUser =
-data.session.user;
+session.user;
 
-await showApp();
+document
+.getElementById("loginScreen")
+.style.display="none";
 
-await loadProfile(
-data.session.user
-);
+document
+.getElementById("mainApp")
+.style.display="block";
+
+await loadPosts();
+
+}else{
+
+document
+.getElementById("loginScreen")
+.style.display="block";
+
+document
+.getElementById("mainApp")
+.style.display="none";
 
 }
 
-}catch(error){
-
-console.error(
-"Session Error:",
-error
-);
-
-}
-
-}
+ }
 
 
 /* ==========================================
