@@ -1,321 +1,328 @@
  <!DOCTYPE html>
 <html lang="hi">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>वसुधैव कुटुम्बकम् 🇮🇳</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 
 <style>
+
 *{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
+box-sizing:border-box;
+margin:0;
+padding:0;
 }
 
 body{
-  font-family:Arial,sans-serif;
-  background:#f3f5f7;
-  color:#222;
+font-family:Arial,sans-serif;
+background:#f3f5f7;
+color:#222;
 }
 
 .app{
-  max-width:520px;
-  margin:auto;
-  min-height:100vh;
-  background:white;
+max-width:520px;
+margin:auto;
+min-height:100vh;
+background:white;
 }
 
 header{
-  background:linear-gradient(135deg,#ff9933,#ffffff,#138808);
-  padding:18px 15px;
-  text-align:center;
-  border-radius:0 0 18px 18px;
+background:linear-gradient(135deg,#ff9933,#ffffff,#138808);
+padding:18px 15px;
+text-align:center;
+border-radius:0 0 18px 18px;
 }
 
 header h1{
-  font-size:21px;
-  font-weight:800;
+font-size:21px;
+font-weight:800;
 }
 
 header p{
-  margin-top:6px;
-  font-size:13px;
+margin-top:6px;
+font-size:13px;
 }
 
 .login-box{
-  min-height:100vh;
-  padding:25px 18px;
-  background:linear-gradient(180deg,#fff8ef,#fff,#f0fff2);
+min-height:100vh;
+padding:25px 18px;
+background:linear-gradient(180deg,#fff8ef,#fff,#f0fff2);
 }
 
 .logo{
-  text-align:center;
-  font-size:50px;
-  margin:20px 0 10px;
+text-align:center;
+font-size:50px;
+margin:20px 0 10px;
 }
 
 .login-title{
-  text-align:center;
-  font-size:24px;
+text-align:center;
+font-size:24px;
 }
 
 .login-subtitle{
-  text-align:center;
-  color:#666;
-  margin:8px 0 20px;
+text-align:center;
+color:#666;
+margin:8px 0 20px;
 }
 
 .login-card{
-  background:white;
-  padding:20px;
-  border-radius:18px;
-  box-shadow:0 4px 18px rgba(0,0,0,.08);
+background:white;
+padding:20px;
+border-radius:18px;
+box-shadow:0 4px 18px rgba(0,0,0,.08);
 }
 
 .login-card input{
-  width:100%;
-  padding:13px;
-  margin-top:10px;
-  border:1px solid #ccc;
-  border-radius:9px;
-  font-size:15px;
+width:100%;
+padding:13px;
+margin-top:10px;
+border:1px solid #ccc;
+border-radius:9px;
+font-size:15px;
 }
 
 .primary{
-  width:100%;
-  padding:12px;
-  margin-top:12px;
-  border:0;
-  border-radius:12px;
-  background:linear-gradient(135deg,#ff9933,#138808);
-  color:white;
-  font-weight:bold;
-  font-size:15px;
+width:100%;
+padding:12px;
+margin-top:12px;
+border:0;
+border-radius:12px;
+background:linear-gradient(135deg,#ff9933,#138808);
+color:white;
+font-weight:bold;
+font-size:15px;
 }
 
 .secondary{
-  width:100%;
-  padding:11px;
-  margin-top:10px;
-  border:1px solid #138808;
-  border-radius:9px;
-  background:white;
-  color:#138808;
-  font-weight:bold;
+width:100%;
+padding:11px;
+margin-top:10px;
+border:1px solid #138808;
+border-radius:9px;
+background:white;
+color:#138808;
+font-weight:bold;
 }
 
 .login-note{
-  font-size:12px;
-  color:#777;
-  text-align:center;
-  margin-top:15px;
-  line-height:1.5;
+font-size:12px;
+color:#777;
+text-align:center;
+margin-top:15px;
+line-height:1.5;
 }
 
 nav{
-  display:flex;
-  overflow-x:auto;
-  background:#fff;
-  border-bottom:1px solid #ddd;
-  position:sticky;
-  top:0;
-  z-index:10;
-  box-shadow:0 2px 10px rgba(0,0,0,.06);
+display:flex;
+overflow-x:auto;
+background:#fff;
+border-bottom:1px solid #ddd;
+position:sticky;
+top:0;
+z-index:10;
+box-shadow:0 2px 10px rgba(0,0,0,.06);
 }
 
 nav button{
-  flex:1;
-  min-width:75px;
-  padding:12px 7px;
-  border:0;
-  background:white;
-  font-size:13px;
-  color:#555;
-  font-weight:600;
-}
-
-nav button:hover{
-  background:#f1f1f1;
+flex:1;
+min-width:75px;
+padding:12px 7px;
+border:0;
+background:white;
+font-size:13px;
+color:#555;
+font-weight:600;
 }
 
 .page{
-  display:none;
-  padding:12px 10px 25px;
+display:none;
+padding:12px 10px 25px;
 }
 
 .page.active{
-  display:block;
+display:block;
 }
 
 .card{
-  background:white;
-  border:0;
-  border-radius:18px;
-  padding:14px;
-  margin-bottom:14px;
-  box-shadow:0 4px 16px rgba(0,0,0,.07);
+background:white;
+border-radius:18px;
+padding:14px;
+margin-bottom:14px;
+box-shadow:0 4px 16px rgba(0,0,0,.07);
 }
 
 .composer{
-  border-top:3px solid #ff9933;
+border-top:3px solid #ff9933;
 }
 
 .composer textarea{
-  width:100%;
-  min-height:80px;
-  padding:12px;
-  border:1px solid #ccc;
-  border-radius:10px;
-  resize:none;
+width:100%;
+min-height:80px;
+padding:12px;
+border:1px solid #ccc;
+border-radius:10px;
+resize:none;
 }
 
 select{
-  padding:9px;
-  border:1px solid #ccc;
-  border-radius:8px;
-  margin-top:8px;
+padding:9px;
+border:1px solid #ccc;
+border-radius:8px;
+margin-top:8px;
 }
 
 .post{
-  border-left:3px solid #138808;
+border-left:3px solid #138808;
 }
 
 .post h3{
-  font-size:16px;
-  margin-bottom:7px;
+font-size:16px;
+margin-bottom:7px;
 }
 
 .post p{
-  line-height:1.5;
+line-height:1.5;
 }
 
 .actions{
-  display:flex;
-  gap:8px;
-  margin-top:12px;
+display:flex;
+gap:8px;
+margin-top:12px;
 }
 
 .actions button{
-  flex:1;
-  padding:8px;
-  border:0;
-  border-radius:12px;
-  background:#f6f7f8;
+flex:1;
+padding:8px;
+border:0;
+border-radius:12px;
+background:#f6f7f8;
 }
 
 .badge{
-  display:inline-block;
-  background:#fff1df;
-  color:#d66a00;
-  font-weight:bold;
-  padding:5px 8px;
-  border-radius:20px;
-  font-size:12px;
-  margin-bottom:8px;
+display:inline-block;
+background:#fff1df;
+color:#d66a00;
+font-weight:bold;
+padding:5px 8px;
+border-radius:20px;
+font-size:12px;
+margin-bottom:8px;
 }
 
 .reel{
-  height:220px;
-  border-radius:20px;
-  background:linear-gradient(135deg,#ff9933,#138808);
-  color:white;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  margin-bottom:14px;
-  font-size:20px;
-  font-weight:bold;
-  box-shadow:0 5px 18px rgba(0,0,0,.12);
+height:220px;
+border-radius:20px;
+background:linear-gradient(135deg,#ff9933,#138808);
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+margin-bottom:14px;
+font-size:20px;
+font-weight:bold;
 }
 
 .community{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:12px;
-  border:1px solid #ddd;
-  border-radius:10px;
-  margin-bottom:10px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:12px;
+border:1px solid #ddd;
+border-radius:10px;
+margin-bottom:10px;
 }
 
 .community button{
-  padding:7px 12px;
-  border:0;
-  border-radius:7px;
-  background:#138808;
-  color:white;
+padding:7px 12px;
+border:0;
+border-radius:7px;
+background:#138808;
+color:white;
 }
 
 .profile{
-  text-align:center;
+text-align:center;
 }
 
 .avatar{
-  width:90px;
-  height:90px;
-  border-radius:50%;
-  margin:auto;
-  background:#ff9933;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:35px;
-  overflow:hidden;
-  border:3px solid #138808;
+width:90px;
+height:90px;
+border-radius:50%;
+margin:auto;
+background:#ff9933;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:35px;
+overflow:hidden;
+border:3px solid #138808;
 }
 
 .avatar img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
+width:100%;
+height:100%;
+object-fit:cover;
 }
 
 .profile-info{
-  margin-top:12px;
+margin-top:12px;
 }
 
 .profile-info p{
-  margin-top:8px;
-  line-height:1.5;
+margin-top:8px;
+line-height:1.5;
 }
 
 footer{
-  text-align:center;
-  padding:20px;
-  color:#777;
-  font-size:12px;
+text-align:center;
+padding:20px;
+color:#777;
+font-size:12px;
 }
 
 .toast{
-  position:fixed;
-  bottom:20px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#222;
-  color:white;
-  padding:10px 16px;
-  border-radius:20px;
-  display:none;
-  z-index:99;
-  max-width:90%;
-  text-align:center;
+position:fixed;
+bottom:20px;
+left:50%;
+transform:translateX(-50%);
+background:#222;
+color:white;
+padding:10px 16px;
+border-radius:20px;
+display:none;
+z-index:99;
+max-width:90%;
+text-align:center;
 }
 
 #mainApp{
-  display:none;
+display:none;
 }
+
 </style>
+
 </head>
 
 <body>
 
+
+<!-- ==============================
+     LOGIN
+================================ -->
+
 <div id="loginScreen" class="login-box">
 
-<div class="logo">🇮🇳</div>
+<div class="logo">
+🇮🇳
+</div>
 
 <h1 class="login-title">
 वसुधैव कुटुम्बकम्
@@ -327,7 +334,9 @@ footer{
 
 <div class="login-card">
 
-<h2>🔐 Login</h2>
+<h2>
+🔐 Login
+</h2>
 
 <input
 id="userEmail"
@@ -341,16 +350,26 @@ type="password"
 autocomplete="current-password"
 placeholder="Password">
 
-<button class="primary" onclick="loginUser()">
+<button
+class="primary"
+onclick="loginUser()">
+
 Login
+
 </button>
 
-<button class="secondary" onclick="registerUser()">
+<button
+class="secondary"
+onclick="registerUser()">
+
 Create New Account
+
 </button>
 
 <p class="login-note">
+
 🔒 आपका password Supabase Authentication द्वारा सुरक्षित रूप से संभाला जाता है।
+
 </p>
 
 </div>
@@ -358,56 +377,113 @@ Create New Account
 </div>
 
 
+<!-- ==============================
+     MAIN APP
+================================ -->
+
 <div id="mainApp">
 
 <div class="app">
 
+
 <header>
-<h1>🇮🇳 वसुधैव कुटुम्बकम्</h1>
-<p>एक परिवार • एक भारत • एक दुनिया</p>
+
+<h1>
+🇮🇳 वसुधैव कुटुम्बकम्
+</h1>
+
+<p>
+एक परिवार • एक भारत • एक दुनिया
+</p>
+
 </header>
 
+
+<!-- NAVIGATION -->
+
 <nav>
-<button onclick="showPage('home')">🏠 Home</button>
-<button onclick="showPage('reels')">🎬 Reels</button>
-<button onclick="showPage('post')">✍️ Post</button>
-<button onclick="showPage('community')">👥 Community</button>
-<button onclick="showPage('profile')">👤 Profile</button>
+
+<button onclick="showPage('home')">
+🏠 Home
+</button>
+
+<button onclick="showPage('reels')">
+🎬 Reels
+</button>
+
+<button onclick="showPage('post')">
+✍️ Post
+</button>
+
+<button onclick="showPage('community')">
+👥 Community
+</button>
+
+<button onclick="showPage('profile')">
+👤 Profile
+</button>
+
 </nav>
 
 
-<section id="home" class="page active">
+<!-- ==============================
+     HOME
+================================ -->
+
+<section
+id="home"
+class="page active">
 
 <div class="card composer">
 
-<b>आप क्या साझा करना चाहते हैं?</b>
+<b>
+आप क्या साझा करना चाहते हैं?
+</b>
 
 <textarea
 id="quickPost"
-placeholder="कुछ अच्छा लिखें..."></textarea>
+placeholder="कुछ अच्छा लिखें...">
+</textarea>
 
 <select id="quickLang">
+
 <option>हिन्दी</option>
+
 <option>English</option>
+
 <option>भोजपुरी</option>
+
 <option>मराठी</option>
+
 <option>தமிழ்</option>
+
 <option>తెలుగు</option>
+
 </select>
 
-<button class="primary" onclick="createQuickPost()">
+<button
+class="primary"
+onclick="createQuickPost()">
+
 पोस्ट करें
+
 </button>
 
 </div>
 
+
 <div id="feed">
+
 
 <div class="card post">
 
-<span class="badge">🇮🇳 भारत</span>
+<span class="badge">
+🇮🇳 भारत
+</span>
 
-<h3>वसुधैव कुटुम्बकम्</h3>
+<h3>
+वसुधैव कुटुम्बकम्
+</h3>
 
 <p>
 हमारी सोच सरल है — हर इंसान का सम्मान,
@@ -436,9 +512,13 @@ placeholder="कुछ अच्छा लिखें..."></textarea>
 
 <div class="card post">
 
-<span class="badge">📚 शिक्षा</span>
+<span class="badge">
+📚 शिक्षा
+</span>
 
-<h3>आज की अच्छी बात</h3>
+<h3>
+आज की अच्छी बात
+</h3>
 
 <p>
 ज्ञान जितना साझा किया जाए, उतना ही बढ़ता है।
@@ -463,57 +543,94 @@ placeholder="कुछ अच्छा लिखें..."></textarea>
 
 </div>
 
+
 </div>
 
 </section>
 
 
-<section id="reels" class="page">
+<!-- ==============================
+     REELS
+================================ -->
+
+<section
+id="reels"
+class="page">
 
 <div class="reel">
+
 🎬<br>
 भारत की कहानी<br>
 भारत की भाषा में
+
 </div>
 
 <div class="reel">
+
 🙏<br>
 भक्ति • संस्कृति • ज्ञान
+
 </div>
 
 <div class="reel">
+
 💼<br>
 Business • Jobs • Skills
+
 </div>
 
 </section>
 
 
-<section id="post" class="page">
+<!-- ==============================
+     POST
+================================ -->
+
+<section
+id="post"
+class="page">
 
 <div class="card">
 
-<h2>✍️ नई पोस्ट</h2>
+<h2>
+✍️ नई पोस्ट
+</h2>
 
 <textarea
 id="postText"
 placeholder="अपनी बात लिखें..."
-style="width:100%;height:130px;margin-top:12px;padding:12px;border-radius:10px;border:1px solid #ccc;">
+style="
+width:100%;
+height:130px;
+margin-top:12px;
+padding:12px;
+border-radius:10px;
+border:1px solid #ccc;
+">
 </textarea>
 
 <select id="postLang">
 
 <option>हिन्दी</option>
+
 <option>English</option>
+
 <option>भोजपुरी</option>
+
 <option>मराठी</option>
+
 <option>தமிழ்</option>
+
 <option>తెలుగు</option>
 
 </select>
 
-<button class="primary" onclick="createPost()">
+<button
+class="primary"
+onclick="createPost()">
+
 पोस्ट प्रकाशित करें
+
 </button>
 
 </div>
@@ -521,11 +638,19 @@ style="width:100%;height:130px;margin-top:12px;padding:12px;border-radius:10px;b
 </section>
 
 
-<section id="community" class="page">
+<!-- ==============================
+     COMMUNITY
+================================ -->
+
+<section
+id="community"
+class="page">
 
 <div class="card">
 
-<h2>👥 भारतीय Communities</h2>
+<h2>
+👥 भारतीय Communities
+</h2>
 
 <p style="margin-top:6px;">
 अपनी रुचि के लोगों से जुड़ें।
@@ -533,60 +658,125 @@ style="width:100%;height:130px;margin-top:12px;padding:12px;border-radius:10px;b
 
 </div>
 
-<div class="community">
-<span>🙏 भारतीय संस्कृति</span>
-<button onclick="join(this)">Join</button>
-</div>
 
 <div class="community">
-<span>💼 Jobs & Skills</span>
-<button onclick="join(this)">Join</button>
+
+<span>
+🙏 भारतीय संस्कृति
+</span>
+
+<button onclick="join(this)">
+Join
+</button>
+
 </div>
 
-<div class="community">
-<span>🏪 Indian Business</span>
-<button onclick="join(this)">Join</button>
-</div>
 
 <div class="community">
-<span>📚 Education</span>
-<button onclick="join(this)">Join</button>
+
+<span>
+💼 Jobs & Skills
+</span>
+
+<button onclick="join(this)">
+Join
+</button>
+
+</div>
+
+
+<div class="community">
+
+<span>
+🏪 Indian Business
+</span>
+
+<button onclick="join(this)">
+Join
+</button>
+
+</div>
+
+
+<div class="community">
+
+<span>
+📚 Education
+</span>
+
+<button onclick="join(this)">
+Join
+</button>
+
 </div>
 
 </section>
 
 
-<section id="profile" class="page">
+<!-- ==============================
+     PROFILE
+================================ -->
+
+<section
+id="profile"
+class="page">
 
 <div class="card profile">
 
-<div class="avatar" id="profileAvatar">
+<div
+class="avatar"
+id="profileAvatar">
+
 🇮🇳
+
 </div>
 
-<h2 id="profileName" style="margin-top:10px;">
+
+<h2
+id="profileName"
+style="margin-top:10px;">
+
 वसुधैव परिवार
+
 </h2>
 
-<p id="profileUsername" style="margin-top:6px;">
+
+<p
+id="profileUsername"
+style="margin-top:6px;">
+
 @username
+
 </p>
 
-<p id="profileEmail" style="margin-top:6px;">
+
+<p
+id="profileEmail"
+style="margin-top:6px;">
+
 Email
+
 </p>
+
 
 <div class="profile-info">
 
 <p id="profileBio">
+
 🙏 सम्मान • सुरक्षा • सहयोग
+
 </p>
 
 </div>
 
-<hr style="margin:15px 0;">
 
-<p>🔐 Privacy First</p>
+<hr
+style="margin:15px 0;">
+
+
+<p>
+🔐 Privacy First
+</p>
 
 <p style="margin-top:8px;">
 🌐 भारतीय भाषाओं का समर्थन
@@ -596,10 +786,13 @@ Email
 🤖 AI Translation
 </p>
 
+
 <button
 class="secondary"
 onclick="logoutUser()">
+
 Logout
+
 </button>
 
 </div>
@@ -610,19 +803,25 @@ Logout
 <footer>
 
 🇮🇳 वसुधैव कुटुम्बकम्<br>
+
 एक परिवार • एक भारत • एक दुनिया
 
 </footer>
 
-</div>
 
 </div>
 
+</div>
 
-<div id="toast" class="toast"></div>
+
+<div
+id="toast"
+class="toast">
+</div>
 
 
 <script>
+
 
 /* ==========================================
    SUPABASE CONFIG
@@ -635,6 +834,7 @@ const SUPABASE_KEY =
 'sb_publishable_Uq4wF9xUhFl5foMSRWyhvQ_iyqXgpt2';
 
 let supabaseClient = null;
+
 
 try{
 
@@ -660,52 +860,104 @@ error
 
 async function loginUser(){
 
-let email =
-document.getElementById("userEmail").value.trim();
+const email =
+document
+.getElementById("userEmail")
+.value
+.trim();
 
-let password =
-document.getElementById("userPassword").value;
+const password =
+document
+.getElementById("userPassword")
+.value;
+
 
 if(!email || !password){
 
-toast("Email और Password भरें");
+toast(
+"Email और Password भरें"
+);
+
 return;
 
 }
+
 
 if(!supabaseClient){
 
-toast("Supabase connection सेट नहीं है");
+toast(
+"Supabase connection सेट नहीं है"
+);
+
 return;
 
 }
 
-toast("Login हो रहा है...");
 
-const { data, error } =
-await supabaseClient.auth.signInWithPassword({
+toast(
+"Login हो रहा है..."
+);
+
+
+try{
+
+const {
+data,
+error
+} =
+await supabaseClient
+.auth
+.signInWithPassword({
 
 email:email,
+
 password:password
 
 });
 
+
 if(error){
 
-console.error(error);
+console.error(
+"Login Error:",
+error
+);
 
-toast("Login Error: "+error.message);
+toast(
+"Login Error: " +
+error.message
+);
+
 return;
 
 }
+
 
 if(data && data.user){
 
 showApp();
 
-loadProfile(data.user);
+await loadProfile(
+data.user
+);
 
-toast("Login सफल ✓");
+toast(
+"Login सफल ✓"
+);
+
+}
+
+}catch(error){
+
+console.error(
+"Login Exception:",
+error
+);
+
+toast(
+"Login Error: " +
+error.message
+);
 
 }
 
@@ -718,51 +970,89 @@ toast("Login सफल ✓");
 
 async function registerUser(){
 
-let email =
-document.getElementById("userEmail").value.trim();
+const email =
+document
+.getElementById("userEmail")
+.value
+.trim();
 
-let password =
-document.getElementById("userPassword").value;
+const password =
+document
+.getElementById("userPassword")
+.value;
+
 
 if(!email || !password){
 
-toast("Email और Password भरें");
+toast(
+"Email और Password भरें"
+);
+
 return;
 
 }
+
 
 if(password.length < 6){
 
-toast("Password कम से कम 6 characters का रखें");
+toast(
+"Password कम से कम 6 characters का रखें"
+);
+
 return;
 
 }
+
 
 if(!supabaseClient){
 
-toast("Supabase connection सेट नहीं है");
+toast(
+"Supabase connection सेट नहीं है"
+);
+
 return;
 
 }
 
-toast("Account बनाया जा रहा है...");
 
-const { data, error } =
-await supabaseClient.auth.signUp({
+toast(
+"Account बनाया जा रहा है..."
+);
+
+
+try{
+
+const {
+data,
+error
+} =
+await supabaseClient
+.auth
+.signUp({
 
 email:email,
+
 password:password
 
 });
 
+
 if(error){
 
-console.error(error);
+console.error(
+"Signup Error:",
+error
+);
 
-toast("Signup Error: "+error.message);
+toast(
+"Signup Error: " +
+error.message
+);
+
 return;
 
 }
+
 
 if(data.session){
 
@@ -770,16 +1060,34 @@ showApp();
 
 if(data.user){
 
-loadProfile(data.user);
+await loadProfile(
+data.user
+);
 
 }
 
-toast("Account बनाया गया ✓");
+toast(
+"Account बनाया गया ✓"
+);
 
 }else{
 
 toast(
 "Account बन गया।"
+);
+
+}
+
+}catch(error){
+
+console.error(
+"Signup Exception:",
+error
+);
+
+toast(
+"Signup Error: " +
+error.message
 );
 
 }
@@ -793,31 +1101,47 @@ toast(
 
 async function logoutUser(){
 
-if(!supabaseClient) return;
+if(!supabaseClient)
+return;
 
-const { error } =
-await supabaseClient.auth.signOut();
+
+const {
+error
+} =
+await supabaseClient
+.auth
+.signOut();
+
 
 if(error){
 
-toast(error.message);
+toast(
+error.message
+);
+
 return;
 
 }
+
 
 document
 .getElementById("mainApp")
 .style.display="none";
 
+
 document
 .getElementById("loginScreen")
 .style.display="block";
+
 
 document
 .getElementById("userPassword")
 .value="";
 
-toast("Logout हो गया ✓");
+
+toast(
+"Logout हो गया ✓"
+);
 
 }
 
@@ -832,6 +1156,7 @@ document
 .getElementById("loginScreen")
 .style.display="none";
 
+
 document
 .getElementById("mainApp")
 .style.display="block";
@@ -840,37 +1165,36 @@ document
 
 
 /* ==========================================
-   PROFILE
-   Supabase columns:
-   id
-   created_at
-   username
-   display_name
-   bio
-   avatar
+   LOAD PROFILE
 ========================================== */
 
 async function loadProfile(user){
 
-if(!user || !supabaseClient) return;
+if(!user || !supabaseClient)
+return;
 
-
-/* Email */
 
 document
 .getElementById("profileEmail")
 .innerText =
-user.email || "Email उपलब्ध नहीं";
+user.email ||
+"Email उपलब्ध नहीं";
 
 
 try{
 
-const { data, error } =
+const {
+data,
+error
+} =
 await supabaseClient
 .from("profiles")
-.select("id,created_at,username,display_name,bio,avatar")
+.select(
+"id,created_at,username,display_name,bio,avatar"
+)
 .eq("id",user.id)
 .maybeSingle();
+
 
 if(error){
 
@@ -884,11 +1208,7 @@ return;
 }
 
 
-/* Profile मिला */
-
 if(data){
-
-/* Display Name */
 
 document
 .getElementById("profileName")
@@ -898,17 +1218,15 @@ data.username ||
 "वसुधैव परिवार";
 
 
-/* Username */
-
 document
 .getElementById("profileUsername")
 .innerText =
 data.username
-? "@"+data.username
-: "@username";
+?
+"@"+data.username
+:
+"@username";
 
-
-/* Bio */
 
 document
 .getElementById("profileBio")
@@ -917,10 +1235,10 @@ data.bio ||
 "🙏 सम्मान • सुरक्षा • सहयोग";
 
 
-/* Avatar */
+const avatarBox =
+document
+.getElementById("profileAvatar");
 
-let avatarBox =
-document.getElementById("profileAvatar");
 
 if(data.avatar){
 
@@ -931,7 +1249,8 @@ escapeAttribute(data.avatar) +
 
 }else{
 
-avatarBox.innerText="🇮🇳";
+avatarBox.innerText =
+"🇮🇳";
 
 }
 
@@ -963,8 +1282,10 @@ p.classList.remove("active");
 
 });
 
-let selected =
+
+const selected =
 document.getElementById(page);
+
 
 if(selected){
 
@@ -972,7 +1293,11 @@ selected.classList.add("active");
 
 }
 
-window.scrollTo(0,0);
+
+window.scrollTo(
+0,
+0
+);
 
 }
 
@@ -983,16 +1308,22 @@ window.scrollTo(0,0);
 
 function toast(message){
 
-let t =
+const t =
 document.getElementById("toast");
 
-t.innerText=message;
 
-t.style.display="block";
+t.innerText =
+message;
+
+
+t.style.display =
+"block";
+
 
 setTimeout(function(){
 
-t.style.display="none";
+t.style.display =
+"none";
 
 },3500);
 
@@ -1005,36 +1336,47 @@ t.style.display="none";
 
 function likePost(button){
 
-let match =
+const match =
 button.innerText.match(/\d+/);
 
+
 let number =
-match ? parseInt(match[0]) : 0;
+match
+?
+parseInt(match[0])
+:
+0;
+
 
 number++;
 
+
 button.innerText =
-"❤️ Like "+number;
+"❤️ Like " +
+number;
 
 }
 
 
 /* ==========================================
-   TRANSLATION DEMO
+   TRANSLATION
 ========================================== */
 
 function translatePost(button){
 
-let post =
+const post =
 button.closest(".post");
 
-let text =
+
+const text =
 post.querySelector("p");
+
 
 if(!text.dataset.original){
 
 text.dataset.original =
 text.innerText;
+
 
 text.innerText =
 "🌐 AI Translation Demo: यह पोस्ट दूसरी भारतीय भाषाओं में भी पढ़ी जा सकती है।";
@@ -1044,6 +1386,7 @@ text.innerText =
 text.innerText =
 text.dataset.original;
 
+
 delete text.dataset.original;
 
 }
@@ -1052,111 +1395,135 @@ delete text.dataset.original;
 
 
 /* ==========================================
-   CREATE POST
+   CREATE POST - SUPABASE
 ========================================== */
 
- async function createPost(){
+async function createPost(){
 
-  const text =
-    document.getElementById("postText").value.trim();
+const text =
+document
+.getElementById("postText")
+.value
+.trim();
 
-  const language =
-    document.getElementById("postLang").value;
 
-  if(!text){
-    toast("पहले कुछ लिखें");
-    return;
-  }
+const language =
+document
+.getElementById("postLang")
+.value;
 
-  if(!supabaseClient){
-    toast("Supabase connection नहीं है");
-    return;
-  }
-
-  const { data: { user } } =
-    await supabaseClient.auth.getUser();
-
-  if(!user){
-    toast("पहले Login करें");
-    return;
-  }
-
-  toast("Post save हो रही है...");
-
-  const { error } =
-    await supabaseClient
-      .from("posts")
-      .insert({
-        user_id: user.id,
-        content: text,
-        language: language
-      });
-
-  if(error){
-
-    console.error("Post error:", error);
-
-    toast("Post save नहीं हुई: " + error.message);
-    return;
-  }
-
-  document
-    .getElementById("postText")
-    .value = "";
-
-  showPage("home");
-
-  toast("Post Supabase में save हो गई ✓");
- }
 
 if(!text){
 
-toast("पहले कुछ लिखें");
+toast(
+"पहले कुछ लिखें"
+);
+
 return;
 
 }
 
-let article =
-document.createElement("div");
 
-article.className="card post";
+if(!supabaseClient){
 
-article.innerHTML=`
+toast(
+"Supabase connection नहीं है"
+);
 
-<span class="badge">🆕 नई पोस्ट</span>
+return;
 
-<h3>वसुधैव परिवार</h3>
+}
 
-<p>${escapeHtml(text)}</p>
 
-<div class="actions">
+try{
 
-<button onclick="likePost(this)">
-❤️ Like 0
-</button>
+const {
+data:{
+user
+}
+} =
+await supabaseClient
+.auth
+.getUser();
 
-<button onclick="toast('Comment Demo')">
-💬 Comment
-</button>
 
-<button onclick="translatePost(this)">
-🌐 Translate
-</button>
+if(!user){
 
-</div>
-`;
+toast(
+"पहले Login करें"
+);
 
-document
-.getElementById("feed")
-.prepend(article);
+return;
+
+}
+
+
+toast(
+"Post save हो रही है..."
+);
+
+
+const {
+error
+} =
+await supabaseClient
+.from("posts")
+.insert({
+
+user_id:user.id,
+
+content:text,
+
+language:language
+
+});
+
+
+if(error){
+
+console.error(
+"Post Error:",
+error
+);
+
+toast(
+"Post save नहीं हुई: " +
+error.message
+);
+
+return;
+
+}
+
 
 document
 .getElementById("postText")
 .value="";
 
-showPage("home");
 
-toast("पोस्ट प्रकाशित हो गई ✓");
+showPage(
+"home"
+);
+
+
+toast(
+"Post Supabase में save हो गई ✓"
+);
+
+
+}catch(error){
+
+console.error(
+"Create Post Exception:",
+error
+);
+
+toast(
+"Post Error: " +
+error.message
+);
+
+}
 
 }
 
@@ -1167,30 +1534,45 @@ toast("पोस्ट प्रकाशित हो गई ✓");
 
 function createQuickPost(){
 
-let text =
+const text =
 document
 .getElementById("quickPost")
-.value.trim();
+.value
+.trim();
+
 
 if(!text){
 
-toast("पहले कुछ लिखें");
+toast(
+"पहले कुछ लिखें"
+);
+
 return;
 
 }
 
-let article =
+
+const article =
 document.createElement("div");
 
-article.className="card post";
 
-article.innerHTML=`
+article.className =
+"card post";
 
-<span class="badge">🆕 नई पोस्ट</span>
 
-<h3>आपकी पोस्ट</h3>
+article.innerHTML = `
 
-<p>${escapeHtml(text)}</p>
+<span class="badge">
+🆕 नई पोस्ट
+</span>
+
+<h3>
+आपकी पोस्ट
+</h3>
+
+<p>
+${escapeHtml(text)}
+</p>
 
 <div class="actions">
 
@@ -1207,17 +1589,23 @@ article.innerHTML=`
 </button>
 
 </div>
+
 `;
+
 
 document
 .getElementById("feed")
 .prepend(article);
 
+
 document
 .getElementById("quickPost")
 .value="";
 
-toast("पोस्ट प्रकाशित हो गई ✓");
+
+toast(
+"पोस्ट प्रकाशित हो गई ✓"
+);
 
 }
 
@@ -1228,10 +1616,13 @@ toast("पोस्ट प्रकाशित हो गई ✓");
 
 function escapeHtml(text){
 
-let div =
+const div =
 document.createElement("div");
 
-div.innerText=text;
+
+div.innerText =
+text;
+
 
 return div.innerHTML;
 
@@ -1245,9 +1636,13 @@ return div.innerHTML;
 function escapeAttribute(text){
 
 return String(text)
+
 .replace(/&/g,"&amp;")
+
 .replace(/"/g,"&quot;")
+
 .replace(/</g,"&lt;")
+
 .replace(/>/g,"&gt;");
 
 }
@@ -1259,15 +1654,18 @@ return String(text)
 
 function join(button){
 
-button.innerText="Joined ✓";
+button.innerText =
+"Joined ✓";
 
-button.style.background="#555";
+
+button.style.background =
+"#555";
 
 }
 
 
 /* ==========================================
-   AUTH SESSION CHECK
+   SESSION CHECK
 ========================================== */
 
 async function checkSession(){
@@ -1278,29 +1676,45 @@ document
 .getElementById("loginScreen")
 .style.display="block";
 
+
 document
 .getElementById("mainApp")
 .style.display="none";
 
+
 return;
 
 }
 
-const { data, error } =
-await supabaseClient.auth.getSession();
+
+try{
+
+const {
+data,
+error
+} =
+await supabaseClient
+.auth
+.getSession();
+
 
 if(error){
 
-console.log(error);
+console.log(
+"Session error:",
+error
+);
+
 return;
 
 }
+
 
 if(data.session){
 
 showApp();
 
-loadProfile(
+await loadProfile(
 data.session.user
 );
 
@@ -1310,9 +1724,19 @@ document
 .getElementById("loginScreen")
 .style.display="block";
 
+
 document
 .getElementById("mainApp")
 .style.display="none";
+
+}
+
+}catch(error){
+
+console.log(
+"Session exception:",
+error
+);
 
 }
 
@@ -1329,8 +1753,7 @@ function(){
 
 checkSession();
 
-}
-);
+});
 
 
 /* ==========================================
@@ -1339,26 +1762,35 @@ checkSession();
 
 if(supabaseClient){
 
-supabaseClient.auth.onAuthStateChange(
+supabaseClient
+.auth
+.onAuthStateChange(
 function(event,session){
 
 if(session){
 
 showApp();
 
-setTimeout(function(){
 
-loadProfile(session.user);
+setTimeout(
+function(){
 
-},0);
+loadProfile(
+session.user
+);
+
+},
+0
+);
 
 }
 
-});
+}
+);
 
 }
 
 </script>
 
 </body>
-</html>
+              </html>
