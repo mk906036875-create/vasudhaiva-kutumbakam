@@ -1055,12 +1055,59 @@ delete text.dataset.original;
    CREATE POST
 ========================================== */
 
-function createPost(){
+ async function createPost(){
 
-let text =
-document
-.getElementById("postText")
-.value.trim();
+  const text =
+    document.getElementById("postText").value.trim();
+
+  const language =
+    document.getElementById("postLang").value;
+
+  if(!text){
+    toast("पहले कुछ लिखें");
+    return;
+  }
+
+  if(!supabaseClient){
+    toast("Supabase connection नहीं है");
+    return;
+  }
+
+  const { data: { user } } =
+    await supabaseClient.auth.getUser();
+
+  if(!user){
+    toast("पहले Login करें");
+    return;
+  }
+
+  toast("Post save हो रही है...");
+
+  const { error } =
+    await supabaseClient
+      .from("posts")
+      .insert({
+        user_id: user.id,
+        content: text,
+        language: language
+      });
+
+  if(error){
+
+    console.error("Post error:", error);
+
+    toast("Post save नहीं हुई: " + error.message);
+    return;
+  }
+
+  document
+    .getElementById("postText")
+    .value = "";
+
+  showPage("home");
+
+  toast("Post Supabase में save हो गई ✓");
+ }
 
 if(!text){
 
