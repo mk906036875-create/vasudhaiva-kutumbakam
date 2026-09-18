@@ -166,3 +166,38 @@ function showAvatar(url){
   }
 
 }
+/* ==========================================
+   SAVE USER PROFILE
+========================================== */
+
+async function saveUserProfile(){
+
+  if(!currentUser){
+    return;
+  }
+
+  const email =
+    currentUser.email || "";
+
+  const username =
+    email.split("@")[0];
+
+  const avatarUrl =
+    currentUser.user_metadata?.avatar_url || "";
+
+  const { error } =
+    await supabaseClient
+      .from("profiles")
+      .upsert({
+        user_id: currentUser.id,
+        username: username,
+        avatar_url: avatarUrl
+      });
+
+  if(error){
+    console.error(
+      "Profile Save Error:",
+      error
+    );
+  }
+}
