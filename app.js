@@ -201,3 +201,240 @@ async function saveUserProfile(){
     );
   }
 }
+/* ==========================================
+   EDIT PROFILE
+========================================== */
+
+function openEditProfile(){
+
+  if(!currentUser){
+    toast("पहले Login करें");
+    return;
+  }
+
+  const name =
+    currentUser.user_metadata?.display_name ||
+    currentUser.email?.split("@")[0] ||
+    "";
+
+  const bio =
+    currentUser.user_metadata?.bio ||
+    "वसुधैव कुटुम्बकम् परिवार का सदस्य";
+
+  const work =
+    currentUser.user_metadata?.work ||
+    "";
+
+  const education =
+    currentUser.user_metadata?.education ||
+    "";
+
+  const website =
+    currentUser.user_metadata?.website ||
+    "";
+
+  const location =
+    currentUser.user_metadata?.location ||
+    "";
+
+  const newName =
+    prompt("अपना नाम लिखें:", name);
+
+  if(newName === null){
+    return;
+  }
+
+  const newBio =
+    prompt("अपना Bio लिखें:", bio);
+
+  if(newBio === null){
+    return;
+  }
+
+  const newWork =
+    prompt("आपका Work / व्यवसाय:", work);
+
+  if(newWork === null){
+    return;
+  }
+
+  const newEducation =
+    prompt("आपकी Education:", education);
+
+  if(newEducation === null){
+    return;
+  }
+
+  const newWebsite =
+    prompt("Website:", website);
+
+  if(newWebsite === null){
+    return;
+  }
+
+  const newLocation =
+    prompt(
+      "Location (यदि share करना चाहते हैं):",
+      location
+    );
+
+  if(newLocation === null){
+    return;
+  }
+
+  updateEditedProfile(
+    newName.trim(),
+    newBio.trim(),
+    newWork.trim(),
+    newEducation.trim(),
+    newWebsite.trim(),
+    newLocation.trim()
+  );
+
+}
+
+
+async function updateEditedProfile(
+  name,
+  bio,
+  work,
+  education,
+  website,
+  location
+){
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+    await supabaseClient
+      .auth
+      .updateUser({
+
+        data:{
+          display_name:name,
+          bio:bio,
+          work:work,
+          education:education,
+          website:website,
+          location:location,
+          avatar_url:
+            currentUser
+              .user_metadata
+              ?.avatar_url || ""
+        }
+
+      });
+
+    if(error){
+
+      console.error(
+        "Profile Update Error:",
+        error
+      );
+
+      toast(
+        "Profile Update Error: " +
+        error.message
+      );
+
+      return;
+    }
+
+    currentUser =
+      data.user;
+
+    /* Update screen */
+
+    const profileName =
+      document.getElementById(
+        "profileName"
+      );
+
+    const profileUsername =
+      document.getElementById(
+        "profileUsername"
+      );
+
+    const profileBio =
+      document.getElementById(
+        "profileBio"
+      );
+
+    const profileLocation =
+      document.getElementById(
+        "profileLocation"
+      );
+
+    const profileWork =
+      document.getElementById(
+        "profileWork"
+      );
+
+    const profileEducation =
+      document.getElementById(
+        "profileEducation"
+      );
+
+    const profileWebsite =
+      document.getElementById(
+        "profileWebsite"
+      );
+
+    if(profileName){
+      profileName.innerText = name;
+    }
+
+    if(profileUsername){
+      profileUsername.innerText =
+        "@" + name;
+    }
+
+    if(profileBio){
+      profileBio.innerText =
+        bio ||
+        "वसुधैव कुटुम्बकम् परिवार का सदस्य";
+    }
+
+    if(profileLocation){
+      profileLocation.innerText =
+        location || "Not shared";
+    }
+
+    if(profileWork){
+      profileWork.innerText =
+        work || "Not added";
+    }
+
+    if(profileEducation){
+      profileEducation.innerText =
+        education || "Not added";
+    }
+
+    if(profileWebsite){
+      profileWebsite.innerText =
+        website || "Not added";
+    }
+
+    /* Save profile table */
+
+    await saveUserProfile();
+
+    toast(
+      "Profile अपडेट हो गई ✓"
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      "Profile Error: " +
+      error.message
+    );
+
+  }
+
+}
