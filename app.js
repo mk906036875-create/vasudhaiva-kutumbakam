@@ -406,5 +406,37 @@ async function updateEditedProfile(
 
 }
  
+/* ==========================================
+   REFRESH PROFILE
+========================================== */
 
+async function refreshProfile(){
+
+  if(!currentUser){
+    return;
+  }
+
+  const {
+    data,
+    error
+  } =
+  await supabaseClient.auth.getUser();
+
+  if(error){
+    console.error(error);
+    return;
+  }
+
+  if(data?.user){
+
+    currentUser =
+      data.user;
+
+    loadProfile(
+      currentUser
+    );
+
+  }
+
+}
  
