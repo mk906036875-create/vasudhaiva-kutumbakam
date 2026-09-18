@@ -595,9 +595,33 @@ Join
 
 <section id="profile" class="page">
 
-<div class="card profile">
+<div class="card profile"
+style="
+padding:0;
+overflow:hidden;
+">
 
-<!-- PROFILE PHOTO -->
+<!-- COVER PHOTO -->
+
+<div
+style="
+height:150px;
+background:linear-gradient(
+135deg,
+#ff9933,
+#ffffff,
+#138808
+);
+position:relative;
+">
+
+<div
+style="
+position:absolute;
+bottom:-50px;
+left:50%;
+transform:translateX(-50%);
+">
 
 <img
 id="profileAvatarImg"
@@ -609,15 +633,87 @@ width:100px;
 height:100px;
 border-radius:50%;
 object-fit:cover;
-margin:0 auto 15px;
-border:3px solid #ff9933;
+border:4px solid white;
+background:white;
 ">
 
 <div
 class="avatar"
-id="profileAvatar">
+id="profileAvatar"
+style="
+width:100px;
+height:100px;
+border-radius:50%;
+border:4px solid white;
+background:#ff9933;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:40px;
+">
 👤
 </div>
+
+</div>
+
+</div>
+
+
+<!-- PROFILE CONTENT -->
+
+<div
+style="
+padding:65px 20px 20px;
+text-align:center;
+">
+
+<h2
+id="profileName">
+User
+</h2>
+
+<p
+id="profileUsername"
+style="
+color:#777;
+margin:5px 0;
+">
+@user
+</p>
+
+<p
+id="profileEmail"
+style="
+font-size:13px;
+color:#777;
+">
+</p>
+
+<p
+id="profileBio"
+style="
+margin:12px 0;
+">
+वसुधैव कुटुम्बकम् परिवार का सदस्य
+</p>
+
+
+<!-- EDIT PROFILE -->
+
+<button
+type="button"
+onclick="openEditProfile()"
+style="
+padding:10px 18px;
+border:0;
+border-radius:10px;
+background:#ff9933;
+color:white;
+font-weight:bold;
+margin:5px;
+">
+✏️ Edit Profile
+</button>
 
 
 <!-- PHOTO BUTTONS -->
@@ -627,7 +723,7 @@ style="
 display:flex;
 justify-content:center;
 gap:10px;
-margin:10px 0 20px;
+margin:15px 0;
 ">
 
 <button
@@ -636,6 +732,7 @@ onclick="document.getElementById('galleryInput').click()"
 style="
 padding:10px 14px;
 border-radius:10px;
+border:0;
 background:#ff9933;
 color:white;
 font-weight:bold;
@@ -652,6 +749,7 @@ onclick="document.getElementById('cameraInput').click()"
 style="
 padding:10px 14px;
 border-radius:10px;
+border:0;
 background:#138808;
 color:white;
 font-weight:bold;
@@ -664,7 +762,7 @@ font-weight:bold;
 </div>
 
 
-<!-- GALLERY INPUT -->
+<!-- GALLERY -->
 
 <input
 type="file"
@@ -675,7 +773,7 @@ onchange="uploadAvatar(this)"
 >
 
 
-<!-- CAMERA INPUT -->
+<!-- CAMERA -->
 
 <input
 type="file"
@@ -687,25 +785,126 @@ onchange="uploadAvatar(this)"
 >
 
 
-<h2 id="profileName">
-User
-</h2>
+<!-- PROFILE STATS -->
 
-<p id="profileUsername">
-@user
+<div
+style="
+display:flex;
+justify-content:space-around;
+margin:20px 0;
+padding:15px 5px;
+border-top:1px solid #eee;
+border-bottom:1px solid #eee;
+">
+
+<div>
+<b id="profilePostsCount">0</b>
+<br>
+<small>Posts</small>
+</div>
+
+<div>
+<b id="profileFollowersCount">0</b>
+<br>
+<small>Followers</small>
+</div>
+
+<div>
+<b id="profileFollowingCount">0</b>
+<br>
+<small>Following</small>
+</div>
+
+</div>
+
+
+<!-- ABOUT -->
+
+<div
+style="
+text-align:left;
+margin-top:15px;
+">
+
+<h3>
+ℹ️ About
+</h3>
+
+<p style="margin-top:10px;">
+📍 Location:
+<span id="profileLocation">
+Not shared
+</span>
 </p>
 
-<p id="profileEmail">
+<p style="margin-top:8px;">
+💼 Work:
+<span id="profileWork">
+Not added
+</span>
 </p>
 
-<p id="profileBio">
-वसुधैव कुटुम्बकम् परिवार का सदस्य
+<p style="margin-top:8px;">
+🎓 Education:
+<span id="profileEducation">
+Not added
+</span>
 </p>
 
+<p style="margin-top:8px;">
+🔗 Website:
+<span id="profileWebsite">
+Not added
+</span>
+</p>
+
+</div>
+
+
+<!-- PROFILE MENU -->
+
+<div
+style="
+margin-top:20px;
+display:grid;
+gap:10px;
+">
+
+<button
+type="button"
+style="
+padding:12px;
+border:1px solid #ddd;
+border-radius:10px;
+background:white;
+text-align:left;
+">
+🔒 Privacy
+</button>
+
+<button
+type="button"
+style="
+padding:12px;
+border:1px solid #ddd;
+border-radius:10px;
+background:white;
+text-align:left;
+">
+⚙️ Settings
+</button>
+
+</div>
+
+
+<!-- LOGOUT -->
 
 <button
 class="logout"
-onclick="logoutUser()">
+onclick="logoutUser()"
+style="
+margin-top:20px;
+">
 
 Logout
 
@@ -713,7 +912,9 @@ Logout
 
 </div>
 
-</section>
+</div>
+
+ </section>
 
  
 
