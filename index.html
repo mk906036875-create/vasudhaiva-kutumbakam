@@ -1432,9 +1432,64 @@ article.innerHTML=
 🆕 नई पोस्ट
 </span>
 
-<h3>
+ <div style="
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:12px;
+">
+
+<img
+src="${escapeAttribute(
+currentUser?.user_metadata?.avatar_url || ""
+)}"
+style="
+width:42px;
+height:42px;
+border-radius:50%;
+object-fit:cover;
+border:2px solid #ff9933;
+${currentUser?.user_metadata?.avatar_url ? "" : "display:none;"}
+">
+
+<div style="
+width:42px;
+height:42px;
+border-radius:50%;
+background:#ff9933;
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
+${currentUser?.user_metadata?.avatar_url ? "display:none;" : ""}
+">
+${escapeHtml(
+(currentUser?.email || "U")
+.split("@")[0]
+.charAt(0)
+.toUpperCase()
+)}
+</div>
+
+<div>
+<b>
+${escapeHtml(
+(currentUser?.email || "User")
+.split("@")[0]
+)}
+</b>
+
+<div style="
+font-size:11px;
+color:#777;
+">
 वसुधैव परिवार
-</h3>
+</div>
+
+</div>
+
+</div>
 
 <p class="post-content">
 ${escapeHtml(post.content)}
