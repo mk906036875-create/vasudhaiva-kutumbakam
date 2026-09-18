@@ -222,65 +222,34 @@ function openEditProfile(){
     "वसुधैव कुटुम्बकम् परिवार का सदस्य";
 
   const work =
-    currentUser.user_metadata?.work ||
-    "";
+    currentUser.user_metadata?.work || "";
 
   const education =
-    currentUser.user_metadata?.education ||
-    "";
+    currentUser.user_metadata?.education || "";
 
   const website =
-    currentUser.user_metadata?.website ||
-    "";
+    currentUser.user_metadata?.website || "";
 
   const location =
-    currentUser.user_metadata?.location ||
-    "";
+    currentUser.user_metadata?.location || "";
 
-  const newName =
-    prompt("अपना नाम लिखें:", name);
+  const newName = prompt("अपना नाम लिखें:", name);
+  if(newName === null) return;
 
-  if(newName === null){
-    return;
-  }
+  const newBio = prompt("अपना Bio लिखें:", bio);
+  if(newBio === null) return;
 
-  const newBio =
-    prompt("अपना Bio लिखें:", bio);
+  const newWork = prompt("आपका Work / व्यवसाय:", work);
+  if(newWork === null) return;
 
-  if(newBio === null){
-    return;
-  }
+  const newEducation = prompt("आपकी Education:", education);
+  if(newEducation === null) return;
 
-  const newWork =
-    prompt("आपका Work / व्यवसाय:", work);
+  const newWebsite = prompt("Website:", website);
+  if(newWebsite === null) return;
 
-  if(newWork === null){
-    return;
-  }
-
-  const newEducation =
-    prompt("आपकी Education:", education);
-
-  if(newEducation === null){
-    return;
-  }
-
-  const newWebsite =
-    prompt("Website:", website);
-
-  if(newWebsite === null){
-    return;
-  }
-
-  const newLocation =
-    prompt(
-      "Location (यदि share करना चाहते हैं):",
-      location
-    );
-
-  if(newLocation === null){
-    return;
-  }
+  const newLocation = prompt("Location:", location);
+  if(newLocation === null) return;
 
   updateEditedProfile(
     newName.trim(),
@@ -290,7 +259,6 @@ function openEditProfile(){
     newWebsite.trim(),
     newLocation.trim()
   );
-
 }
 
 
@@ -309,31 +277,24 @@ async function updateEditedProfile(
       data,
       error
     } =
-    await supabaseClient
-      .auth
-      .updateUser({
+    await supabaseClient.auth.updateUser({
 
-        data:{
-          display_name:name,
-          bio:bio,
-          work:work,
-          education:education,
-          website:website,
-          location:location,
-          avatar_url:
-            currentUser
-              .user_metadata
-              ?.avatar_url || ""
-        }
+      data:{
+        display_name:name,
+        bio:bio,
+        work:work,
+        education:education,
+        website:website,
+        location:location,
+        avatar_url:
+          currentUser.user_metadata?.avatar_url || ""
+      }
 
-      });
+    });
 
     if(error){
 
-      console.error(
-        "Profile Update Error:",
-        error
-      );
+      console.error(error);
 
       toast(
         "Profile Update Error: " +
@@ -343,88 +304,94 @@ async function updateEditedProfile(
       return;
     }
 
-    currentUser =
-      data.user;
+    currentUser = data.user;
 
-    /* Update screen */
+
+    /* UPDATE PROFILE SCREEN */
 
     const profileName =
-      document.getElementById(
-        "profileName"
-      );
+      document.getElementById("profileName");
 
     const profileUsername =
-      document.getElementById(
-        "profileUsername"
-      );
+      document.getElementById("profileUsername");
 
     const profileBio =
-      document.getElementById(
-        "profileBio"
-      );
+      document.getElementById("profileBio");
 
     const profileLocation =
-      document.getElementById(
-        "profileLocation"
-      );
+      document.getElementById("profileLocation");
 
     const profileWork =
-      document.getElementById(
-        "profileWork"
-      );
+      document.getElementById("profileWork");
 
     const profileEducation =
-      document.getElementById(
-        "profileEducation"
-      );
+      document.getElementById("profileEducation");
 
     const profileWebsite =
-      document.getElementById(
-        "profileWebsite"
-      );
+      document.getElementById("profileWebsite");
 
-    if(profileName){
+
+    if(profileName)
       profileName.innerText = name;
-    }
 
-    if(profileUsername){
-      profileUsername.innerText =
-        "@" + name;
-    }
+    if(profileUsername)
+      profileUsername.innerText = "@" + name;
 
-    if(profileBio){
+    if(profileBio)
       profileBio.innerText =
         bio ||
         "वसुधैव कुटुम्बकम् परिवार का सदस्य";
-    }
 
-    if(profileLocation){
+    if(profileLocation)
       profileLocation.innerText =
         location || "Not shared";
-    }
 
-    if(profileWork){
+    if(profileWork)
       profileWork.innerText =
         work || "Not added";
-    }
 
-    if(profileEducation){
+    if(profileEducation)
       profileEducation.innerText =
         education || "Not added";
-    }
 
-    if(profileWebsite){
+    if(profileWebsite)
       profileWebsite.innerText =
         website || "Not added";
+
+
+    /* SAVE PROFILE TABLE */
+
+    const {
+      error: profileError
+    } =
+    await supabaseClient
+      .from("profiles")
+      .upsert({
+
+        user_id:currentUser.id,
+
+        username:name,
+
+        avatar_url:
+          currentUser.user_metadata?.avatar_url || ""
+
+      });
+
+
+    if(profileError){
+
+      console.error(
+        "Profile Table Error:",
+        profileError
+      );
+
     }
 
-    /* Save profile table */
-
-    await saveUserProfile();
 
     toast(
       "Profile अपडेट हो गई ✓"
     );
+
 
   }catch(error){
 
@@ -438,3 +405,6 @@ async function updateEditedProfile(
   }
 
 }
+ 
+
+ 
