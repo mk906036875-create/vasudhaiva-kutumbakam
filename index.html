@@ -1540,10 +1540,6 @@ timeStyle:"short"
 return "";
 
 }
-
-}
-
-
 /* ==========================================
    LOAD POSTS
 ========================================== */
@@ -1558,6 +1554,26 @@ return;
 }
 
 try{
+
+/* GET LATEST USER */
+
+const {
+data: userData,
+error: userError
+} =
+await supabaseClient
+.auth
+.getUser();
+
+if(!userError && userData?.user){
+
+currentUser =
+userData.user;
+
+}
+
+
+/* LOAD POSTS */
 
 const {
 data,
@@ -1598,7 +1614,21 @@ return;
 
 }
 
+
+/* PROFILE DATA */
+
+const profileName =
+currentUser?.user_metadata?.display_name ||
+(currentUser?.email || "User")
+.split("@")[0];
+
+const profileAvatar =
+currentUser?.user_metadata?.avatar_url ||
+"";
+
+
 feed.innerHTML="";
+
 
 data.forEach(function(post){
 
@@ -1607,6 +1637,9 @@ document.createElement("div");
 
 article.className=
 "card post";
+
+
+/* DELETE */
 
 let deleteButton="";
 
@@ -1626,6 +1659,9 @@ onclick="deletePost('${escapeAttribute(post.id)}')">
 
 }
 
+
+/* POST HTML */
+
 article.innerHTML=
 
 `
@@ -1633,25 +1669,29 @@ article.innerHTML=
 🆕 नई पोस्ट
 </span>
 
- <div style="
+
+<!-- PROFILE -->
+
+<div style="
 display:flex;
 align-items:center;
 gap:10px;
 margin-bottom:12px;
 ">
 
+
 <img
-src="${escapeAttribute(
-currentUser?.user_metadata?.avatar_url || ""
-)}"
+src="${escapeAttribute(profileAvatar)}"
+alt="Profile Photo"
 style="
 width:42px;
 height:42px;
 border-radius:50%;
 object-fit:cover;
 border:2px solid #ff9933;
-${currentUser?.user_metadata?.avatar_url ? "" : "display:none;"}
+${profileAvatar ? "" : "display:none;"}
 ">
+
 
 <div style="
 width:42px;
@@ -1663,22 +1703,22 @@ display:flex;
 align-items:center;
 justify-content:center;
 font-weight:bold;
-${currentUser?.user_metadata?.avatar_url ? "display:none;" : ""}
+${profileAvatar ? "display:none;" : ""}
 ">
+
 ${escapeHtml(
-(currentUser?.email || "U")
-.split("@")[0]
+profileName
 .charAt(0)
 .toUpperCase()
 )}
+
 </div>
 
+
 <div>
+
 <b>
-${escapeHtml(
-(currentUser?.email || "User")
-.split("@")[0]
-)}
+${escapeHtml(profileName)}
 </b>
 
 <div style="
@@ -1692,9 +1732,15 @@ color:#777;
 
 </div>
 
+
+<!-- POST CONTENT -->
+
 <p class="post-content">
 ${escapeHtml(post.content)}
 </p>
+
+
+<!-- POST META -->
 
 <div class="post-meta">
 
@@ -1706,6 +1752,9 @@ ${escapeHtml(post.content)}
 
 </div>
 
+
+<!-- ACTIONS -->
+
 <div class="post-actions">
 
 <button
@@ -1713,48 +1762,62 @@ onclick="likePost(this)">
 ❤️ Like 0
 </button>
 
+
 <button
 onclick="openComments('${escapeAttribute(post.id)}')">
 💬 Comment
 </button>
+
 
 <button
 onclick="translatePost(this)">
 🌐 Translate
 </button>
 
+
 ${deleteButton}
 
 </div>
 
+
+<!-- COMMENTS -->
+
 <div
 id="comments-${escapeAttribute(post.id)}"
 class="comments-box">
+
 
 <div
 id="comment-list-${escapeAttribute(post.id)}">
 Comments load हो रहे हैं...
 </div>
 
+
 <div class="comment-form">
+
 
 <input
 id="comment-input-${escapeAttribute(post.id)}"
 placeholder="Comment लिखें...">
+
 
 <button
 onclick="sendComment('${escapeAttribute(post.id)}')">
 Send
 </button>
 
+
 </div>
 
 </div>
+
 `;
+
 
 feed.appendChild(article);
 
 });
+
 
 }catch(error){
 
