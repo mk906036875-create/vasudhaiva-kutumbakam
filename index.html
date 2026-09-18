@@ -1023,12 +1023,12 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_Uq4wF9xUhFl5foMSRWyhvQ_iyqXgpt2";
 
-let supabaseClient;
+let supabase;
 let currentUser=null;
 
 try{
 
-supabaseClient =
+supabase=
 supabase.createClient(
 SUPABASE_URL,
 SUPABASE_KEY,
