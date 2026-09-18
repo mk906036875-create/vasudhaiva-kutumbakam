@@ -915,40 +915,64 @@ loadPosts();
 /* ==========================================
    PROFILE
 ========================================== */
-
 async function loadProfile(user){
 
-if(!user){
-return;
+  if(!user){
+    return;
+  }
+
+  const email =
+    user.email || "";
+
+  document
+    .getElementById("profileEmail")
+    .innerText = email;
+
+  const name =
+    email
+      .split("@")[0];
+
+  document
+    .getElementById("profileName")
+    .innerText = name;
+
+  document
+    .getElementById("profileUsername")
+    .innerText = "@" + name;
+
+
+  /* Profile Photo */
+
+  const avatarUrl =
+    user.user_metadata?.avatar_url || "";
+
+  if(avatarUrl){
+
+    showAvatar(avatarUrl);
+
+  }else{
+
+    const avatar =
+      document.getElementById(
+        "profileAvatar"
+      );
+
+    if(avatar){
+
+      avatar.innerText =
+        name
+          .charAt(0)
+          .toUpperCase();
+
+    }
+
+    showAvatar("");
+
+  }
+
 }
-
-const email =
-user.email || "";
-
-document
-.getElementById("profileEmail")
-.innerText=email;
-
-const name =
-email
-.split("@")[0];
-
-document
-.getElementById("profileName")
-.innerText=name;
-
-document
-.getElementById("profileUsername")
-.innerText="@"+name;
-
-document
-.getElementById("profileAvatar")
-.innerText=
-name
-.charAt(0)
-.toUpperCase();
-
-}
+ 
+ 
 
 
 /* ==========================================
