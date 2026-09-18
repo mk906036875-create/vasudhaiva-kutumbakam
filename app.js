@@ -180,7 +180,8 @@ async function saveUserProfile(){
     currentUser.email || "";
 
   const username =
-    email.split("@")[0];
+  currentUser.user_metadata?.display_name ||
+  email.split("@")[0];
 
   const avatarUrl =
     currentUser.user_metadata?.avatar_url || "";
