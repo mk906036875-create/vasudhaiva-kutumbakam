@@ -441,3 +441,61 @@ async function refreshProfile(){
 
 }
  
+/* ==========================================
+   SYNC PROFILE TO POSTS
+========================================== */
+
+async function syncProfileToPosts(){
+
+  if(!currentUser){
+    return;
+  }
+
+  const metadata =
+    currentUser.user_metadata || {};
+
+  const email =
+    currentUser.email || "";
+
+  const username =
+    metadata.display_name ||
+    email.split("@")[0] ||
+    "User";
+
+  const avatarUrl =
+    metadata.avatar_url || "";
+
+  const { error } =
+    await supabaseClient
+      .from("profiles")
+      .upsert({
+
+        user_id: currentUser.id,
+
+        username: username,
+
+        avatar_url: avatarUrl
+
+      });
+
+  if(error){
+
+    console.error(
+      "Profile Sync Error:",
+      error
+    );
+
+    toast(
+      "Profile Sync Error: " +
+      error.message
+    );
+
+    return;
+  }
+
+  await loadPosts();
+
+  toast(
+    "Home Profile Update हो गई ✓"
+  );
+}
