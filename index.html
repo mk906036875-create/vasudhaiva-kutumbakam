@@ -591,18 +591,101 @@ Join
 
 </section>
 
-
 <!-- PROFILE -->
 
 <section id="profile" class="page">
 
 <div class="card profile">
 
+<!-- PROFILE PHOTO -->
+
+<img
+id="profileAvatarImg"
+src=""
+alt="Profile Photo"
+style="
+display:none;
+width:100px;
+height:100px;
+border-radius:50%;
+object-fit:cover;
+margin:0 auto 15px;
+border:3px solid #ff9933;
+">
+
 <div
 class="avatar"
 id="profileAvatar">
 👤
 </div>
+
+
+<!-- PHOTO BUTTONS -->
+
+<div
+style="
+display:flex;
+justify-content:center;
+gap:10px;
+margin:10px 0 20px;
+">
+
+<button
+type="button"
+onclick="document.getElementById('galleryInput').click()"
+style="
+padding:10px 14px;
+border-radius:10px;
+background:#ff9933;
+color:white;
+font-weight:bold;
+">
+
+🖼️ Gallery
+
+</button>
+
+
+<button
+type="button"
+onclick="document.getElementById('cameraInput').click()"
+style="
+padding:10px 14px;
+border-radius:10px;
+background:#138808;
+color:white;
+font-weight:bold;
+">
+
+📷 Camera
+
+</button>
+
+</div>
+
+
+<!-- GALLERY INPUT -->
+
+<input
+type="file"
+id="galleryInput"
+accept="image/*"
+style="display:none"
+onchange="uploadAvatar(this)"
+>
+
+
+<!-- CAMERA INPUT -->
+
+<input
+type="file"
+id="cameraInput"
+accept="image/*"
+capture="environment"
+style="display:none"
+onchange="uploadAvatar(this)"
+>
+
 
 <h2 id="profileName">
 User
@@ -619,6 +702,7 @@ User
 वसुधैव कुटुम्बकम् परिवार का सदस्य
 </p>
 
+
 <button
 class="logout"
 onclick="logoutUser()">
@@ -631,6 +715,7 @@ Logout
 
 </section>
 
+ 
 
 </div>
 
