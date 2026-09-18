@@ -1521,25 +1521,26 @@ name+" Community में Join request दर्ज हुई ✓"
 /* ==========================================
    DATE
 ========================================== */
-
 function formatPostDate(date){
 
-try{
+  try{
 
-return new Date(date)
-.toLocaleString(
-"hi-IN",
-{
-dateStyle:"medium",
-timeStyle:"short"
+    return new Date(date).toLocaleString(
+      "hi-IN",
+      {
+        dateStyle:"medium",
+        timeStyle:"short"
+      }
+    );
+
+  }catch(error){
+
+    return "";
+
+  }
+
 }
-);
-
-}catch(error){
-
-return "";
-
-}
+ 
 /* ==========================================
    LOAD POSTS
 ========================================== */
