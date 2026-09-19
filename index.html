@@ -2336,72 +2336,36 @@ console.error(
 error
 );
 
+  }
 }
-<!-- ==========================================
-     AUTH STATE
-========================================== -->
 
-<script>
+/* ==========================================
+   AUTH STATE
+========================================== */
 
-supabaseClient
-.auth
-.onAuthStateChange(
-function(event, session){
+supabaseClient.auth.onAuthStateChange(
+  function(event, session){
 
-  if(
-    session &&
-    session.user
-  ){
+    if(session && session.user){
 
-    currentUser =
-      session.user;
+      currentUser = session.user;
 
+      document.getElementById("loginScreen").style.display = "none";
+      document.getElementById("mainApp").style.display = "block";
 
-    document
-      .getElementById(
-        "loginScreen"
-      )
-      .style.display =
-        "none";
+      loadProfile(session.user);
 
+    }else{
 
-    document
-      .getElementById(
-        "mainApp"
-      )
-      .style.display =
-        "block";
+      currentUser = null;
 
+      document.getElementById("loginScreen").style.display = "flex";
+      document.getElementById("mainApp").style.display = "none";
 
-    loadProfile(
-      session.user
-    );
-
-
-  }else{
-
-    currentUser =
-      null;
-
-
-    document
-      .getElementById(
-        "loginScreen"
-      )
-      .style.display =
-        "flex";
-
-
-    document
-      .getElementById(
-        "mainApp"
-      )
-      .style.display =
-        "none";
+    }
 
   }
-
-});
+);
 
 
 /* ==========================================
@@ -2412,8 +2376,8 @@ checkSession();
 
 </script>
 
-
 <script src="app.js"></script>
 
 </body>
 </html>
+ 
