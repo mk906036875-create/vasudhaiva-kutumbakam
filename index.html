@@ -2368,9 +2368,6 @@ supabaseClient.auth.onAuthStateChange(
 );
 
 /* ==========================================
-   START
-========================================== */
-/* ==========================================
    REELS UPLOAD
 ========================================== */
 
@@ -2402,18 +2399,10 @@ async function vkPostReel(){
       await supabaseClient
       .storage
       .from("reels")
-      .upload(
-        fileName,
-        file
-      );
+      .upload(fileName, file);
 
     if(uploadError){
-
-      alert(
-        "Upload Error:\n" +
-        uploadError.message
-      );
-
+      alert("Upload Error:\n" + uploadError.message);
       return;
     }
 
@@ -2427,58 +2416,38 @@ async function vkPostReel(){
       await supabaseClient
       .from("reels")
       .insert({
-
         video_url: data.publicUrl,
-
-        caption:
-          document
-          .getElementById("reelCaption")
-          .value
-          .trim(),
-
-        hashtags:
-          document
-          .getElementById("reelHashtag")
-          .value
-          .trim()
-
+        caption: document.getElementById("reelCaption").value.trim(),
+        hashtags: document.getElementById("reelHashtag").value.trim()
       });
 
     if(error){
-
-      alert(
-        "Reel Save Error:\n" +
-        error.message
-      );
-
+      alert("Reel Save Error:\n" + error.message);
       return;
     }
 
     alert("🎉 Reel Post हो गई!");
 
-    document
-      .getElementById("reelVideo")
-      .value = "";
-
-    document
-      .getElementById("reelCaption")
-      .value = "";
-
-    document
-      .getElementById("reelHashtag")
-      .value = "";
+    document.getElementById("reelVideo").value = "";
+    document.getElementById("reelCaption").value = "";
+    document.getElementById("reelHashtag").value = "";
 
   }catch(error){
 
-    alert(
-      "Error:\n" +
-      error.message
-    );
+    alert("Error:\n" + error.message);
 
   }
 
-     }
+}
+
+
+/* ==========================================
+   START
+========================================== */
+
 checkSession();
+
+
 
 </script>
 <!-- ==========================================
