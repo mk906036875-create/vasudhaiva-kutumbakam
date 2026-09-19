@@ -2384,6 +2384,540 @@ document
 
 }
 );
+ <!-- ==========================================
+     REELS HTML
+========================================== -->
+
+<section id="reels" class="page">
+
+  <div class="card">
+
+    <h2>🎬 Reels</h2>
+
+    <label
+      for="reelVideo"
+      style="
+        display:block;
+        padding:14px;
+        text-align:center;
+        background:#1877f2;
+        color:white;
+        border-radius:10px;
+        font-weight:bold;
+        cursor:pointer;
+      ">
+      🎥 Video चुनें
+    </label>
+
+    <input
+      type="file"
+      id="reelVideo"
+      accept="video/*"
+      style="display:none;"
+      onchange="vkPreviewReel(event)"
+    >
+
+    <div
+      id="reelPreviewBox"
+      style="display:none;">
+
+      <video
+        id="reelPreview"
+        controls
+        playsinline
+        style="
+          width:100%;
+          max-height:500px;
+          margin-top:15px;
+          border-radius:15px;
+          background:#000;
+        ">
+      </video>
+
+      <input
+        id="reelCaption"
+        type="text"
+        placeholder="Reel के बारे में लिखें..."
+        style="
+          width:100%;
+          box-sizing:border-box;
+          padding:12px;
+          margin-top:12px;
+          border:1px solid #ddd;
+          border-radius:10px;
+        ">
+
+      <input
+        id="reelHashtag"
+        type="text"
+        placeholder="#India #VasudhaivKutumbakam"
+        style="
+          width:100%;
+          box-sizing:border-box;
+          padding:12px;
+          margin-top:10px;
+          border:1px solid #ddd;
+          border-radius:10px;
+        ">
+
+      <button
+        onclick="vkPostReel()"
+        style="
+          width:100%;
+          padding:13px;
+          margin-top:12px;
+          border:0;
+          border-radius:10px;
+          font-size:16px;
+          font-weight:bold;
+          cursor:pointer;
+        ">
+        🚀 Post Reel
+      </button>
+
+    </div>
+
+  </div>
+
+  <div id="reelsFeed"></div>
+
+</section>
+
+
+<!-- ==========================================
+     REELS JAVASCRIPT
+========================================== -->
+
+<script>
+
+let vkSelectedReelFile = null;
+
+
+/* VIDEO PREVIEW */
+
+function vkPreviewReel(event) {
+
+  const file = event.target.files[0];
+
+  if (!file) return;
+
+  vkSelectedReelFile = file;
+
+  const video =
+    document.getElementById("reelPreview");
+
+  const box =
+    document.getElementById("reelPreviewBox");
+
+  if (!video || !box) return;
+
+  video.src =
+    URL.createObjectURL(file);
+
+  box.style.display = "block";
+}
+
+
+/* POST REEL */
+
+async function vkPostReel() {
+
+  if (!vkSelectedReelFile) {
+
+    alert("पहले वीडियो चुनें");
+
+    return;
+  }
+
+
+  if (
+    typeof currentUser === "undefined" ||
+    !currentUser
+  ) {
+
+    alert("पहले Login करें");
+
+    return;
+  }
+
+
+  const caption =
+    document
+      .getElementById("reelCaption")
+      .value
+      .trim();
+
+
+  const hashtags =
+    document
+      .getElementById("reelHashtag")
+      .value
+      .trim();
+
+
+  try {
+
+    const fileName =
+      Date.now() +
+      "_" +
+      vkSelectedReelFile.name
+        .replace(
+          /[^a-zA-Z0-9._-]/g,
+          "_"
+        );
+
+
+    /* UPLOAD VIDEO */
+
+    const {
+      error: uploadError
+    } =
+      await supabaseClient
+        .storage
+        .from("reels")
+        .upload(
+          fileName,
+          vkSelectedReelFile,
+          {
+            cacheControl: "3600",
+            upsert: false
+          }
+        );
+
+
+    if (uploadError) {
+
+      console.error(uploadError);
+
+      alert(
+        "Video upload नहीं हुआ:\n" +
+        uploadError.message
+      );
+
+      return;
+    }
+
+
+    /* GET PUBLIC URL */
+
+    const {
+      data: publicData
+    } =
+      supabaseClient
+        .storage
+        .from("reels")
+        .getPublicUrl(
+          fileName
+        );
+
+
+    const videoURL =
+      publicData.publicUrl;
+
+
+    /* SAVE DATABASE */
+
+    const {
+      error: dbError
+    } =
+      await supabaseClient
+        .from("reels")
+        .insert({
+
+          video_url: videoURL,
+
+          caption: caption,
+
+          hashtags: hashtags
+
+        });
+
+
+    if (dbError) {
+
+      console.error(dbError);
+
+      alert(
+        "Reel save नहीं हुई:\n" +
+        dbError.message
+      );
+
+      return;
+    }
+
+
+    alert(
+      "🎉 Reel successfully post हो गई!"
+    );
+
+
+    /* RESET */
+
+    vkSelectedReelFile = null;
+
+    document.getElementById(
+      "reelVideo"
+    ).value = "";
+
+    document.getElementById(
+      "reelCaption"
+    ).value = "";
+
+    document.getElementById(
+      "reelHashtag"
+    ).value = "";
+
+    document.getElementById(
+      "reelPreviewBox"
+    ).style.display = "none";
+
+    document.getElementById(
+      "reelPreview"
+    ).src = "";
+
+
+    vkLoadReels();
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "कुछ समस्या हुई:\n" +
+      error.message
+    );
+
+  }
+
+}
+
+
+/* LOAD REELS */
+
+async function vkLoadReels() {
+
+  const feed =
+    document.getElementById(
+      "reelsFeed"
+    );
+
+  if (!feed) return;
+
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("reels")
+        .select("*")
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        );
+
+
+    if (error) {
+
+      console.error(error);
+
+      feed.innerHTML =
+        "<p>Reels load नहीं हो सकीं।</p>";
+
+      return;
+    }
+
+
+    feed.innerHTML = "";
+
+
+    if (!data || data.length === 0) {
+
+      feed.innerHTML = `
+        <div class="card">
+          <p style="text-align:center;">
+            अभी कोई Reel नहीं है 🎬
+          </p>
+        </div>
+      `;
+
+      return;
+    }
+
+
+    data.forEach(function(reel) {
+
+      const card =
+        document.createElement("div");
+
+      card.className = "card";
+
+      card.style.marginTop = "15px";
+
+
+      card.innerHTML = `
+
+        <video
+          src="${reel.video_url}"
+          controls
+          playsinline
+          style="
+            width:100%;
+            max-height:600px;
+            border-radius:15px;
+            background:#000;
+          ">
+        </video>
+
+        <p style="font-weight:bold;">
+          ${vkEscapeReelText(
+            reel.caption || ""
+          )}
+        </p>
+
+        <p style="color:#1877f2;">
+          ${vkEscapeReelText(
+            reel.hashtags || ""
+          )}
+        </p>
+
+        <div
+          style="
+            display:flex;
+            justify-content:space-around;
+            padding-top:10px;
+          ">
+
+          <button
+            onclick="vkLikeReel()">
+            ❤️ Like
+          </button>
+
+          <button
+            onclick="vkCommentReel()">
+            💬 Comment
+          </button>
+
+          <button
+            onclick="vkShareReel('${reel.video_url}')">
+            ↗️ Share
+          </button>
+
+        </div>
+      `;
+
+
+      feed.appendChild(card);
+
+    });
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    feed.innerHTML =
+      "<p>Reels load करने में समस्या हुई।</p>";
+
+  }
+
+}
+
+
+/* SECURITY */
+
+function vkEscapeReelText(text) {
+
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+
+/* LIKE */
+
+function vkLikeReel() {
+
+  alert("❤️ Like");
+
+}
+
+
+/* COMMENT */
+
+function vkCommentReel() {
+
+  alert("💬 Comment");
+
+}
+
+
+/* SHARE */
+
+async function vkShareReel(url) {
+
+  if (navigator.share) {
+
+    try {
+
+      await navigator.share({
+
+        title:
+          "वसुधैव कुटुम्बकम् Reel",
+
+        text:
+          "मेरी Reel देखिए 🇮🇳",
+
+        url: url
+
+      });
+
+    } catch (e) {}
+
+  } else {
+
+    try {
+
+      await navigator.clipboard
+        .writeText(url);
+
+      alert(
+        "🔗 Reel link copy हो गया"
+      );
+
+    } catch (e) {
+
+      alert(
+        "Share नहीं हो पाया"
+      );
+
+    }
+
+  }
+
+}
+
+
+/* LOAD REELS */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function() {
+
+    vkLoadReels();
+
+  }
+);
+
 
 /* ==========================================
    START
@@ -2392,6 +2926,7 @@ document
 checkSession();
 
 </script>
+
 
 <script src="app.js"></script>
 
